@@ -1,7 +1,11 @@
 
 package org.usfirst.frc.team4308.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -10,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
+
+import com.ctre.CANTalon;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,9 +29,12 @@ public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 
+	RobotDrive robot;
+	Joystick stick;
+	CANTalon shooter;
+	Encoder ShooterEnc;
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
-
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -33,7 +42,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
+		robot = new RobotDrive(0,1,2,3);
+		stick = new Joystick(0);
+		shooter = new CANTalon(0);
+		ShooterEnc = new Encoder(0, 1);
+		
 		chooser.addDefault("Default Auto", new ExampleCommand());
+		
+		CameraServer.getInstance().startAutomaticCapture();
+		
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
@@ -104,6 +121,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		robot.arcadeDrive(stick);
+		
+		if(stick.getRawButton(1)){
+			shooter.set(-1);
+		} else {
+			shooter.set(0);
+		}
+		
+		SmartDashboard.putNumber("Encoder: ", shooter.getSpeed());
 	}
 
 	/**
