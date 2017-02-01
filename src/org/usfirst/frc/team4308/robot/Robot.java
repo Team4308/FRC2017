@@ -2,6 +2,7 @@
 package org.usfirst.frc.team4308.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -37,9 +39,12 @@ public class Robot extends IterativeRobot {
 	Joystick stick;
 	CANTalon shooter;
 	Encoder ShooterEnc;
+	AHRS gyro;
 	Command autonomousCommand;
 	PIDController turnController;
 	SendableChooser<Command> chooser = new SendableChooser<>();
+	double rotateToAngleRate;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -47,24 +52,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		robot = new RobotDrive(0,1,2,3);
+		robot = new RobotDrive(0, 1, 2, 3);
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
-		ShooterEnc = new Encoder(0, 1);	
-		
-		AHRS gyro = new AHRS(SPI.Port.kMXP);
-		
-		turnController = new PIDController(0,0,0,0, gyro, shooter);
+		ShooterEnc = new Encoder(0, 1);
+
+		gyro = new AHRS(SPI.Port.kMXP);
+
+		turnController = new PIDController(0, 0, 0, 0, gyro, shooter);
 		turnController.setInputRange(-100, 100);
 		turnController.setOutputRange(-1, 1);
 		turnController.setAbsoluteTolerance(2.0f);
 		turnController.setContinuous(true);
-		
+
 		LiveWindow.addActuator("Drive System", "Rotate Controller", turnController);
-		
-		
+
 		chooser.addDefault("Default Auto", new ExampleCommand());
-		
+
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
@@ -137,12 +141,12 @@ public class Robot extends IterativeRobot {
 		int currentShot = 0;
 		Scheduler.getInstance().run();
 		robot.arcadeDrive(-1 * stick.getRawAxis(1), -1 * stick.getRawAxis(0));
-		
-		while (stick.getRawButton(1)){
-				currentShot += 0.01;
-				shooter.set(currentShot);
+
+		while (stick.getRawButton(1)) {
+			currentShot += 0.01;
+			shooter.set(currentShot);
 		}
-		
+
 		SmartDashboard.putNumber("Encoder: ", shooter.getSpeed());
 	}
 
@@ -153,4 +157,47 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+
+	public void operatorControl() {
+		robot.setSafetyEnabled(true);
+		while (isOperatorControl() && isEnabled()) {
+			boolean rotateToAngle = false;
+			if (stick.getRawButton(1)) {
+				gyro.reset();
+			}
+			if (stick.getRawButton(2)) {
+				turnController.setSetpoint(0.0f);
+				rotateToAngle = true;
+			} else if (stick.getRawButton(3)) {
+				turnController.setSetpoint(90.0f);
+				rotateToAngle = true;
+			} else if (stick.getRawButton(4)) {
+				turnController.setSetpoint(179.9f);
+				rotateToAngle = true;
+			} else if (stick.getRawButton(5)) {
+				turnController.setSetpoint(-90.0f);
+				rotateToAngle = true;
+			}
+			double currentRotationRate;
+			if (rotateToAngle) {
+				turnController.enable();
+				currentRotationRate = rotateToAngleRate;
+			} else {
+				turnController.disable();
+				currentRotationRate = stick.getTwist();
+			}
+			try {
+				/* Use the joystick X axis for lateral movement, */
+				/* Y axis for forward movement, and the current */
+				/* calculated rotation rate (or joystick Z axis), */
+				/* depending upon whether "rotate to angle" is active. */
+				robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(), currentRotationRate, gyro.getAngle());
+				SmartDashboard.putNumber("Angle: ", gyro.getAngle());
+			} catch (RuntimeException ex) {
+				DriverStation.reportError("Error communicating with drive system:  " + ex.getMessage(), true);
+			}
+			Timer.delay(0.005); // wait for a motor update time
+		}
+	}
+
 }
