@@ -5,7 +5,10 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -16,6 +19,7 @@ import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
 
 import com.ctre.CANTalon;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,6 +38,7 @@ public class Robot extends IterativeRobot {
 	CANTalon shooter;
 	Encoder ShooterEnc;
 	Command autonomousCommand;
+	PIDController turnController;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -45,11 +50,20 @@ public class Robot extends IterativeRobot {
 		robot = new RobotDrive(0,1,2,3);
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
-		ShooterEnc = new Encoder(0, 1);
+		ShooterEnc = new Encoder(0, 1);	
+		
+		AHRS gyro = new AHRS(SPI.Port.kMXP);
+		
+		turnController = new PIDController(0,0,0,0, gyro, shooter);
+		turnController.setInputRange(-100, 100);
+		turnController.setOutputRange(-1, 1);
+		turnController.setAbsoluteTolerance(2.0f);
+		turnController.setContinuous(true);
+		
+		LiveWindow.addActuator("Drive System", "Rotate Controller", turnController);
+		
 		
 		chooser.addDefault("Default Auto", new ExampleCommand());
-		
-		CameraServer.getInstance().startAutomaticCapture();
 		
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
@@ -120,13 +134,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		int currentShot = 0;
 		Scheduler.getInstance().run();
-		robot.arcadeDrive(stick);
+		robot.arcadeDrive(-1 * stick.getRawAxis(1), -1 * stick.getRawAxis(0));
 		
-		if(stick.getRawButton(1)){
-			shooter.set(-1);
-		} else {
-			shooter.set(0);
+		while (stick.getRawButton(1)){
+				currentShot += 0.01;
+				shooter.set(currentShot);
 		}
 		
 		SmartDashboard.putNumber("Encoder: ", shooter.getSpeed());
