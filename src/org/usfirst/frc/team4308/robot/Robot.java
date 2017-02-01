@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team4308.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -30,7 +29,7 @@ import com.kauailabs.navx.frc.AHRS;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot implements PIDOutput {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
@@ -45,6 +44,13 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	double rotateToAngleRate;
 
+	static final double kP = 0.03;
+	static final double kI = 0.00;
+	static final double kD = 0.00;
+	static final double kF = 0.00;
+
+	static final double kToleranceDegrees = 2.0f;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -56,13 +62,16 @@ public class Robot extends IterativeRobot {
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
 		ShooterEnc = new Encoder(0, 1);
+		try {
+			gyro = new AHRS(SPI.Port.kMXP);
+		} catch (RuntimeException rte) {
+			DriverStation.reportError("Error instantiating navX-MXP: " + rte.getStackTrace(), true);
+		}
 
-		gyro = new AHRS(SPI.Port.kMXP);
-
-		turnController = new PIDController(0, 0, 0, 0, gyro, shooter);
-		turnController.setInputRange(-100, 100);
-		turnController.setOutputRange(-1, 1);
-		turnController.setAbsoluteTolerance(2.0f);
+		turnController = new PIDController(kP, kI, kD, kF, gyro, this);
+		turnController.setInputRange(-180.0f, 180.0f);
+		turnController.setOutputRange(-1.0, 1.0);
+		turnController.setAbsoluteTolerance(kToleranceDegrees);
 		turnController.setContinuous(true);
 
 		LiveWindow.addActuator("Drive System", "Rotate Controller", turnController);
@@ -131,6 +140,7 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		operatorControl();
 	}
 
 	/**
@@ -198,6 +208,12 @@ public class Robot extends IterativeRobot {
 			}
 			Timer.delay(0.005); // wait for a motor update time
 		}
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		rotateToAngleRate = output;
+
 	}
 
 }
