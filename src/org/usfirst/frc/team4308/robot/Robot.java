@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -21,6 +21,7 @@ import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
@@ -38,11 +39,10 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	RobotDrive robot;
 	Joystick stick;
 	CANTalon shooter;
-	Encoder ShooterEnc;
 	AHRS gyro;
 	Command autonomousCommand;
 	PIDController turnController;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser;
 	double rotateToAngleRate;
 
 	static final double kP = 0.03;
@@ -59,17 +59,16 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		robot = new RobotDrive(new MultiSpeedController(new Talon(0), new Talon(1)),
-				new MultiSpeedController(new Talon(2), new Talon(3)));
+		chooser = new SendableChooser<Command>();
+		robot = new RobotDrive(0, 1, 2, 3);
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
-		ShooterEnc = new Encoder(0, 1);
 		try {
 			gyro = new AHRS(SPI.Port.kMXP);
 		} catch (RuntimeException rte) {
 			DriverStation.reportError("Error instantiating navX-MXP: " + rte.getStackTrace(), true);
 		}
-
+		
 		turnController = new PIDController(kP, kI, kD, kF, gyro, this);
 		turnController.setInputRange(-180.0f, 180.0f);
 		turnController.setOutputRange(-1.0, 1.0);
@@ -142,7 +141,6 @@ public class Robot extends IterativeRobot implements PIDOutput {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
-		operatorControl();
 	}
 
 	/**
@@ -150,16 +148,14 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		int currentShot = 0;
 		Scheduler.getInstance().run();
-		robot.arcadeDrive(-1 * stick.getRawAxis(1), -1 * stick.getRawAxis(0));
-
-		while (stick.getRawButton(1)) {
-			currentShot += 0.01;
-			shooter.set(currentShot);
+		operatorControl();
+		if (stick.getRawButton(8)) {
+			shooter.set(-((-stick.getZ() + 1) / 2));
+		} else {
+			shooter.set(0);
 		}
-
-		SmartDashboard.putNumber("Encoder: ", shooter.getSpeed());
+		SmartDashboard.putNumber("Speed: ", shooter.getAnalogInPosition());
 	}
 
 	/**
@@ -172,46 +168,45 @@ public class Robot extends IterativeRobot implements PIDOutput {
 
 	public void operatorControl() {
 		robot.setSafetyEnabled(true);
-		while (isOperatorControl() && isEnabled()) {
-			boolean rotateToAngle = false;
-			if (stick.getRawButton(1)) {
-				gyro.reset();
-			}
-			if (stick.getRawButton(2)) {
-				turnController.setSetpoint(0.0f);
-				rotateToAngle = true;
-			} else if (stick.getRawButton(3)) {
-				turnController.setSetpoint(90.0f);
-				rotateToAngle = true;
-			} else if (stick.getRawButton(4)) {
-				turnController.setSetpoint(179.9f);
-				rotateToAngle = true;
-			} else if (stick.getRawButton(5)) {
-				turnController.setSetpoint(-90.0f);
-				rotateToAngle = true;
-			}
-			double currentRotationRate;
-			if (rotateToAngle) {
-				turnController.enable();
-				currentRotationRate = rotateToAngleRate;
-			} else {
-				turnController.disable();
-				currentRotationRate = stick.getX();
-			}
-			try {
-				/* Use the joystick X axis for lateral movement, */
-				/* Y axis for forward movement, and the current */
-				/* calculated rotation rate (or joystick Z axis), */
-				/* depending upon whether "rotate to angle" is active. */
-				// robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(),
-				// currentRotationRate, gyro.getAngle());
-				robot.arcadeDrive(stick.getY(), currentRotationRate);
-				SmartDashboard.putNumber("Angle: ", gyro.getAngle());
-			} catch (RuntimeException ex) {
-				DriverStation.reportError("Error communicating with drive system:  " + ex.getMessage(), true);
-			}
-			Timer.delay(0.005); // wait for a motor update time
+		turnController.setAbsoluteTolerance(10.0);
+		boolean rotateToAngle = false;
+		if (stick.getRawButton(1)) {
+			gyro.reset();
 		}
+		if (stick.getRawButton(5)) {
+			turnController.setSetpoint(0.0f);
+			rotateToAngle = true;
+		} else if (stick.getRawButton(3)) {
+			turnController.setSetpoint(90.0f);
+			rotateToAngle = true;
+		} else if (stick.getRawButton(4)) {
+			turnController.setSetpoint(179.9f);
+			rotateToAngle = true;
+		} else if (stick.getRawButton(2)) {
+			turnController.setSetpoint(-90.0f);
+			rotateToAngle = true;
+		}
+		double currentRotationRate;
+		if (rotateToAngle) {
+			turnController.enable();
+			currentRotationRate = rotateToAngleRate;
+		} else {
+			turnController.disable();
+			currentRotationRate = stick.getX();
+		}
+		try {
+			/* Use the joystick X axis for lateral movement, */
+			/* Y axis for forward movement, and the current */
+			/* calculated rotation rate (or joystick Z axis), */
+			/* depending upon whether "rotate to angle" is active. */
+			// robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(),
+			// currentRotationRate, gyro.getAngle());
+			robot.arcadeDrive(-stick.getY(), -currentRotationRate);
+			SmartDashboard.putNumber("Angle: ", gyro.getAngle());
+		} catch (RuntimeException ex) {
+			DriverStation.reportError("Error communicating with drive system:  " + ex.getMessage(), true);
+		}
+		Timer.delay(0.005); // wait for a motor update time
 	}
 
 	@Override
