@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -58,7 +59,8 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		robot = new RobotDrive(0, 1, 2, 3);
+		robot = new RobotDrive(new MultiSpeedController(new Talon(0), new Talon(1)),
+				new MultiSpeedController(new Talon(2), new Talon(3)));
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
 		ShooterEnc = new Encoder(0, 1);
@@ -194,14 +196,16 @@ public class Robot extends IterativeRobot implements PIDOutput {
 				currentRotationRate = rotateToAngleRate;
 			} else {
 				turnController.disable();
-				currentRotationRate = stick.getTwist();
+				currentRotationRate = stick.getX();
 			}
 			try {
 				/* Use the joystick X axis for lateral movement, */
 				/* Y axis for forward movement, and the current */
 				/* calculated rotation rate (or joystick Z axis), */
 				/* depending upon whether "rotate to angle" is active. */
-				robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(), currentRotationRate, gyro.getAngle());
+				// robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(),
+				// currentRotationRate, gyro.getAngle());
+				robot.arcadeDrive(stick.getY(), currentRotationRate);
 				SmartDashboard.putNumber("Angle: ", gyro.getAngle());
 			} catch (RuntimeException ex) {
 				DriverStation.reportError("Error communicating with drive system:  " + ex.getMessage(), true);
