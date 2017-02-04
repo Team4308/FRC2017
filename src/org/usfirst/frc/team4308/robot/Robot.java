@@ -6,7 +6,6 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -29,7 +27,6 @@ import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
 
 import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 
 /**
@@ -90,7 +87,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
-		
+
 		visionThread = new Thread(() -> {
 			// Get the Axis camera from CameraServer
 			AxisCamera camera = CameraServer.getInstance().addAxisCamera("axis-camera.local");
@@ -110,7 +107,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 			// deploying.
 			while (!Thread.interrupted()) {
 				// Tell the CvSink to grab a frame from the camera and put it
-				// in the source mat.  If there is an error notify the output.
+				// in the source mat. If there is an error notify the output.
 				if (cvSink.grabFrame(mat) == 0) {
 					// Send the output the error.
 					outputStream.notifyError(cvSink.getError());
@@ -118,8 +115,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 					continue;
 				}
 				// Put a rectangle on the image
-				Imgproc.rectangle(mat, new Point(100, 100), new Point(400, 400),
-						new Scalar(255, 255, 255), 5);
+				Imgproc.rectangle(mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
 				// Give the output stream a new image to display
 				outputStream.putFrame(mat);
 			}
