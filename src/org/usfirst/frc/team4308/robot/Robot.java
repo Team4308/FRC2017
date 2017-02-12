@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	public void robotInit() {
 		oi = new OI();
 		chooser = new SendableChooser<Command>();
-		robot = new RobotDrive(0, 1, 2, 3);
+		robot = new RobotDrive(new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3));
 		stick = new Joystick(0);
 		shooter = new CANTalon(0);
 		try {
@@ -88,40 +88,32 @@ public class Robot extends IterativeRobot implements PIDOutput {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 
-		visionThread = new Thread(() -> {
-			// Get the Axis camera from CameraServer
-			AxisCamera camera = CameraServer.getInstance().addAxisCamera("axis-camera.local");
-			// Set the resolution
-			camera.setResolution(640, 480);
-
-			// Get a CvSink. This will capture Mats from the camera
-			CvSink cvSink = CameraServer.getInstance().getVideo();
-			// Setup a CvSource. This will send images back to the Dashboard
-			CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
-
-			// Mats are very memory expensive. Lets reuse this Mat.
-			Mat mat = new Mat();
-
-			// This cannot be 'true'. The program will never exit if it is. This
-			// lets the robot stop this thread when restarting robot code or
-			// deploying.
-			while (!Thread.interrupted()) {
-				// Tell the CvSink to grab a frame from the camera and put it
-				// in the source mat. If there is an error notify the output.
-				if (cvSink.grabFrame(mat) == 0) {
-					// Send the output the error.
-					outputStream.notifyError(cvSink.getError());
-					// skip the rest of the current iteration
-					continue;
-				}
-				// Put a rectangle on the image
-				Imgproc.rectangle(mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
-				// Give the output stream a new image to display
-				outputStream.putFrame(mat);
-			}
-		});
-		visionThread.setDaemon(true);
-		visionThread.start();
+		/*
+		 * visionThread = new Thread(() -> { // Get the Axis camera from
+		 * CameraServer AxisCamera camera =
+		 * CameraServer.getInstance().addAxisCamera("axis-camera.local"); // Set
+		 * the resolution camera.setResolution(640, 480);
+		 * 
+		 * // Get a CvSink. This will capture Mats from the camera CvSink cvSink
+		 * = CameraServer.getInstance().getVideo(); // Setup a CvSource. This
+		 * will send images back to the Dashboard CvSource outputStream =
+		 * CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+		 * 
+		 * // Mats are very memory expensive. Lets reuse this Mat. Mat mat = new
+		 * Mat();
+		 * 
+		 * // This cannot be 'true'. The program will never exit if it is. This
+		 * // lets the robot stop this thread when restarting robot code or //
+		 * deploying. while (!Thread.interrupted()) { // Tell the CvSink to grab
+		 * a frame from the camera and put it // in the source mat. If there is
+		 * an error notify the output. if (cvSink.grabFrame(mat) == 0) { // Send
+		 * the output the error. outputStream.notifyError(cvSink.getError()); //
+		 * skip the rest of the current iteration continue; } // Put a rectangle
+		 * on the image Imgproc.rectangle(mat, new Point(100, 100), new
+		 * Point(400, 400), new Scalar(255, 255, 255), 5); // Give the output
+		 * stream a new image to display outputStream.putFrame(mat); } });
+		 * visionThread.setDaemon(true); visionThread.start();
+		 */
 	}
 
 	/**
@@ -190,14 +182,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		operatorControl();
-		if (stick.getRawButton(8)) {
-			shooter.set(-((-stick.getZ() + 1) / 2));
-		} else {
-			shooter.set(0);
-		}
-		SmartDashboard.putNumber("Speed: ", shooter.getAnalogInPosition());
-		SmartDashboard.putNumber("NavX: ", gyro.getAngle());
+		robot.tankDrive(-stick.getRawAxis(1), -stick.getRawAxis(3));
 	}
 
 	/**
@@ -206,49 +191,6 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
-	}
-
-	public void operatorControl() {
-		robot.setSafetyEnabled(true);
-		turnController.setAbsoluteTolerance(10.0);
-		boolean rotateToAngle = false;
-		if (stick.getRawButton(1)) {
-			gyro.reset();
-		}
-		if (stick.getRawButton(5)) {
-			turnController.setSetpoint(0.0f);
-			rotateToAngle = true;
-		} else if (stick.getRawButton(3)) {
-			turnController.setSetpoint(90.0f);
-			rotateToAngle = true;
-		} else if (stick.getRawButton(4)) {
-			turnController.setSetpoint(179.9f);
-			rotateToAngle = true;
-		} else if (stick.getRawButton(2)) {
-			turnController.setSetpoint(-90.0f);
-			rotateToAngle = true;
-		}
-		double currentRotationRate;
-		if (rotateToAngle) {
-			turnController.enable();
-			currentRotationRate = rotateToAngleRate;
-		} else {
-			turnController.disable();
-			currentRotationRate = stick.getX();
-		}
-		try {
-			/* Use the joystick X axis for lateral movement, */
-			/* Y axis for forward movement, and the current */
-			/* calculated rotation rate (or joystick Z axis), */
-			/* depending upon whether "rotate to angle" is active. */
-			// robot.mecanumDrive_Cartesian(stick.getX(), stick.getY(),
-			// currentRotationRate, gyro.getAngle());
-			robot.arcadeDrive(-stick.getY(), -currentRotationRate);
-			SmartDashboard.putNumber("Angle: ", gyro.getAngle());
-		} catch (RuntimeException ex) {
-			DriverStation.reportError("Error communicating with drive system:  " + ex.getMessage(), true);
-		}
-		Timer.delay(0.005); // wait for a motor update time
 	}
 
 	@Override
