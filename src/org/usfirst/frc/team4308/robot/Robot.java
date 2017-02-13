@@ -1,10 +1,6 @@
 
 package org.usfirst.frc.team4308.robot;
 
-import edu.wpi.cscore.AxisCamera;
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -12,17 +8,12 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
 
@@ -164,6 +155,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		robot.arcadeDrive(0.1f, 1.0f);
 	}
 
 	@Override
@@ -174,6 +166,7 @@ public class Robot extends IterativeRobot implements PIDOutput {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
+		gyro.resetDisplacement();
 	}
 
 	/**
@@ -183,6 +176,10 @@ public class Robot extends IterativeRobot implements PIDOutput {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		robot.tankDrive(-stick.getRawAxis(1), -stick.getRawAxis(3));
+
+		SmartDashboard.putNumber("X Displacement", gyro.getDisplacementX());
+		SmartDashboard.putNumber("Y Displacement", gyro.getDisplacementY());
+		SmartDashboard.putNumber("Z Displacement", gyro.getDisplacementZ());
 	}
 
 	/**
