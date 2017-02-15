@@ -5,7 +5,15 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+/**
+ * Abstract class allowing for multiple types of video sources and outputs used in vision processing and use
+ * @author Michael
+ *
+ */
 public abstract class Vison extends Subsystem {
+	
+	// TODO: more access to components of camera
+	// TODO: separate thread instantiation (remove block statement, replace with safer modules)
 
 	protected Thread visionThread;
 	protected VideoCamera camera;

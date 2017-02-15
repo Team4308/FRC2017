@@ -12,7 +12,15 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
+/**
+ * IP camera feed controller
+ * Requires default credentials for access
+ * @author Michael
+ *
+ */
 public class AxisVision extends Vison {
+	
+	// TODO: test
 
 	public AxisVision() {
 		super();

@@ -21,7 +21,7 @@ public class RobotMap {
 		public static final int driveStick = 0;
 	}
 	
-	public static class MOTORS {
+	public static class DRIVE {
 		public static final int frontLeft = 0;
 		public static final int backLeft = 1;
 		public static final int frontRight = 2;

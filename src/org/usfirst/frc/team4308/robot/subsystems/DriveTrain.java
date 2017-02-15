@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+/**
+ * Controller for the drive train and its motors
+ * @author mike_
+ *
+ */
 public class DriveTrain extends Subsystem {
 
 	private final SpeedController leftAlpha;
@@ -20,10 +25,10 @@ public class DriveTrain extends Subsystem {
 	
 	 // TODO: Constructors for inputs of name, speed controllers, and integer channels
 	public DriveTrain() { 
-		leftAlpha = new CANTalon(RobotMap.MOTORS.frontLeft);
-		leftBeta = new CANTalon(RobotMap.MOTORS.backLeft);
-		rightAlpha = new CANTalon(RobotMap.MOTORS.frontRight);
-		rightBeta = new CANTalon(RobotMap.MOTORS.backRight);
+		leftAlpha = new CANTalon(RobotMap.DRIVE.frontLeft);
+		leftBeta = new CANTalon(RobotMap.DRIVE.backLeft);
+		rightAlpha = new CANTalon(RobotMap.DRIVE.frontRight);
+		rightBeta = new CANTalon(RobotMap.DRIVE.backRight);
 		drive = new RobotDrive(leftAlpha, leftBeta, rightAlpha, rightBeta);
 	}
 
