@@ -16,4 +16,23 @@ public class RobotMap {
 	// number and the module. For example you with a rangefinder:
 	// public static int rangefinderPort = 1;
 	// public static int rangefinderModule = 1;
+	
+	public static class CONTROL {
+		public static final int driveStick = 0;
+	}
+	
+	public static class MOTORS {
+		public static final int frontLeft = 0;
+		public static final int backLeft = 1;
+		public static final int frontRight = 2;
+		public static final int backRight = 3;
+	}
+	
+	public static class CAMERA {
+		public static final int videoWidth = 640;
+		public static final int videoHeight = 480;
+		
+		public static final String usbName = "cam0";
+		public static final String axisName = "axis-camera.local";
+	}
 }

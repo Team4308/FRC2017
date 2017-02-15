@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  * Handler class responsible for the many functions the Navx-MXP gives
  * 
- * @author mike_
+ * @author Michael
  *
  */
 public class NavxMXP extends Subsystem {
@@ -33,15 +33,16 @@ public class NavxMXP extends Subsystem {
 
 	public NavxMXP() {
 		super();
+		reset();
 	}
 
 	public NavxMXP(String name) {
 		super(name);
+		reset();
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-
 	}
 
 	public Vector3 orientation() {
@@ -104,7 +105,7 @@ public class NavxMXP extends Subsystem {
 		gyro.reset();
 	}
 
-	private boolean disturbance() {
+	public boolean disturbance() {
 		return gyro.isMagneticDisturbance() && gyro.isAltitudeValid();
 	}
 

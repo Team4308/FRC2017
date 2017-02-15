@@ -2,6 +2,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
+import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -9,12 +10,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class USBVision extends Vison {
 
-	public USBVision(String host, int width, int height) {
-		super(host, width, height);
+	public USBVision() {
+		super();
 	}
 
-	public USBVision(String name, String host, int width, int height) {
-		super(name, host, width, height);
+	public USBVision(String name) {
+		super(name);
 	}
 
 	@Override
@@ -22,10 +23,10 @@ public class USBVision extends Vison {
 		try {
 			visionThread = new Thread(() -> {
 				camera = CameraServer.getInstance().startAutomaticCapture();
-				camera.setResolution(width, height);
+				camera.setResolution(RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
 
 				cvsink = CameraServer.getInstance().getVideo();
-				outputStream = CameraServer.getInstance().putVideo(getName(), width, height);
+				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
 
 				Mat source = new Mat();
 				Mat output = new Mat();
@@ -39,7 +40,7 @@ public class USBVision extends Vison {
 					outputStream.putFrame(source);
 				}
 			});
-			visionThread.setName(host);
+			visionThread.setName(RobotMap.CAMERA.axisName);
 			visionThread.setDaemon(true);
 
 		} catch (Exception e) {

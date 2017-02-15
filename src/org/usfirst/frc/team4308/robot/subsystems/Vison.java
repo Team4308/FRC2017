@@ -11,23 +11,13 @@ public abstract class Vison extends Subsystem {
 	protected VideoCamera camera;
 	protected CvSink cvsink;
 	protected CvSource outputStream;
-	
-	protected final String host;
-	protected final int height;
-	protected final int width;
 
-	public Vison(String host, int width, int height) {
+	public Vison() {
 		super();
-		this.width = width;
-		this.height = height;
-		this.host = host;
 	}
 
-	public Vison(String name, String host, int width, int height) {
+	public Vison(String name) {
 		super(name);
-		this.width = width;
-		this.height = height;
-		this.host = host;
 	}
 
 	public abstract boolean initialize();
