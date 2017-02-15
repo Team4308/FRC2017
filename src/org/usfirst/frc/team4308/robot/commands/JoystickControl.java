@@ -2,23 +2,23 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ResetGyro extends Command {
+public class JoystickControl extends Command {
 
-	public ResetGyro() {
+	public JoystickControl() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ResetGyro(String name) {
+	public JoystickControl(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ResetGyro(double timeout) {
+	public JoystickControl(double timeout) {
 		super(timeout);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ResetGyro(String name, double timeout) {
+	public JoystickControl(String name, double timeout) {
 		super(name, timeout);
 		// TODO Auto-generated constructor stub
 	}
