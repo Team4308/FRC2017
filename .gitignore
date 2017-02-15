@@ -1,2 +1,8 @@
-/bin/
-/build/
+bin/
+build/
+*.class
+*.log
+*.jar
+*.zip
+*.tar.gz
+*.rar
