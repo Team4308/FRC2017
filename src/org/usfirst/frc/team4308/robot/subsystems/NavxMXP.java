@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * Handler class responsible for the many functions the Navx-MXP gives
@@ -85,6 +86,18 @@ public class NavxMXP extends Subsystem {
 		return new Vector3(xSum / displacements.size(), ySum / displacements.size(), zSum / displacements.size());
 	}
 
+	public double yaw() {
+		return gyro.getYaw();
+	}
+
+	public double roll() {
+		return gyro.getRoll();
+	}
+
+	public double pitch() {
+		return gyro.getPitch();
+	}
+
 	public boolean reset() {
 		boolean status = true;
 		try {
@@ -97,6 +110,8 @@ public class NavxMXP extends Subsystem {
 		gyroReadings = new OverflowingArrayList<Vector3>(READING_DEPTH);
 		displacements = new OverflowingArrayList<Vector3>(READING_DEPTH);
 
+		LiveWindow.addSensor("NavX-MXP", "Gyroscope", gyro);
+		
 		return status;
 	}
 

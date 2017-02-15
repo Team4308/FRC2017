@@ -4,23 +4,26 @@ import org.usfirst.frc.team4308.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class JoystickControl extends Command {
+public abstract class Control extends Command {
 
-	public JoystickControl() {
+	public Control() {
 		super();
 		requires(Robot.drivetrain);
 	}
-	
-	@Override
-	protected void execute() {
-		Robot.drivetrain.tankDrive(Robot.oi.getJoystick());
+
+	public Control(double timeout) {
+		super(timeout);
+		requires(Robot.drivetrain);
 	}
+
+	@Override
+	protected abstract void execute();
 
 	@Override
 	protected boolean isFinished() {
 		return false;
 	}
-	
+
 	@Override
 	protected void end() {
 		Robot.drivetrain.stop();

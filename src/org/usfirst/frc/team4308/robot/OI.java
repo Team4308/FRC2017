@@ -1,6 +1,11 @@
 package org.usfirst.frc.team4308.robot;
 
+import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.DriveAngular;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -34,13 +39,20 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
-	
-	public Joystick joystick;
-	
+
+	private Joystick joystick;
+
 	public OI() {
 		joystick = new Joystick(RobotMap.CONTROL.driveStick);
+
+		new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-180.0));
+		new JoystickButton(joystick, 5).whenPressed(new DriveAngular(180.0));
+		new JoystickButton(joystick, 2).whenPressed(new DriveAngular(-90.0));
+		new JoystickButton(joystick, 3).whenPressed(new DriveAngular(90.0));
+
+		SmartDashboard.putData("Drive Forward", new DriveLinear());
 	}
-	
+
 	public Joystick getJoystick() {
 		return joystick;
 	}

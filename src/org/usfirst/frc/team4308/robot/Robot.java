@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.TankControl;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
 import org.usfirst.frc.team4308.robot.subsystems.USBVision;
@@ -22,11 +26,11 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	public static OI oi;
 
-	public static DriveTrain drivetrain;
-	public static NavxMXP navx;
-	public static USBVision usbCamera;
-	
-	public SendableChooser<Command> chooser;
+	public static DriveTrain drivetrain = new DriveTrain();
+	public static NavxMXP navx = new NavxMXP();
+	public static USBVision usbCamera = new USBVision();
+
+	SendableChooser<Command> chooser;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -35,9 +39,16 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		drivetrain = new DriveTrain();
-		navx = new NavxMXP();
-		usbCamera = new USBVision();
+
+		SmartDashboard.putData(drivetrain);
+		SmartDashboard.putData(usbCamera);
+		SmartDashboard.putData(navx);
+
+		autonomousCommand = null;
+
+		chooser = new SendableChooser<Command>();
+		chooser.addDefault("Move Forward", new TankControl());
+		SmartDashboard.putData("Auto Mode", chooser);
 	}
 
 	/**
