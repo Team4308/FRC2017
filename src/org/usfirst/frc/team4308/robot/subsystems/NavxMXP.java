@@ -37,7 +37,7 @@ public class NavxMXP extends Subsystem implements Loggable {
 
 	public NavxMXP() {
 		super();
-		reset();
+		initialize();
 	}
 
 	@Override
@@ -96,21 +96,20 @@ public class NavxMXP extends Subsystem implements Loggable {
 		return gyro.getPitch();
 	}
 
-	public boolean reset() {
-		boolean status = true;
+	public boolean initialize() {
 		try {
 			gyro = new AHRS(SPI.Port.kMXP);
 		} catch (RuntimeException rte) {
 			DriverStation.reportError("Error instantiating navX-MXP: " + rte.getStackTrace(), true);
-			status = false;
+			return false;
 		}
 
 		gyroReadings = new OverflowingArrayList<Vector3>(readingDepth);
 		displacements = new OverflowingArrayList<Vector3>(readingDepth);
 
 		LiveWindow.addSensor("NavX-MXP", "Gyroscope", gyro);
-		
-		return status;
+
+		return true;
 	}
 
 	public void recalibrate() {

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import com.ctre.CANTalon;
@@ -11,7 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends Subsystem implements SpeedController, Loggable {
 
-	private static final double restingSpeed = 0.0;
+	public static final double restingSpeed = 0.0;
+	public static final double maxForward = 1.0;
+	public static final double maxBackward = 1.0;
 
 	private final SpeedController master;
 	private final SpeedController slave;
@@ -31,6 +34,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 
 	@Override
 	protected void initDefaultCommand() {
+		setDefaultCommand(new ClimberControl());
 	}
 
 	@Override
@@ -44,7 +48,6 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 			slave.set(-speed);
 			this.speed = speed;
 		}
-
 	}
 
 	@Override

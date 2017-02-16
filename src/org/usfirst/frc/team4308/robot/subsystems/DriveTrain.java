@@ -1,8 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.RobotMap.DRIVE;
-import org.usfirst.frc.team4308.robot.commands.ArcadeControl;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import com.ctre.CANTalon;
@@ -65,8 +64,7 @@ public class DriveTrain extends Subsystem implements Loggable {
 
 	@Override
 	protected void initDefaultCommand() { // TODO: properly grab control scheme from RobotMap
-		new RobotMap.DRIVE();
-		setDefaultCommand(DRIVE.controlScheme);
+		setDefaultCommand(Robot.oi.controlScheme);
 	}
 
 	public void arcadeDrive(Joystick stick) {

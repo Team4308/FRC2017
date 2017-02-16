@@ -14,6 +14,10 @@ import java.util.Collection;
  */
 public class FixedArrayList<E> extends ArrayList<E> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2683401181146354859L;
 	private final int fixedSize;
 
 	public FixedArrayList(int size) {

@@ -1,10 +1,15 @@
 package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.TankControl;
+import org.usfirst.frc.team4308.util.DualButton;
+import org.usfirst.frc.team4308.robot.commands.ArcadeControl;
 import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -40,20 +45,54 @@ public class OI {
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
 
-	private Joystick joystick;
+	private final Joystick joystick;
+	private final JoystickButton[] buttons;
+	private final DualButton climbButtons;
 
-	public OI() { //TODO: implement proper joystick recognition and axis/button assignment
+	public final Command controlScheme;
+
+	// TODO: implement proper joystick recognition and axis/button assignment
+	// TODO: check if button ranges are zero indexed
+	public OI() {
 		joystick = new Joystick(RobotMap.CONTROL.driveStick);
 
-		new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-180.0));
-		new JoystickButton(joystick, 5).whenPressed(new DriveAngular(180.0));
-		new JoystickButton(joystick, 2).whenPressed(new DriveAngular(-90.0));
-		new JoystickButton(joystick, 3).whenPressed(new DriveAngular(90.0));
+		buttons = new JoystickButton[10];
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JoystickButton(joystick, i);
+		}
+
+		switch (joystick.getAxisCount()) {
+		case 3: // 2 DoF joystick
+			controlScheme = new ArcadeControl();
+			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, 5).whenPressed(new DriveAngular(90.0));
+			climbButtons = new DualButton(buttons[7], buttons[8]);
+			break;
+		case 6: // 2 stick PlayStation style controller
+			controlScheme = new TankControl();
+			new JoystickButton(joystick, 1).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(90.0));
+			climbButtons = new DualButton(buttons[5], buttons[6]);
+			break;
+		default:
+			DriverStation.reportError("Invalid number of axis on control joystick", true);
+			climbButtons = null;
+			controlScheme = null;
+			break;
+		}
 
 		SmartDashboard.putData("Drive Forward", new DriveLinear());
 	}
 
 	public Joystick getJoystick() {
 		return joystick;
+	}
+
+	public DualButton getClimbButtons() {
+		return climbButtons;
 	}
 }

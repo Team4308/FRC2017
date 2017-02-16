@@ -14,8 +14,7 @@ import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
-
-import com.ctre.CANTalon;
+import org.usfirst.frc.team4308.util.Loggable;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +23,7 @@ import com.ctre.CANTalon;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot { // TODO: unbreak?
+public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak?
 
 	public static Pneumatics pneumatics;
 	public static DriveTrain drivetrain;
@@ -133,4 +132,12 @@ public class Robot extends IterativeRobot { // TODO: unbreak?
 		LiveWindow.run();
 	}
 
+	@Override
+	public void log() {
+		pneumatics.log();
+		drivetrain.log();
+		climber.log();
+		navx.log();
+	}
+	
 }
