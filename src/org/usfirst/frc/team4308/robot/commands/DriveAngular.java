@@ -6,7 +6,7 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 public class DriveAngular extends Control {
 
 	private static final int defaultTimeout = 2;
-	private static final double maxError = 2.0;
+	private static final double tolerance = 2.0;
 	private static final double kP = -1.0 / 5.0;
 
 	private final double angle;
@@ -47,7 +47,7 @@ public class DriveAngular extends Control {
 
 	@Override
 	protected boolean isFinished() {
-		return (Math.abs(error) <= maxError) || isTimedOut();
+		return (Math.abs(error) <= tolerance) || isTimedOut();
 	}
 
 }

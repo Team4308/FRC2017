@@ -42,7 +42,7 @@ public class OI {
 
 	private Joystick joystick;
 
-	public OI() {
+	public OI() { //TODO: implement proper joystick recognition and axis/button assignment
 		joystick = new Joystick(RobotMap.CONTROL.driveStick);
 
 		new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-180.0));

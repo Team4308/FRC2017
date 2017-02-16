@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.commands.TankControl;
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
+import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 
 import com.ctre.CANTalon;
 
@@ -22,18 +24,16 @@ import com.ctre.CANTalon;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
-	Command autonomousCommand;
+public class Robot extends IterativeRobot { // TODO: unbreak?
 
-	public static OI oi;
+	public static Pneumatics pneumatics;
 	public static DriveTrain drivetrain;
+	public static Climber climber;
 	public static NavxMXP navx;
+	public static OI oi;
 
+	Command autonomousCommand;
 	SendableChooser<Command> chooser;
-
-	CANTalon leftClimb = new CANTalon(4);
-	CANTalon rightClimb = new CANTalon(5);
-	boolean speedState = false;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -43,6 +43,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 
 		drivetrain = new DriveTrain();
+		climber = new Climber();
 		navx = new NavxMXP();
 		oi = new OI();
 
@@ -122,27 +123,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-
-		if (oi.getJoystick().getRawButton(8)) {
-			leftClimb.set(0.5);
-			rightClimb.set(-0.5);
-		} else if (oi.getJoystick().getRawButton(7)) {
-			leftClimb.set(-0.5);
-			rightClimb.set(0.5);
-		} else {
-			leftClimb.set(0.0);
-			rightClimb.set(0.0);
-		}
-		
-		if (oi.getJoystick().getRawButton(6)) {
-			speedState = !speedState;
-		}
-		
-		if (speedState) {
-			drivetrain.setMax(1.0);
-		} else {
-			drivetrain.setMax(0.01);
-		}
 	}
 
 	/**

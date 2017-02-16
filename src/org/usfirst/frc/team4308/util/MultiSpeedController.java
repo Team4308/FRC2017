@@ -4,15 +4,20 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class MultiSpeedController implements SpeedController {
 
-	private static final double RESTING_SPEED = 0.0;
+	private static final double restingSpeed = 0.0;
 
-	private SpeedController[] controllers;
-	private double speed = RESTING_SPEED;
-	private boolean isInverted = false;
+	private final SpeedController[] controllers;
+	private double speed;
+	private boolean isInverted;
 
 	public MultiSpeedController(SpeedController... controllers) {
+		this(false, controllers);
+	}
+
+	public MultiSpeedController(boolean isInverted, SpeedController... controllers) {
+		this.isInverted = isInverted;
 		this.controllers = controllers;
-		this.set(RESTING_SPEED);
+		this.set(restingSpeed);
 	}
 
 	@Override
@@ -58,7 +63,10 @@ public class MultiSpeedController implements SpeedController {
 
 	@Override
 	public void stopMotor() {
-		this.set(RESTING_SPEED);
+		for (SpeedController controller : controllers) {
+			controller.stopMotor();
+		}
+		this.speed = (restingSpeed);
 	}
 
 }

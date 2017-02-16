@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.OverflowingArrayList;
 import org.usfirst.frc.team4308.util.Vector3;
 
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Handler class responsible for the many functions the Navx-MXP gives
@@ -16,9 +18,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * @author Michael
  *
  */
-public class NavxMXP extends Subsystem {
+public class NavxMXP extends Subsystem implements Loggable {
 
-	private static final int READING_DEPTH = 25;
+	private static final int readingDepth = 25;
 
 	private AHRS gyro;
 
@@ -30,6 +32,7 @@ public class NavxMXP extends Subsystem {
 	// TODO: get raw readings from gyro
 	// TODO: get averaged readings from gyro
 	// TODO: access accelerometer
+	// ^^^untested^^^
 	// TODO: add error handling
 
 	public NavxMXP() {
@@ -102,8 +105,8 @@ public class NavxMXP extends Subsystem {
 			status = false;
 		}
 
-		gyroReadings = new OverflowingArrayList<Vector3>(READING_DEPTH);
-		displacements = new OverflowingArrayList<Vector3>(READING_DEPTH);
+		gyroReadings = new OverflowingArrayList<Vector3>(readingDepth);
+		displacements = new OverflowingArrayList<Vector3>(readingDepth);
 
 		LiveWindow.addSensor("NavX-MXP", "Gyroscope", gyro);
 		
@@ -117,6 +120,11 @@ public class NavxMXP extends Subsystem {
 
 	public boolean disturbance() {
 		return gyro.isMagneticDisturbance() && gyro.isAltitudeValid();
+	}
+
+	@Override
+	public void log() {
+		SmartDashboard.putNumber("Yaw", gyro.getAngle());
 	}
 
 }

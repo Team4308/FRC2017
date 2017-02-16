@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveLinear extends Command {
 
 	private static final int defaultTimeout = 2;
-	private static final double maxError = 0.1;
+	private static final double tolerance = 0.1;
 	private static final double kP = -1.0 / 5.0;
 
 	private final double distance;
@@ -45,7 +45,7 @@ public class DriveLinear extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return (Math.abs(error) <= maxError) || isTimedOut();
+		return (Math.abs(error) <= tolerance) || isTimedOut();
 	}
 
 	@Override

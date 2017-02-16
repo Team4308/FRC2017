@@ -84,8 +84,6 @@ public class AxisVision extends Vison {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
