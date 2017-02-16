@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ArcadeControl;
 import org.usfirst.frc.team4308.robot.commands.TankControl;
 
 import com.ctre.CANTalon;
@@ -9,9 +10,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -21,9 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveTrain extends Subsystem {
-	
-	private static final double pulseDistance = 0.042;
 
+	private static final double pulseDistance = 0.042;
+ 
 	private final SpeedController leftAlpha;
 	private final SpeedController leftBeta;
 	private final SpeedController rightAlpha;
@@ -35,32 +34,37 @@ public class DriveTrain extends Subsystem {
 	// TODO: Constructors for inputs of name, speed controllers, and integer
 	// channels
 	public DriveTrain() {
+		super();
 		leftAlpha = new CANTalon(RobotMap.DRIVE.frontLeft);
 		leftBeta = new CANTalon(RobotMap.DRIVE.backLeft);
 		rightAlpha = new CANTalon(RobotMap.DRIVE.frontRight);
 		rightBeta = new CANTalon(RobotMap.DRIVE.backRight);
-		
+
 		drive = new RobotDrive(leftAlpha, leftBeta, rightAlpha, rightBeta);
 		drive.setSafetyEnabled(true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-		
-		leftEncoder.setDistancePerPulse(pulseDistance);
-		rightEncoder.setDistancePerPulse(pulseDistance);
 
-		LiveWindow.addActuator("Drive Train", "Front Left Motor", (Talon) leftAlpha);
-		LiveWindow.addActuator("Drive Train", "Back Left Motor", (Talon) leftBeta);
-		LiveWindow.addActuator("Drive Train", "Front Right Motor", (Talon) rightAlpha);
-		LiveWindow.addActuator("Drive Train", "Back Right Motor", (Talon) rightBeta);
-		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+		// leftEncoder.setDistancePerPulse(pulseDistance);
+		// rightEncoder.setDistancePerPulse(pulseDistance);
+
+		// LiveWindow.addActuator("Drive Train", "Front Left Motor", (Talon)
+		// leftAlpha);
+		// LiveWindow.addActuator("Drive Train", "Back Left Motor", (Talon)
+		// leftBeta);
+		// LiveWindow.addActuator("Drive Train", "Front Right Motor", (Talon)
+		// rightAlpha);
+		// LiveWindow.addActuator("Drive Train", "Back Right Motor", (Talon)
+		// rightBeta);
+		// LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
+		// LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new TankControl());
+		setDefaultCommand(new ArcadeControl());
 	}
 
 	public void arcadeDrive(Joystick stick) {
@@ -72,7 +76,7 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void tankDrive(Joystick stick) {
-		drive.tankDrive(stick.getRawAxis(1), stick.getRawAxis(3));
+		drive.tankDrive(stick.getRawAxis(1), stick.getRawAxis(5));
 	}
 
 	public void tankDrive(double leftValue, double rightValue) {
@@ -109,6 +113,10 @@ public class DriveTrain extends Subsystem {
 
 	public Encoder getRightEncoder() {
 		return rightEncoder;
+	}
+	
+	public void setMax(double limit) {
+		drive.setLeftRightMotorOutputs(limit, limit);
 	}
 
 }

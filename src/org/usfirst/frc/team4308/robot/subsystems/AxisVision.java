@@ -26,10 +26,6 @@ public class AxisVision extends Vison {
 		super();
 	}
 
-	public AxisVision(String name) {
-		super(name);
-	}
-
 	@Override
 	public boolean initialize() {
 		try {

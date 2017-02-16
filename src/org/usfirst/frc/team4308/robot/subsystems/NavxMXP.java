@@ -37,11 +37,6 @@ public class NavxMXP extends Subsystem {
 		reset();
 	}
 
-	public NavxMXP(String name) {
-		super(name);
-		reset();
-	}
-
 	@Override
 	protected void initDefaultCommand() {
 	}

@@ -28,10 +28,10 @@ public class RobotMap {
 	}
 
 	public static class DRIVE {
-		public static final int frontLeft = 0;
+		public static final int frontLeft = 3;
 		public static final int backLeft = 1;
-		public static final int frontRight = 2;
-		public static final int backRight = 3;
+		public static final int frontRight = 0;
+		public static final int backRight = 2;
 	}
 
 	public static class CAMERA {
@@ -41,4 +41,6 @@ public class RobotMap {
 		public static final String usbName = "cam0";
 		public static final String axisName = "axis-camera.local";
 	}
+	
+	public static final int pressureSensorChannel = 0;
 }

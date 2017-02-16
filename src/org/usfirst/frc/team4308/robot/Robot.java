@@ -12,7 +12,8 @@ import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.commands.TankControl;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
-import org.usfirst.frc.team4308.robot.subsystems.USBVision;
+
+import com.ctre.CANTalon;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,15 +23,17 @@ import org.usfirst.frc.team4308.robot.subsystems.USBVision;
  * directory.
  */
 public class Robot extends IterativeRobot {
-
 	Command autonomousCommand;
-	public static OI oi;
 
-	public static DriveTrain drivetrain = new DriveTrain();
-	public static NavxMXP navx = new NavxMXP();
-	public static USBVision usbCamera = new USBVision();
+	public static OI oi;
+	public static DriveTrain drivetrain;
+	public static NavxMXP navx;
 
 	SendableChooser<Command> chooser;
+
+	CANTalon leftClimb = new CANTalon(4);
+	CANTalon rightClimb = new CANTalon(5);
+	boolean speedState = false;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -38,13 +41,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+
+		drivetrain = new DriveTrain();
+		navx = new NavxMXP();
 		oi = new OI();
 
-		SmartDashboard.putData(drivetrain);
-		SmartDashboard.putData(usbCamera);
-		SmartDashboard.putData(navx);
+		autonomousCommand = new DriveLinear();
 
-		autonomousCommand = null;
+		SmartDashboard.putData(drivetrain);
+		SmartDashboard.putData(navx);
 
 		chooser = new SendableChooser<Command>();
 		chooser.addDefault("Move Forward", new TankControl());
@@ -117,6 +122,27 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+
+		if (oi.getJoystick().getRawButton(8)) {
+			leftClimb.set(0.5);
+			rightClimb.set(-0.5);
+		} else if (oi.getJoystick().getRawButton(7)) {
+			leftClimb.set(-0.5);
+			rightClimb.set(0.5);
+		} else {
+			leftClimb.set(0.0);
+			rightClimb.set(0.0);
+		}
+		
+		if (oi.getJoystick().getRawButton(6)) {
+			speedState = !speedState;
+		}
+		
+		if (speedState) {
+			drivetrain.setMax(1.0);
+		} else {
+			drivetrain.setMax(0.01);
+		}
 	}
 
 	/**
