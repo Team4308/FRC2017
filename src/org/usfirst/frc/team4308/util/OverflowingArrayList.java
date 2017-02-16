@@ -13,6 +13,10 @@ import java.util.Collection;
  */
 public class OverflowingArrayList<E> extends ArrayList<E> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 967926892949969569L;
 	private final int fixedSize;
 
 	public OverflowingArrayList(int size) {
