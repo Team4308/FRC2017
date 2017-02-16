@@ -1,19 +1,19 @@
 
 package org.usfirst.frc.team4308.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
-import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.TankControl;
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
+import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 
 import com.ctre.CANTalon;
 
@@ -24,35 +24,37 @@ import com.ctre.CANTalon;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot { // TODO: unbreak?
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static Pneumatics pneumatics;
+	public static DriveTrain drivetrain;
+	public static Climber climber;
+	public static NavxMXP navx;
 	public static OI oi;
 
-	RobotDrive robot;
-	Joystick stick;
-	CANTalon shooter;
-	Encoder ShooterEnc;
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+
+		drivetrain = new DriveTrain();
+		climber = new Climber();
+		navx = new NavxMXP();
 		oi = new OI();
-		robot = new RobotDrive(0,1,2,3);
-		stick = new Joystick(0);
-		shooter = new CANTalon(0);
-		ShooterEnc = new Encoder(0, 1);
-		
-		chooser.addDefault("Default Auto", new ExampleCommand());
-		
-		CameraServer.getInstance().startAutomaticCapture();
-		
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+
+		autonomousCommand = new DriveLinear();
+
+		SmartDashboard.putData(drivetrain);
+		SmartDashboard.putData(navx);
+
+		chooser = new SendableChooser<Command>();
+		chooser.addDefault("Move Forward", new TankControl());
+		SmartDashboard.putData("Auto Mode", chooser);
 	}
 
 	/**
@@ -121,15 +123,6 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		robot.arcadeDrive(stick);
-		
-		if(stick.getRawButton(1)){
-			shooter.set(-1);
-		} else {
-			shooter.set(0);
-		}
-		
-		SmartDashboard.putNumber("Encoder: ", shooter.getSpeed());
 	}
 
 	/**
@@ -139,4 +132,5 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+
 }
