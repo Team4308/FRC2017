@@ -51,5 +51,38 @@ public class RobotMap {
 		public static final int slaveChannel = 5;
 	}
 
+	public static class POWER {
+		public static final int primaryAmpLimit = 40;
+		public static final int secondaryAmpLimit = 30;
+		public static final int breakerAmpLimit = 120;
+		
+		public enum BatteryLevel {
+			NOMINAL(12, 0.5),
+			LOW(10.5, 1.0),
+			DISCHARGED(8.0, 1.0);
+			
+			public final double center;
+			public final double range;
+			
+			BatteryLevel(double center, double range) {
+				this.center = center;
+				this.range = range;
+			}
+			
+			public static BatteryLevel level(double level) {
+				if (level > NOMINAL.center - NOMINAL.range) {
+					return BatteryLevel.NOMINAL;
+				} else if (level > LOW.center - LOW.range) {
+					return BatteryLevel.LOW;
+				} else {
+					return BatteryLevel.DISCHARGED;
+				}
+			}
+		}
+		
+		public static final double warningTemp = 60.0;
+		public static final double dangerTemp = 85.0;
+	}
+
 	public static final int pressureSensorChannel = 0;
 }

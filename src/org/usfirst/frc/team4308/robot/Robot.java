@@ -14,6 +14,7 @@ import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.util.Loggable;
 
 /**
@@ -25,7 +26,7 @@ import org.usfirst.frc.team4308.util.Loggable;
  */
 public class Robot extends IterativeRobot implements Loggable { // TODO:
 																// unbreak?
-
+	public static PowerMonitor powermonitor;
 	public static Pneumatics pneumatics;
 	public static DriveTrain drivetrain;
 	public static Climber climber;
@@ -42,6 +43,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO:
 	@Override
 	public void robotInit() {
 
+		powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drivetrain = new DriveTrain();
 		climber = new Climber();
@@ -139,8 +141,8 @@ public class Robot extends IterativeRobot implements Loggable { // TODO:
 
 	@Override
 	public void log() {
-		//pneumatics.log();
-		//drivetrain.log();
+		// pneumatics.log();
+		// drivetrain.log();
 		climber.log();
 		navx.log();
 	}
