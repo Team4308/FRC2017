@@ -14,7 +14,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 
 	public static final double restingSpeed = 0.0;
 	public static final double maxForward = 1.0;
-	public static final double maxBackward = 1.0;
+	public static final double maxBackward = -1.0;
 
 	private final SpeedController master;
 	private final SpeedController slave;
@@ -86,6 +86,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 
 	@Override
 	public void log() {
+		SmartDashboard.putBoolean("Climb Invert", isInverted);
 		SmartDashboard.putNumber("Climb Speed", speed);
 	}
 

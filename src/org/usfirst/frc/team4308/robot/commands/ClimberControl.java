@@ -10,6 +10,7 @@ public class ClimberControl extends Command {
 
 	public ClimberControl() {
 		this(RobotMap.GAME.maxTimeSeconds);
+		requires(Robot.climber);
 	}
 
 	public ClimberControl(double timeout) {

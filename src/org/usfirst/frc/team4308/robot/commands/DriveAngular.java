@@ -7,7 +7,6 @@ public class DriveAngular extends Control {
 
 	private static final int defaultTimeout = 2;
 	private static final double tolerance = 2.0;
-	private static final double kP = -1.0 / 5.0;
 
 	private final double angle;
 	private final double maxSpeed;
@@ -15,6 +14,7 @@ public class DriveAngular extends Control {
 
 	public DriveAngular(double angle) {
 		this(angle, RobotMap.AUTONOMOUS.maxRotateSpeed);
+		requires(Robot.navx);
 	}
 
 	public DriveAngular(double angle, double maxSpeed) {
@@ -30,24 +30,18 @@ public class DriveAngular extends Control {
 	@Override
 	protected void execute() {
 		error = angle - Robot.navx.yaw();
-		if (maxSpeed * kP * error >= maxSpeed) {
-			if (angle < Robot.navx.yaw()) {
-				Robot.drivetrain.arcadeDrive(0, -maxSpeed);
-			} else {
-				Robot.drivetrain.arcadeDrive(0, maxSpeed);
-			}
+		if (error > angle + tolerance && error > angle - tolerance) {
+			Robot.drivetrain.arcadeDrive(0, maxSpeed);
+		} else if (error < angle + tolerance && error < angle - tolerance) {
+			Robot.drivetrain.arcadeDrive(0, -maxSpeed);
 		} else {
-			if (angle < Robot.navx.yaw()) {
-				Robot.drivetrain.arcadeDrive(0, -maxSpeed * kP * error);
-			} else {
-				Robot.drivetrain.arcadeDrive(0, maxSpeed * kP * error);
-			}
+			end();
 		}
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return (Math.abs(error) <= tolerance) || isTimedOut();
+		return false;
 	}
 
 }

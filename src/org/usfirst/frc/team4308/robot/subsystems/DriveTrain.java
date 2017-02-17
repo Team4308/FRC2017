@@ -49,17 +49,13 @@ public class DriveTrain extends Subsystem implements Loggable {
 		drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
-		leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
-		rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
-		leftEncoder.setDistancePerPulse(pulseDistance);
-		rightEncoder.setDistancePerPulse(pulseDistance);
+		//leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
+		//rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
+		//leftEncoder.setDistancePerPulse(pulseDistance);
+		//rightEncoder.setDistancePerPulse(pulseDistance);
 
-		LiveWindow.addActuator("Drive Train", "Front Left Motor", (LiveWindowSendable) leftAlpha);
-		LiveWindow.addActuator("Drive Train", "Back Left Motor", (LiveWindowSendable) leftBeta);
-		LiveWindow.addActuator("Drive Train", "Front Right Motor", (LiveWindowSendable) rightAlpha);
-		LiveWindow.addActuator("Drive Train", "Back Right Motor", (LiveWindowSendable) rightBeta);
-		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+		//LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
+		//LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}
 
 	@Override

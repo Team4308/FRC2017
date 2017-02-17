@@ -23,7 +23,8 @@ import org.usfirst.frc.team4308.util.Loggable;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak?
+public class Robot extends IterativeRobot implements Loggable { // TODO:
+																// unbreak?
 
 	public static Pneumatics pneumatics;
 	public static DriveTrain drivetrain;
@@ -41,6 +42,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	@Override
 	public void robotInit() {
 
+		pneumatics = new Pneumatics();
 		drivetrain = new DriveTrain();
 		climber = new Climber();
 		navx = new NavxMXP();
@@ -104,6 +106,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		log();
 	}
 
 	@Override
@@ -122,6 +125,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		log();
 	}
 
 	/**
@@ -130,14 +134,15 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
+		log();
 	}
 
 	@Override
 	public void log() {
-		pneumatics.log();
-		drivetrain.log();
+		//pneumatics.log();
+		//drivetrain.log();
 		climber.log();
 		navx.log();
 	}
-	
+
 }

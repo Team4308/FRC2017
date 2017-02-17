@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.SlowMode;
 import org.usfirst.frc.team4308.robot.commands.TankControl;
 import org.usfirst.frc.team4308.util.DualButton;
 import org.usfirst.frc.team4308.robot.commands.ArcadeControl;
@@ -68,7 +69,8 @@ public class OI {
 			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(180.0));
 			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
 			new JoystickButton(joystick, 5).whenPressed(new DriveAngular(90.0));
-			climbButtons = new DualButton(buttons[7], buttons[8]);
+			new JoystickButton(joystick, 6).whenPressed(new SlowMode());
+			climbButtons = new DualButton(joystick, 8, 9);
 			break;
 		case 6: // 2 stick PlayStation style controller
 			controlScheme = new TankControl();
@@ -76,7 +78,7 @@ public class OI {
 			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(180.0));
 			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
 			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(90.0));
-			climbButtons = new DualButton(buttons[5], buttons[6]);
+			climbButtons = new DualButton(joystick, 5, 6);
 			break;
 		default:
 			DriverStation.reportError("Invalid number of axis on control joystick", true);

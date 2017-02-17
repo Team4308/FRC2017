@@ -1,33 +1,36 @@
 package org.usfirst.frc.team4308.util;
 
-import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 
-public class DualButton extends Button {
+public class DualButton extends Trigger {
 
-	private Button primary;
-	private Button secondary;
+	private Joystick joystick;
+	private int primary;
+	private int secondary;
 
-	public DualButton(Button primary, Button secondary) {
+	public DualButton(Joystick joystick, int primary, int secondary) {
+		this.joystick = joystick;
 		this.primary = primary;
 		this.secondary = secondary;
 	}
 
 	public boolean positve() {
-		return primary.get() && !secondary.get();
+		return joystick.getRawButton(primary) && !joystick.getRawButton(secondary);
 	}
 
 	public boolean negative() {
-		return secondary.get() && !primary.get();
+		return joystick.getRawButton(secondary) && !joystick.getRawButton(primary);
 	}
 
 	public boolean neutral() {
-		return !primary.get() && !secondary.get();
+		return !joystick.getRawButton(primary) && !joystick.getRawButton(secondary);
 	}
 
 	public int getInteger() {
-		if (!primary.get() && secondary.get()) {
+		if (!joystick.getRawButton(primary) && joystick.getRawButton(secondary)) {
 			return -1;
-		} else if (!secondary.get() && primary.get()) {
+		} else if (!joystick.getRawButton(secondary) && joystick.getRawButton(primary)) {
 			return 1;
 		} else {
 			return 0;
@@ -36,7 +39,7 @@ public class DualButton extends Button {
 
 	@Override
 	public boolean get() {
-		return primary.get() && secondary.get();
+		return joystick.getRawButton(primary) && joystick.getRawButton(secondary);
 	}
 
 }
