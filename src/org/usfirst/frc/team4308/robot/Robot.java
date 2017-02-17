@@ -8,8 +8,13 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team4308.robot.commands.ExampleCommand;
-import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.TankControl;
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
+import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team4308.util.Loggable;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -18,13 +23,16 @@ import org.usfirst.frc.team4308.robot.subsystems.ExampleSubsystem;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak?
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static Pneumatics pneumatics;
+	public static DriveTrain drivetrain;
+	public static Climber climber;
+	public static NavxMXP navx;
 	public static OI oi;
 
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -32,10 +40,20 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+
+		drivetrain = new DriveTrain();
+		climber = new Climber();
+		navx = new NavxMXP();
 		oi = new OI();
-		chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+
+		autonomousCommand = new DriveLinear();
+
+		SmartDashboard.putData(drivetrain);
+		SmartDashboard.putData(navx);
+
+		chooser = new SendableChooser<Command>();
+		chooser.addDefault("Move Forward", new TankControl());
+		SmartDashboard.putData("Auto Mode", chooser);
 	}
 
 	/**
@@ -113,4 +131,13 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+
+	@Override
+	public void log() {
+		pneumatics.log();
+		drivetrain.log();
+		climber.log();
+		navx.log();
+	}
+	
 }
