@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Controller for the drive train and its motors
  * 
- * @author mike_
+ * @author Samson Close
  *
  */
 public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
