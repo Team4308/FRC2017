@@ -7,19 +7,17 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 public class SlowMode extends InstantCommand {
 
 	private static boolean slow = false;
+	private static final double SLOW_SPEED = 0.42;
+	private static final double FAST_SPEED = 1.0;
 
 	public SlowMode() {
 		super();
-		requires(Robot.drivetrain);
+		requires(Robot.drive);
 	}
 
 	@Override
 	protected void execute() {
-		if (slow) {
-			Robot.drivetrain.setLimit(0.5);
-		} else {
-			Robot.drivetrain.setLimit(1.0);
-		}
+		Robot.drive.setMaxOutput(slow ? SLOW_SPEED : FAST_SPEED);
 		slow = !slow;
 		end();
 	}

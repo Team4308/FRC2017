@@ -3,9 +3,7 @@ package org.usfirst.frc.team4308.robot.commands;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.command.Command;
-
-public class DriveLinear extends Command {
+public class DriveLinear extends DriveControl {
 
 	private static final int defaultTimeout = 2;
 	private static final double tolerance = 0.1;
@@ -24,23 +22,22 @@ public class DriveLinear extends Command {
 	}
 
 	public DriveLinear(double distance, double maxSpeed) {
-		this(defaultTimeout, distance, maxSpeed);
+		this(distance, maxSpeed, defaultTimeout);
 	}
 
 	public DriveLinear(double distance, double maxSpeed, double timeout) {
 		super(timeout);
 		this.distance = distance;
-		this.maxSpeed = maxSpeed;
+		this.maxSpeed = Math.abs(maxSpeed);
+		Robot.drive.resetEncoders();
 	}
 
 	@Override
 	protected void execute() {
-		error = distance - Robot.drivetrain.getDistance();
-		if (maxSpeed * kP * error >= maxSpeed) {
-			Robot.drivetrain.arcadeDrive(maxSpeed, 0);
-		} else {
-			Robot.drivetrain.arcadeDrive(maxSpeed * kP * error, 0);
-		}
+		error = distance - Robot.drive.getDistance();
+		// Uses the speed (maxSpeed * kP * error) within the range of -maxSpeed to maxSpeed
+		double speed = Math.max(Math.min(maxSpeed * kP * error, maxSpeed), -maxSpeed);
+		Robot.drive.setMotorOutputs(speed, speed);
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class DriveLinear extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drivetrain.stop();
+		Robot.drive.stopMotor();
+		Robot.drive.resetEncoders();
 	}
-
 }

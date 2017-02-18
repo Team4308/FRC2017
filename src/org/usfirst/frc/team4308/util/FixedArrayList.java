@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Extension of the ArrayList object that will refuse to add elements that would
- * increase the size of the ArrayList beyond a limit stated when the object was
- * created
+ * Extension of the ArrayList object that will refuse to add elements that would increase the size of the ArrayList beyond a limit stated when the object was created
  * 
  * @author mike_
  *

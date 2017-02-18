@@ -31,8 +31,7 @@ public class Pneumatics extends Subsystem implements Loggable { // TODO: adapt t
 	}
 
 	/**
-	 * Start the compressor going. The compressor automatically starts and stops
-	 * as it goes above and below maximum pressure.
+	 * Start the compressor going. The compressor automatically starts and stops as it goes above and below maximum pressure.
 	 */
 	public void start() {
 		compressor.start();

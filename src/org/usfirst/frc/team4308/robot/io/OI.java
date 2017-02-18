@@ -1,21 +1,18 @@
-package org.usfirst.frc.team4308.robot;
+package org.usfirst.frc.team4308.robot.io;
 
+import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
-import org.usfirst.frc.team4308.robot.commands.TankControl;
 import org.usfirst.frc.team4308.util.DualButton;
-import org.usfirst.frc.team4308.robot.commands.ArcadeControl;
-import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
+ * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
 	//// CREATING BUTTONS
@@ -47,24 +44,24 @@ public class OI {
 	// button.whenReleased(new ExampleCommand());
 
 	private final Joystick joystick;
-	private final JoystickButton[] buttons;
+	private final JoystickType type;
+	// private final JoystickButton[] buttons;
 	private final DualButton climbButtons;
-
-	public final Command controlScheme;
 
 	// TODO: implement proper joystick recognition and axis/button assignment
 	// TODO: check if button ranges are zero indexed
 	public OI() {
 		joystick = new Joystick(RobotMap.CONTROL.driveStick);
 
-		buttons = new JoystickButton[10];
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = new JoystickButton(joystick, i);
-		}
+		// buttons = new JoystickButton[10];
+		// for (int i = 0; i < buttons.length; i++) {
+		// buttons[i] = new JoystickButton(joystick, i);
+		// }
 
-		switch (joystick.getAxisCount()) {
-		case 3: // 2 DoF joystick
-			controlScheme = new ArcadeControl();
+		type = JoystickType.fromJoystick(joystick);
+
+		switch (type) {
+		case FLIGHT: // 2 DoF joystick
 			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(-180.0));
 			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(180.0));
 			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
@@ -72,22 +69,25 @@ public class OI {
 			new JoystickButton(joystick, 6).whenPressed(new SlowMode());
 			climbButtons = new DualButton(joystick, 8, 9);
 			break;
-		case 6: // 2 stick PlayStation style controller
-			controlScheme = new TankControl();
-			new JoystickButton(joystick, 1).whenPressed(new DriveAngular(-180.0));
-			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(180.0));
-			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
-			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(90.0));
-			climbButtons = new DualButton(joystick, 5, 6);
+		case STANDARD: // 2 stick PlayStation style controller
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_A).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_B).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_Y).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_X).whenPressed(new DriveAngular(90.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_START).whenPressed(new SlowMode());
+			climbButtons = new DualButton(joystick, RobotMap.CONTROL.BUTTON_LB, RobotMap.CONTROL.BUTTON_RB);
 			break;
 		default:
 			DriverStation.reportError("Invalid number of axis on control joystick", true);
 			climbButtons = null;
-			controlScheme = null;
 			break;
 		}
 
 		SmartDashboard.putData("Drive Forward", new DriveLinear());
+	}
+
+	public JoystickType getJoystickType() {
+		return type;
 	}
 
 	public Joystick getJoystick() {

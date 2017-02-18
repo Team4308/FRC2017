@@ -1,10 +1,7 @@
 package org.usfirst.frc.team4308.robot;
 
 /**
- * The RobotMap is a mapping from the ports sensors and actuators are wired into
- * to a variable name. This provides flexibility changing wiring, makes checking
- * the wiring easier and significantly reduces the number of magic numbers
- * floating around.
+ * The RobotMap is a mapping from the ports sensors and actuators are wired into to a variable name. This provides flexibility changing wiring, makes checking the wiring easier and significantly reduces the number of magic numbers floating around.
  */
 public class RobotMap {
 
@@ -22,6 +19,24 @@ public class RobotMap {
 		public static final int driveStick = 0;
 		public static final int tankDriveLeftAxis = 2;
 		public static final int tankDriveRightAxis = 5;
+
+		public static final int LEFT_STICK_X = 0;
+		public static final int LEFT_STICK_Y = 1;
+		public static final int LEFT_TRIGGER = 2;
+		public static final int RIGHT_TRIGGER = 3;
+		public static final int RIGHT_STICK_X = 4;
+		public static final int RIGHT_STICK_Y = 5;
+
+		public static final int BUTTON_A = 1; // TODO test that these are right
+		public static final int BUTTON_B = 2;
+		public static final int BUTTON_X = 3;
+		public static final int BUTTON_Y = 4;
+		public static final int BUTTON_LB = 5;
+		public static final int BUTTON_RB = 6;
+		public static final int BUTTON_BACK = 7;
+		public static final int BUTTON_START = 8;
+		public static final int BUTTON_L_ANALOGUE = 9;
+		public static final int BUTTON_R_ANALOGUE = 10;
 	}
 
 	// TODO: encoder channel correction
@@ -55,20 +70,18 @@ public class RobotMap {
 		public static final int primaryAmpLimit = 40;
 		public static final int secondaryAmpLimit = 30;
 		public static final int breakerAmpLimit = 120;
-		
+
 		public enum BatteryLevel {
-			NOMINAL(12, 0.5),
-			LOW(10.5, 1.0),
-			DISCHARGED(8.0, 1.0);
-			
+			NOMINAL(12, 0.5), LOW(10.5, 1.0), DISCHARGED(8.0, 1.0);
+
 			public final double center;
 			public final double range;
-			
+
 			BatteryLevel(double center, double range) {
 				this.center = center;
 				this.range = range;
 			}
-			
+
 			public static BatteryLevel level(double level) {
 				if (level > NOMINAL.center - NOMINAL.range) {
 					return BatteryLevel.NOMINAL;
@@ -79,7 +92,7 @@ public class RobotMap {
 				}
 			}
 		}
-		
+
 		public static final double warningTemp = 60.0;
 		public static final double dangerTemp = 85.0;
 	}

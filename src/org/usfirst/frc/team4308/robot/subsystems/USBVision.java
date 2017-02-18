@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * Onboard USB camera feed controller
+ * 
  * @author Michael
  *
  */
 public class USBVision extends Vison {
 
 	// TODO: test
-	
+
 	public USBVision() {
 		super();
 	}

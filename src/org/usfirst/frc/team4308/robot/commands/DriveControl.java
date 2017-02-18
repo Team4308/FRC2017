@@ -5,20 +5,20 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ClimberControl extends Command {
+public class DriveControl extends Command {
 
-	public ClimberControl() {
+	public DriveControl() {
 		this(RobotMap.GAME.maxTimeSeconds);
 	}
 
-	public ClimberControl(double timeout) {
+	public DriveControl(double timeout) {
 		super(timeout);
-		requires(Robot.climber);
+		requires(Robot.drive);
 	}
 
 	@Override
 	protected void execute() {
-		Robot.climber.execute();
+		Robot.drive.execute();
 	}
 
 	@Override
@@ -29,6 +29,5 @@ public class ClimberControl extends Command {
 	@Override
 	protected void end() {
 		Robot.drive.stopMotor();
-		Robot.climber.stopMotor();
 	}
 }
