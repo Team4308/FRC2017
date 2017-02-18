@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -29,7 +28,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	public static OI oi;
 
 	Command autonomousCommand;
-	SendableChooser<Command> chooser;
+	// SendableChooser<Command> chooser;
 
 	@Override
 	public void robotInit() {
@@ -40,12 +39,12 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 		navx = new NavxMXP();
 		oi = new OI();
 
-		autonomousCommand = new DriveLinear(drive);
-		chooser = new SendableChooser<Command>();
+		autonomousCommand = new DriveLinear();
+		// chooser = new SendableChooser<Command>();
 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(navx);
-		SmartDashboard.putData("Auto Mode", chooser);
+		// SmartDashboard.putData("Auto Mode", chooser);
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		// autonomousCommand = chooser.getSelected();
 
 		// String autoSelected = SmartDashboard.getString("Auto Selector",
 		// "Default");

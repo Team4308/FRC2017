@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4308.robot.commands;
 
-import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team4308.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -10,17 +10,14 @@ public class SlowMode extends InstantCommand {
 	private static final double SLOW_SPEED = 0.42;
 	private static final double FAST_SPEED = 1.0;
 
-	private DriveTrain drive;
-
-	public SlowMode(DriveTrain drive) {
+	public SlowMode() {
 		super();
-		this.drive = drive;
-		requires(drive);
+		requires(Robot.drive);
 	}
 
 	@Override
 	protected void execute() {
-		drive.setMaxOutput(slow ? SLOW_SPEED : FAST_SPEED);
+		Robot.drive.setMaxOutput(slow ? SLOW_SPEED : FAST_SPEED);
 		slow = !slow;
 		end();
 	}

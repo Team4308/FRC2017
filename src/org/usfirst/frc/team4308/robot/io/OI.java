@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4308.robot.io;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
@@ -63,19 +62,19 @@ public class OI {
 
 		switch (type) {
 		case FLIGHT: // 2 DoF joystick
-			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(Robot.drive, -180.0));
-			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(Robot.drive, 180.0));
-			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(Robot.drive, -90.0));
-			new JoystickButton(joystick, 5).whenPressed(new DriveAngular(Robot.drive, 90.0));
-			new JoystickButton(joystick, 6).whenPressed(new SlowMode(Robot.drive));
+			new JoystickButton(joystick, 2).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, 3).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, 4).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, 5).whenPressed(new DriveAngular(90.0));
+			new JoystickButton(joystick, 6).whenPressed(new SlowMode());
 			climbButtons = new DualButton(joystick, 8, 9);
 			break;
 		case STANDARD: // 2 stick PlayStation style controller
-			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_A).whenPressed(new DriveAngular(Robot.drive, -180.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_B).whenPressed(new DriveAngular(Robot.drive, 180.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_Y).whenPressed(new DriveAngular(Robot.drive, -90.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_X).whenPressed(new DriveAngular(Robot.drive, 90.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_START).whenPressed(new SlowMode(Robot.drive));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_A).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_B).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_Y).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_X).whenPressed(new DriveAngular(90.0));
+			new JoystickButton(joystick, RobotMap.CONTROL.BUTTON_START).whenPressed(new SlowMode());
 			climbButtons = new DualButton(joystick, RobotMap.CONTROL.BUTTON_LB, RobotMap.CONTROL.BUTTON_RB);
 			break;
 		default:
@@ -84,7 +83,7 @@ public class OI {
 			break;
 		}
 
-		SmartDashboard.putData("Drive Forward", new DriveLinear(Robot.drive));
+		SmartDashboard.putData("Drive Forward", new DriveLinear());
 	}
 
 	public JoystickType getJoystickType() {
