@@ -7,10 +7,10 @@ public class PowerCheck extends InstantCommand {
 	public PowerCheck() {
 		super();
 	}
-	
+
 	@Override
 	protected void execute() {
-		
+
 	}
 
 }

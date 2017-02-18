@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
- * IP camera feed controller
- * Requires default credentials for access
+ * IP camera feed controller Requires default credentials for access
+ * 
  * @author Michael
  *
  */
 public class AxisVision extends Vison {
-	
+
 	// TODO: test
 
 	public AxisVision() {
@@ -28,8 +28,7 @@ public class AxisVision extends Vison {
 				camera.setResolution(RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
 
 				cvsink = CameraServer.getInstance().getVideo();
-				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.CAMERA.videoWidth,
-						RobotMap.CAMERA.videoHeight);
+				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
 
 				Mat source = new Mat();
 

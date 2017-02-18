@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Extension of the ArrayList object that will remove the first element(s) of
- * the array in order to make room for new elements
+ * Extension of the ArrayList object that will remove the first element(s) of the array in order to make room for new elements
  * 
  * @author mike_
  *

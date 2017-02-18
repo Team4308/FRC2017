@@ -81,11 +81,11 @@ public class PowerMonitor extends Subsystem implements Loggable {
 
 		return true;
 	}
-	
+
 	public boolean currentWarning() {
 		return currentWarning;
 	}
-	
+
 	public boolean temperatureWarning() {
 		return temperatureWarning;
 	}

@@ -2,6 +2,7 @@
 package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.io.OI;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveSamson;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
@@ -111,7 +112,8 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	@Override
 	public void teleopPeriodic() {
 		// Passes the joystick input to the bot's drive control
-		drive.execute(oi.getJoystick());
+		drive.execute();
+		climber.execute();
 
 		Scheduler.getInstance().run();
 		log();

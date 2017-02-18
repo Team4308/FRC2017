@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.Loggable;
 
@@ -38,6 +39,8 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 
 	@Override
 	public void set(double speed) {
+		speed = Math.max(Math.min(speed, maxForward), maxBackward);
+
 		if (isInverted) {
 			master.set(-speed);
 			slave.set(speed);
@@ -87,6 +90,20 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 	public void log() {
 		SmartDashboard.putBoolean("Climb Invert", isInverted);
 		SmartDashboard.putNumber("Climb Speed", speed);
+	}
+
+	public void execute() {
+		switch (Robot.oi.getClimbButtons().getInteger()) {
+		case 0:
+			set(Climber.restingSpeed);
+			break;
+		case 1:
+			set(Climber.maxForward);
+			break;
+		case -1:
+			set(Climber.maxBackward);
+			break;
+		}
 	}
 
 }

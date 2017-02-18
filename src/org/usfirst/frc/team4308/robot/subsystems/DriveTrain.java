@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author mike_
  *
  */
+@Deprecated
 public class DriveTrain extends Subsystem implements Loggable {
 
 	private static final double pulseDistance = 0.042;
@@ -88,6 +89,7 @@ public class DriveTrain extends Subsystem implements Loggable {
 		drive.stopMotor();
 	}
 
+	@Override
 	public void log() {
 		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
 		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());

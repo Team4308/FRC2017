@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4308.robot.commands;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.subsystems.DriveSamson;
 

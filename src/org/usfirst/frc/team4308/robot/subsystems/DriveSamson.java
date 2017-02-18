@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.Loggable;
 
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controller for the drive train and its motors
@@ -24,7 +27,7 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 	public static final double kDefaultExpirationTime = 0.1;
 	public static final double kDefaultMaxOutput = 1.0;
 
-	// private static final double pulseDistance = 0.042;
+	private static final double pulseDistance = 0.042;
 
 	private DriveSamsonType type;
 	private double maxOutput;
@@ -55,38 +58,45 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 		setSafetyEnabled(true);
 
 		// TODO encode shit
-		// leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA,
-		// RobotMap.DRIVE.leftChannelB);
-		// rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA,
-		// RobotMap.DRIVE.rightChannelB);
-		// leftEncoder.setDistancePerPulse(pulseDistance);
-		// rightEncoder.setDistancePerPulse(pulseDistance);
+		leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
+		rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
+		leftEncoder.setDistancePerPulse(pulseDistance);
+		rightEncoder.setDistancePerPulse(pulseDistance);
 
-		// LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		// LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
+		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}
 
 	public void setDriveType(DriveSamsonType type) {
 		this.type = type;
 	}
 
-	public void execute(Joystick joystick) {
-		// double leftX = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
-		double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
-		double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
-		double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
+	public void execute() {
+		Joystick joystick = Robot.oi.getJoystick();
 
-		switch (type) {
-		default:
-		case SAMSON:
+		switch (Robot.oi.getJoystickType()) {
+		case STANDARD:
+			// double leftX = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
+			double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
+			double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
+			double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
 
-			double leftMotor = leftY + rightX;
-			double rightMotor = leftY - rightX;
+			switch (type) {
+			default:
+			case SAMSON:
 
-			setMotorOutputs(leftMotor, rightMotor);
+				double leftMotor = leftY + rightX;
+				double rightMotor = leftY - rightX;
+
+				setMotorOutputs(leftMotor, rightMotor);
+				break;
+			case TANK:
+				setMotorOutputs(leftY, rightY);
+				break;
+			}
 			break;
-		case TANK:
-			setMotorOutputs(leftY, rightY);
+		case FLIGHT:
+			// TODO controls for a flight styled control stick
 			break;
 		}
 	}
@@ -96,38 +106,13 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 		// setDefaultCommand(Robot.oi.controlScheme);
 		type = DriveSamsonType.SAMSON;
 	}
-	//
-	// public void arcadeDrive(Joystick stick) {
-	// drive.arcadeDrive(stick);
-	// }
-	//
-	// public void arcadeDrive(double moveValue, double rotateValue) {
-	// drive.arcadeDrive(moveValue, rotateValue);
-	// }
-	//
-	// public void tankDrive(Joystick stick) {
-	// drive.tankDrive(stick.getRawAxis(1), stick.getRawAxis(5));
-	// }
-	//
-	// public void tankDrive(double leftValue, double rightValue) {
-	// drive.tankDrive(leftValue, rightValue);
-	// }
-	//
-	// public void drive(double magnitude, double curve) {
-	// drive.drive(magnitude, curve);
-	// }
-	//
-	// public void stop() {
-	// drive.stopMotor();
-	// }
 
 	@Override
 	public void log() {
-		// SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
-		// SmartDashboard.putNumber("Right Distance",
-		// rightEncoder.getDistance());
-		// SmartDashboard.putNumber("Left Speed", leftEncoder.getRate());
-		// SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
+		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
+		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());
+		SmartDashboard.putNumber("Left Speed", leftEncoder.getRate());
+		SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
 	}
 
 	public void resetEncoders() {
