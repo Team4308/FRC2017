@@ -15,7 +15,7 @@ public class DualButton extends Trigger {
 		this.secondary = secondary;
 	}
 
-	public boolean positve() {
+	public boolean positive() {
 		return joystick.getRawButton(primary) && !joystick.getRawButton(secondary);
 	}
 
@@ -28,9 +28,9 @@ public class DualButton extends Trigger {
 	}
 
 	public int getInteger() {
-		if (!joystick.getRawButton(primary) && joystick.getRawButton(secondary)) {
+		if (negative()) {
 			return -1;
-		} else if (!joystick.getRawButton(secondary) && joystick.getRawButton(primary)) {
+		} else if (positive()) {
 			return 1;
 		} else {
 			return 0;

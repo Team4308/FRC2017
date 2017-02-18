@@ -1,11 +1,11 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
@@ -32,8 +32,8 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 	private final SpeedController leftBack;
 	private final SpeedController rightFront;
 	private final SpeedController rightBack;
-	// private Encoder leftEncoder;
-	// private Encoder rightEncoder;
+	private Encoder leftEncoder;
+	private Encoder rightEncoder;
 
 	// TODO: Constructors for inputs of name, speed controllers, and integer
 	// channels
@@ -54,6 +54,7 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 
 		setSafetyEnabled(true);
 
+		// TODO encode shit
 		// leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA,
 		// RobotMap.DRIVE.leftChannelB);
 		// rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA,
@@ -65,11 +66,15 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 		// LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}
 
-	public void execute(double leftX, double leftY, double rightX, double rightY) {
-		leftX = limit(leftX);
-		leftY = limit(leftY);
-		rightX = limit(rightX);
-		rightY = limit(rightY);
+	public void setDriveType(DriveSamsonType type) {
+		this.type = type;
+	}
+
+	public void execute(Joystick joystick) {
+		// double leftX = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
+		double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
+		double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
+		double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
 
 		switch (type) {
 		default:
@@ -87,8 +92,7 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 	}
 
 	@Override
-	protected void initDefaultCommand() { // TODO: properly grab control scheme
-											// from RobotMap
+	protected void initDefaultCommand() { // TODO: properly grab control scheme from RobotMap
 		// setDefaultCommand(Robot.oi.controlScheme);
 		type = DriveSamsonType.SAMSON;
 	}
@@ -126,26 +130,22 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 		// SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
 	}
 
-	// public void reset() {
-	// leftEncoder.reset();
-	// rightEncoder.reset();
-	// }
+	public void resetEncoders() {
+		leftEncoder.reset();
+		rightEncoder.reset();
+	}
 
-	// public double getDistance() {
-	// return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
-	// }
+	public double getDistance() {
+		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
+	}
 
-	// public Encoder getLeftEncoder() {
-	// return leftEncoder;
-	// }
-	//
-	// public Encoder getRightEncoder() {
-	// return rightEncoder;
-	// }
+	public Encoder getLeftEncoder() {
+		return leftEncoder;
+	}
 
-	// public void setLimit(double limit) {
-	// drive.setMaxOutput(limit);
-	// }
+	public Encoder getRightEncoder() {
+		return rightEncoder;
+	}
 
 	/**
 	 * @return the maximum output for the motors
@@ -155,8 +155,7 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 	}
 
 	/**
-	 * Sets the outputs of the motors. The general range for these values is
-	 * -1.0 to 1.0. (Refer to getMaxOutput() to see what the range is).
+	 * Sets the outputs of the motors. The general range for these values is -1.0 to 1.0. (Refer to getMaxOutput() to see what the range is).
 	 * 
 	 * @param leftOutput
 	 *            the output to the left motors
@@ -185,7 +184,7 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 		}
 	}
 
-	protected static double limit(double num) {
+	private double limit(double num) {
 		if (num > 1.0) {
 			return 1.0;
 		}
@@ -193,6 +192,10 @@ public class DriveSamson extends Subsystem implements Loggable, MotorSafety {
 			return -1.0;
 		}
 		return num;
+	}
+
+	public void setMaxOutput(double limit) {
+		this.maxOutput = Math.abs(limit);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.Loggable;
 
@@ -11,8 +10,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -33,7 +30,8 @@ public class DriveTrain extends Subsystem implements Loggable {
 	private Encoder leftEncoder;
 	private Encoder rightEncoder;
 
-	// TODO: Constructors for inputs of name, speed controllers, and integer channels
+	// TODO: Constructors for inputs of name, speed controllers, and integer
+	// channels
 	// TODO: instantiation of correct encoders
 	public DriveTrain() {
 		super();
@@ -49,17 +47,20 @@ public class DriveTrain extends Subsystem implements Loggable {
 		drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
-		//leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
-		//rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
-		//leftEncoder.setDistancePerPulse(pulseDistance);
-		//rightEncoder.setDistancePerPulse(pulseDistance);
+		// leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA,
+		// RobotMap.DRIVE.leftChannelB);
+		// rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA,
+		// RobotMap.DRIVE.rightChannelB);
+		// leftEncoder.setDistancePerPulse(pulseDistance);
+		// rightEncoder.setDistancePerPulse(pulseDistance);
 
-		//LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		//LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+		// LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
+		// LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}
 
 	@Override
-	protected void initDefaultCommand() { // TODO: properly grab control scheme from RobotMap
+	protected void initDefaultCommand() { // TODO: properly grab control scheme
+											// from RobotMap
 		// TODO setDefaultCommand(Robot.oi.controlScheme);
 	}
 
@@ -114,5 +115,4 @@ public class DriveTrain extends Subsystem implements Loggable {
 	public void setLimit(double limit) {
 		drive.setMaxOutput(limit);
 	}
-
 }

@@ -8,12 +8,12 @@ public abstract class Control extends Command {
 
 	public Control() {
 		super();
-		requires(Robot.drivetrain);
+		requires(Robot.drive);
 	}
 
 	public Control(double timeout) {
 		super(timeout);
-		requires(Robot.drivetrain);
+		requires(Robot.drive);
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public abstract class Control extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drivetrain.stopMotor();
+		Robot.drive.stopMotor();
 	}
 
 }
