@@ -1,21 +1,19 @@
 
 package org.usfirst.frc.team4308.robot;
 
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
+import org.usfirst.frc.team4308.robot.subsystems.DriveSamson;
+import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
+import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team4308.util.Loggable;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team4308.robot.commands.DriveLinear;
-import org.usfirst.frc.team4308.robot.commands.TankControl;
-import org.usfirst.frc.team4308.robot.subsystems.Climber;
-import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
-import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
-import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
-import org.usfirst.frc.team4308.util.Loggable;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,12 +24,14 @@ import org.usfirst.frc.team4308.util.Loggable;
  */
 public class Robot extends IterativeRobot implements Loggable { // TODO:
 																// unbreak?
-	public static PowerMonitor powermonitor;
+	// public static PowerMonitor powermonitor; // TODO fix this before adding
+	// it back
 	public static Pneumatics pneumatics;
-	public static DriveTrain drivetrain;
+	public static DriveSamson drivetrain;
 	public static Climber climber;
 	public static NavxMXP navx;
-	public static OI oi;
+	// TODO public static OI oi;
+	public static Joystick joystick;
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser;
@@ -43,20 +43,24 @@ public class Robot extends IterativeRobot implements Loggable { // TODO:
 	@Override
 	public void robotInit() {
 
-		powermonitor = new PowerMonitor();
+		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
-		drivetrain = new DriveTrain();
+		// drivetrain = new DriveTrain();
+		drivetrain = new DriveSamson();
+		joystick = new Joystick(RobotMap.CONTROL.driveStick);
+
 		climber = new Climber();
 		navx = new NavxMXP();
-		oi = new OI();
+		// TODO oi = new OI();
 
-		autonomousCommand = new DriveLinear();
+		// TODO autonomousCommand = new DriveLinear();
 
 		SmartDashboard.putData(drivetrain);
 		SmartDashboard.putData(navx);
 
 		chooser = new SendableChooser<Command>();
-		chooser.addDefault("Move Forward", new TankControl());
+		// TODO remove whatever this garbag is chooser.addDefault("Move
+		// Forward", new TankControl());
 		SmartDashboard.putData("Auto Mode", chooser);
 	}
 
@@ -121,11 +125,16 @@ public class Robot extends IterativeRobot implements Loggable { // TODO:
 			autonomousCommand.cancel();
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
+	private static final int CONTROLLER_LEFT_STICK_X = 0;
+	private static final int CONTROLLER_LEFT_STICK_Y = 1;
+	private static final int CONTROLLER_RIGHT_STICK_X = 4;
+	private static final int CONTROLLER_RIGHT_STICK_Y = 5;
+
 	@Override
 	public void teleopPeriodic() {
+		// Passes the joystick input to the bot's drive control
+		drivetrain.execute(joystick.getRawAxis(CONTROLLER_LEFT_STICK_X), joystick.getRawAxis(CONTROLLER_LEFT_STICK_Y), joystick.getRawAxis(CONTROLLER_RIGHT_STICK_X), joystick.getRawAxis(CONTROLLER_RIGHT_STICK_Y));
+
 		Scheduler.getInstance().run();
 		log();
 	}

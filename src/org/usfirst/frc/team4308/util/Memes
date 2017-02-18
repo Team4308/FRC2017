@@ -1,0 +1,19 @@
+ERROR  1  
+ERROR Unhandled exception: edu.wpi.first.wpilibj.command.IllegalUseOfCommandException: A default command must require the subsystem at [edu.wpi.first.wpilibj.command.Subsystem.setDefaultCommand(Subsystem.java:101), org.usfirst.frc.team4308.robot.subsystems.PowerMonitor.initDefaultCommand(PowerMonitor.java:47), edu.wpi.first.wpilibj.command.Subsystem.getDefaultCommand(Subsystem.java:123), edu.wpi.first.wpilibj.command.Scheduler.run(Scheduler.java:223), org.usfirst.frc.team4308.robot.Robot.disabledPeriodic(Robot.java:75), edu.wpi.first.wpilibj.IterativeRobot.startCompetition(IterativeRobot.java:88), edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:247)]  
+edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:249) 
+ERROR Unhandled exception: edu.wpi.first.wpilibj.command.IllegalUseOfCommandException: A default command must require the subsystem at [edu.wpi.first.wpilibj.command.Subsystem.setDefaultCommand(Subsystem.java:101), org.usfirst.frc.team4308.robot.subsystems.PowerMonitor.initDefaultCommand(PowerMonitor.java:47), edu.wpi.first.wpilibj.command.Subsystem.getDefaultCommand(Subsystem.java:123), edu.wpi.first.wpilibj.command.Scheduler.run(Scheduler.java:223), org.usfirst.frc.team4308.robot.Robot.disabledPeriodic(Robot.java:75), edu.wpi.first.wpilibj.IterativeRobot.startCompetition(IterativeRobot.java:88), edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:247)] 
+WARNING: Robots don't quit! 
+
+
+ERROR  1  ERROR Unhandled exception: edu.wpi.first.wpilibj.command.IllegalUseOfCommandException: A default command must require the subsystem at 
+[edu.wpi.first.wpilibj.command.Subsystem.setDefaultCommand(Subsystem.java:101), 
+org.usfirst.frc.team4308.robot.subsystems.PowerMonitor.initDefaultCommand(PowerMonitor.java:47), 
+edu.wpi.first.wpilibj.command.Subsystem.getDefaultCommand(Subsystem.java:123), 
+edu.wpi.first.wpilibj.command.Scheduler.run(Scheduler.java:223), 
+org.usfirst.frc.team4308.robot.Robot.disabledPeriodic(Robot.java:75), 
+edu.wpi.first.wpilibj.IterativeRobot.startCompetition(IterativeRobot.java:88), 
+edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:247)]  edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:249) 
+
+
+ERROR Unhandled exception: edu.wpi.first.wpilibj.command.IllegalUseOfCommandException: A default command must require the subsystem at [edu.wpi.first.wpilibj.command.Subsystem.setDefaultCommand(Subsystem.java:101), org.usfirst.frc.team4308.robot.subsystems.PowerMonitor.initDefaultCommand(PowerMonitor.java:47), edu.wpi.first.wpilibj.command.Subsystem.getDefaultCommand(Subsystem.java:123), edu.wpi.first.wpilibj.command.Scheduler.run(Scheduler.java:223), org.usfirst.frc.team4308.robot.Robot.disabledPeriodic(Robot.java:75), edu.wpi.first.wpilibj.IterativeRobot.startCompetition(IterativeRobot.java:88), edu.wpi.first.wpilibj.RobotBase.main(RobotBase.java:247)] 
+WARNING: Robots don't quit! 

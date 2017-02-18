@@ -60,7 +60,7 @@ public class DriveTrain extends Subsystem implements Loggable {
 
 	@Override
 	protected void initDefaultCommand() { // TODO: properly grab control scheme from RobotMap
-		setDefaultCommand(Robot.oi.controlScheme);
+		// TODO setDefaultCommand(Robot.oi.controlScheme);
 	}
 
 	public void arcadeDrive(Joystick stick) {

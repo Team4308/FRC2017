@@ -26,7 +26,7 @@ public abstract class Control extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drivetrain.stop();
+		Robot.drivetrain.stopMotor();
 	}
 
 }
