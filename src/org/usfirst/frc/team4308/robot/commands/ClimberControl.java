@@ -2,7 +2,6 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -19,17 +18,7 @@ public class ClimberControl extends Command {
 
 	@Override
 	protected void execute() {
-		switch (Robot.oi.getClimbButtons().getInteger()) {
-		case 0:
-			Robot.climber.set(Climber.restingSpeed);
-			break;
-		case 1:
-			Robot.climber.set(Climber.maxForward);
-			break;
-		case -1:
-			Robot.climber.set(Climber.maxBackward);
-			break;
-		}
+		Robot.climber.execute();
 	}
 
 	@Override
@@ -37,4 +26,9 @@ public class ClimberControl extends Command {
 		return false;
 	}
 
+	@Override
+	protected void end() {
+		Robot.drive.stopMotor();
+		Robot.climber.stopMotor();
+	}
 }

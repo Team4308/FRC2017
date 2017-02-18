@@ -1,23 +1,25 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public abstract class Control extends Command {
+public class DriveControl extends Command {
 
-	public Control() {
-		super();
-		requires(Robot.drive);
+	public DriveControl() {
+		this(RobotMap.GAME.maxTimeSeconds);
 	}
 
-	public Control(double timeout) {
+	public DriveControl(double timeout) {
 		super(timeout);
 		requires(Robot.drive);
 	}
 
 	@Override
-	protected abstract void execute();
+	protected void execute() {
+		Robot.drive.execute();
+	}
 
 	@Override
 	protected boolean isFinished() {
@@ -28,5 +30,4 @@ public abstract class Control extends Command {
 	protected void end() {
 		Robot.drive.stopMotor();
 	}
-
 }

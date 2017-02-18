@@ -2,6 +2,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import com.ctre.CANTalon;
@@ -34,7 +35,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO setDefaultCommand(new ClimberControl());
+		setDefaultCommand(new ClimberControl());
 	}
 
 	@Override
@@ -95,13 +96,13 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 	public void execute() {
 		switch (Robot.oi.getClimbButtons().getInteger()) {
 		case 0:
-			set(Climber.restingSpeed);
+			set(restingSpeed);
 			break;
 		case 1:
-			set(Climber.maxForward);
+			set(maxForward);
 			break;
 		case -1:
-			set(Climber.maxBackward);
+			set(maxBackward);
 			break;
 		}
 	}

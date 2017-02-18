@@ -4,7 +4,7 @@ package org.usfirst.frc.team4308.robot;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.io.OI;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
-import org.usfirst.frc.team4308.robot.subsystems.DriveSamson;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak?
 	// public static PowerMonitor powermonitor; // TODO fix this (creates errors. Check github page)
 	public static Pneumatics pneumatics;
-	public static DriveSamson drive;
+	public static DriveTrain drive;
 	public static Climber climber;
 	public static NavxMXP navx;
 	public static OI oi;
@@ -35,10 +35,9 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	 */
 	@Override
 	public void robotInit() {
-
 		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
-		drive = new DriveSamson();
+		drive = new DriveTrain();
 		climber = new Climber();
 		navx = new NavxMXP();
 		oi = new OI();
@@ -111,10 +110,6 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 
 	@Override
 	public void teleopPeriodic() {
-		// Passes the joystick input to the bot's drive control
-		drive.execute();
-		climber.execute();
-
 		Scheduler.getInstance().run();
 		log();
 	}
