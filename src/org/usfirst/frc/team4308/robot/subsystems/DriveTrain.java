@@ -87,8 +87,13 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
 			default:
 			case SAMSON:
 
-				double leftMotor = leftY + rightX;
-				double rightMotor = leftY - rightX;
+				// Conforms the linear input to a x^3 curve
+				// This gives more control on slower speeds and
+				// Easily allows for full acceleration
+				double curvedInput = rightX * rightX * rightX;
+
+				double leftMotor = leftY + curvedInput;
+				double rightMotor = leftY - curvedInput;
 
 				setMotorOutputs(leftMotor, rightMotor);
 				break;
