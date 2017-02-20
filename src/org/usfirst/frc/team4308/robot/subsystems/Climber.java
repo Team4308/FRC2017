@@ -4,6 +4,7 @@ import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
@@ -11,14 +12,14 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Climber extends Subsystem implements SpeedController, Loggable {
+public class Climber extends Subsystem implements SpeedController, Loggable, Powered {
 
 	public static final double restingSpeed = 0.0;
 	public static final double maxForward = 1.0;
 	public static final double maxBackward = -1.0;
 
-	private final SpeedController master;
-	private final SpeedController slave;
+	private final CANTalon master;
+	private final CANTalon slave;
 	private boolean isInverted = false;
 	private double speed;
 
@@ -105,6 +106,21 @@ public class Climber extends Subsystem implements SpeedController, Loggable {
 			set(maxBackward);
 			break;
 		}
+	}
+
+	@Override
+	public double voltage() {
+		return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
+	}
+
+	@Override
+	public double current() {
+		return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
+	}
+
+	@Override
+	public double temperature() {
+		return (master.getTemperature() + slave.getTemperature()) / 2.0;
 	}
 
 }

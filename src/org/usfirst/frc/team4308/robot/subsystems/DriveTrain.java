@@ -4,6 +4,7 @@ import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.DriveControl;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
@@ -22,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Samson Close
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
+public class DriveTrain extends Subsystem implements Loggable, MotorSafety, Powered {
 
 	protected MotorSafetyHelper motorSafetyHelper;
 	public static final double kDefaultExpirationTime = 0.1;
@@ -32,10 +33,10 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
 
 	private DriveControlType type;
 	private double maxOutput;
-	private final SpeedController leftFront;
-	private final SpeedController leftBack;
-	private final SpeedController rightFront;
-	private final SpeedController rightBack;
+	private final CANTalon leftFront;
+	private final CANTalon leftBack;
+	private final CANTalon rightFront;
+	private final CANTalon rightBack;
 	private Encoder leftEncoder;
 	private Encoder rightEncoder;
 
@@ -78,7 +79,8 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
 
 		switch (Robot.oi.getJoystickType()) {
 		case STANDARD:
-			// double leftX = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
+			// double leftX =
+			// limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
 			double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
 			double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
 			double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
@@ -146,7 +148,8 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
 	}
 
 	/**
-	 * Sets the outputs of the motors. The general range for these values is -1.0 to 1.0. (Refer to getMaxOutput() to see what the range is).
+	 * Sets the outputs of the motors. The general range for these values is
+	 * -1.0 to 1.0. (Refer to getMaxOutput() to see what the range is).
 	 * 
 	 * @param leftOutput
 	 *            the output to the left motors
@@ -222,19 +225,41 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety {
 	@Override
 	public void stopMotor() {
 		if (leftFront != null) {
-			leftFront.stopMotor();
+			// leftFront.stopMotor();
+			leftFront.set(0);
 		}
 		if (rightFront != null) {
-			rightFront.stopMotor();
+			// rightFront.stopMotor();
+			rightFront.set(0);
 		}
 		if (leftBack != null) {
-			leftBack.stopMotor();
+			// leftBack.stopMotor();
+			leftBack.set(0);
 		}
 		if (rightBack != null) {
-			rightBack.stopMotor();
+			// rightBack.stopMotor();
+			rightBack.set(0);
 		}
 		if (motorSafetyHelper != null) {
 			motorSafetyHelper.feed();
 		}
+	}
+
+	@Override
+	public double voltage() {
+		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage()
+				+ rightBack.getOutputVoltage()) / 4.0;
+	}
+
+	@Override
+	public double current() {
+		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent()
+				+ rightFront.getOutputCurrent()) / 4.0;
+	}
+
+	@Override
+	public double temperature() {
+		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
+				+ rightBack.getTemperature()) / 4.0;
 	}
 }
