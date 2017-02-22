@@ -80,10 +80,10 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety, Powe
 		switch (Robot.oi.getJoystickType()) {
 		case STANDARD:
 			// double leftX =
-			// limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
-			double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
-			double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
-			double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
+			// limit(joystick.getRawAxis(RobotMap.CONTROL.STANDARD.leftX));
+			double leftY = joystick.getRawAxis(RobotMap.CONTROL.STANDARD.leftY);
+			double rightX = joystick.getRawAxis(RobotMap.CONTROL.STANDARD.rightX);
+			double rightY = joystick.getRawAxis(RobotMap.CONTROL.STANDARD.rightY);
 
 			switch (type) {
 			default:

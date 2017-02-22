@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.io.OI;
+import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
@@ -25,6 +26,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 	public static DriveTrain drive;
 	public static Climber climber;
 	public static NavxMXP navx;
+	public static Arm arm;
 	public static OI oi;
 
 	Command autonomousCommand;
@@ -37,6 +39,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 		drive = new DriveTrain();
 		climber = new Climber();
 		navx = new NavxMXP();
+		arm = new Arm();
 		oi = new OI();
 
 		autonomousCommand = new DriveLinear();
