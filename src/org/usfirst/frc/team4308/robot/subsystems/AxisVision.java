@@ -24,11 +24,11 @@ public class AxisVision extends Vison {
 	public boolean initialize() {
 		try {
 			visionThread = new Thread(() -> {
-				camera = CameraServer.getInstance().addAxisCamera(RobotMap.CAMERA.axisName);
-				camera.setResolution(RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
+				camera = CameraServer.getInstance().addAxisCamera(RobotMap.Camera.axisName);
+				camera.setResolution(RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 				cvsink = CameraServer.getInstance().getVideo();
-				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
+				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 				Mat source = new Mat();
 
@@ -40,7 +40,7 @@ public class AxisVision extends Vison {
 					outputStream.putFrame(source);
 				}
 			});
-			visionThread.setName(RobotMap.CAMERA.axisName);
+			visionThread.setName(RobotMap.Camera.axisName);
 			visionThread.setDaemon(true);
 
 		} catch (Exception e) {

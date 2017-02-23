@@ -30,10 +30,10 @@ public class USBVision extends Vison {
 		try {
 			visionThread = new Thread(() -> {
 				camera = CameraServer.getInstance().startAutomaticCapture();
-				camera.setResolution(RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
+				camera.setResolution(RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 				cvsink = CameraServer.getInstance().getVideo();
-				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.CAMERA.videoWidth, RobotMap.CAMERA.videoHeight);
+				outputStream = CameraServer.getInstance().putVideo(getName(), RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 				Mat source = new Mat();
 				Mat output = new Mat();
@@ -47,7 +47,7 @@ public class USBVision extends Vison {
 					outputStream.putFrame(source);
 				}
 			});
-			visionThread.setName(RobotMap.CAMERA.axisName);
+			visionThread.setName(RobotMap.Camera.axisName);
 			visionThread.setDaemon(true);
 
 		} catch (Exception e) {

@@ -16,7 +16,7 @@ public class SlowMode extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		Robot.drive.setMaxOutput(slow ? RobotMap.DRIVE.SLOW.slow : RobotMap.DRIVE.SLOW.normal);
+		Robot.drive.setMaxOutput(slow ? RobotMap.Drive.Slow.slow : RobotMap.Drive.Slow.normal);
 		slow = !slow;
 		end();
 	}

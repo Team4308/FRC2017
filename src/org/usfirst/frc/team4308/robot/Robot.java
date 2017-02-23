@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot;
 
 import java.util.HashMap;
 
+import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.io.OI;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
@@ -42,6 +43,7 @@ public class Robot extends IterativeRobot implements Loggable {
 
 	@Override
 	public void robotInit() {
+		commands = new HashMap<String, Command>();
 		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
@@ -50,12 +52,14 @@ public class Robot extends IterativeRobot implements Loggable {
 		arm = new Arm();
 		oi = new OI();
 
-		autonomousCommand = new DriveLinear();
 		autoChooser = new SendableChooser<Command>();
-
-		SmartDashboard.putData(drive);
-		SmartDashboard.putData(navx);
-		// SmartDashboard.putData("Auto Mode", chooser);
+		autoChooser.addDefault("Drive Forward", new DriveLinear());
+		autoChooser.addObject("Drive Backward", new DriveLinear(-10));
+		autoChooser.addObject("Orient to 0", new DriveAngular());
+		autoChooser.addObject("Orient to 90", new DriveAngular(90.0));
+		autoChooser.addObject("Orient to 180", new DriveAngular(180.0));
+		autoChooser.addObject("Orient to 270", new DriveAngular(270.0));
+		SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
 	@Override
@@ -70,21 +74,7 @@ public class Robot extends IterativeRobot implements Loggable {
 
 	@Override
 	public void autonomousInit() {
-		// autonomousCommand = chooser.getSelected();
-
-		// String autoSelected = SmartDashboard.getString("Auto Selector",
-		// "Default");
-		// switch (autoSelected) {
-		// case "My Auto":
-		// autonomousCommand = new MyAutoCommand();
-		// break;
-		// case "Default Auto":
-		// default:
-		// autonomousCommand = new ExampleCommand();
-		// break;
-		// }
-
-		// schedule the autonomous command (example)
+		autonomousCommand = autoChooser.getSelected();
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}

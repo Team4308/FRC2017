@@ -14,10 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends Subsystem implements SpeedController, Loggable, Powered {
 
-	public static final double restingSpeed = 0.0;
-	public static final double maxForward = 1.0;
-	public static final double maxBackward = -1.0;
-
 	private final CANTalon master;
 	private final CANTalon slave;
 	private boolean isInverted = false;
@@ -29,9 +25,10 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 
 	public Climber(boolean isInverted) {
 		super();
-		master = new CANTalon(RobotMap.CLIMBER.masterChannel);
-		slave = new CANTalon(RobotMap.CLIMBER.slaveChannel);
-		this.set(restingSpeed);
+		master = new CANTalon(RobotMap.Climb.masterChannel);
+		slave = new CANTalon(RobotMap.Climb.slaveChannel);
+		this.set(RobotMap.Climb.restingSpeed);
+		this.isInverted = isInverted;
 	}
 
 	@Override
@@ -41,7 +38,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 
 	@Override
 	public void set(double speed) {
-		speed = Math.max(Math.min(speed, maxForward), maxBackward);
+		speed = Math.max(Math.min(speed, RobotMap.Climb.maxForward), RobotMap.Climb.maxBackward);
 
 		if (isInverted) {
 			master.set(-speed);
@@ -63,7 +60,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 	public void stopMotor() {
 		this.master.stopMotor();
 		this.slave.stopMotor();
-		this.speed = restingSpeed;
+		this.speed = RobotMap.Climb.restingSpeed;
 	}
 
 	@Override
@@ -92,20 +89,6 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 	public void log() {
 		SmartDashboard.putBoolean("Climb Invert", isInverted);
 		SmartDashboard.putNumber("Climb Speed", speed);
-	}
-
-	public void execute() {
-		switch (Robot.oi.getClimbButtons().getInteger()) {
-		case 0:
-			set(restingSpeed);
-			break;
-		case 1:
-			set(maxForward);
-			break;
-		case -1:
-			set(maxBackward);
-			break;
-		}
 	}
 
 	@Override

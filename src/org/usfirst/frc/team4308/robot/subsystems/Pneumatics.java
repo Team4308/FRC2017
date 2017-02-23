@@ -33,7 +33,7 @@ public class Pneumatics extends Subsystem implements Loggable {
 	 * @return Whether or not the system is fully pressurized.
 	 */
 	public boolean isPressurized() {
-		return compressor.getPressureSwitchValue();
+		return !compressor.getPressureSwitchValue();
 	}
 
 	@Override

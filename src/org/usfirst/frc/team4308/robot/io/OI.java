@@ -57,31 +57,31 @@ public class OI {
 	private final int armAxis;
 
 	public OI() {
-		joystick = new Joystick(RobotMap.CONTROL.driveStick);
+		joystick = new Joystick(RobotMap.Control.driveStick);
 		type = JoystickType.fromJoystick(joystick);
 
 		switch (type) {
 		case FLIGHT: // 2 DoF joystick
-			new JoystickButton(joystick, RobotMap.CONTROL.FLIGHT.eastB).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.CONTROL.FLIGHT.eastA).whenPressed(null);
+			new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
+			new JoystickButton(joystick, RobotMap.Control.Flight.eastA).whenPressed(null);
 			climbButtons = new DualButton(joystick, 8, 9);
-			armAxis = RobotMap.CONTROL.FLIGHT.throttle;
-			leftAxis = RobotMap.CONTROL.FLIGHT.pitch;
-			rightAxis = RobotMap.CONTROL.FLIGHT.roll;
+			armAxis = RobotMap.Control.Flight.throttle;
+			leftAxis = RobotMap.Control.Flight.pitch;
+			rightAxis = RobotMap.Control.Flight.roll;
 			turnAxis = 0;
 			break;
 		case STANDARD: // 2 stick PlayStation style controller
-			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.a).whenPressed(new DriveAngular(-180.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.b).whenPressed(new DriveAngular(180.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.y).whenPressed(new DriveAngular(-90.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.x).whenPressed(new DriveAngular(90.0));
-			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.start).whenPressed(new SlowMode());
-			climbButtons = new DualButton(joystick, RobotMap.CONTROL.STANDARD.leftBumper,
-					RobotMap.CONTROL.STANDARD.rightBumper);
-			armAxis = RobotMap.CONTROL.STANDARD.leftTrigger;
-			leftAxis = RobotMap.CONTROL.STANDARD.leftY;
-			rightAxis = RobotMap.CONTROL.STANDARD.rightY;
-			turnAxis = RobotMap.CONTROL.STANDARD.rightX;
+			new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new DriveAngular(-180.0));
+			new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new DriveAngular(180.0));
+			new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new DriveAngular(-90.0));
+			new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new DriveAngular(90.0));
+			new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
+			climbButtons = new DualButton(joystick, RobotMap.Control.Standard.leftBumper,
+					RobotMap.Control.Standard.rightBumper);
+			armAxis = RobotMap.Control.Standard.leftTrigger;
+			leftAxis = RobotMap.Control.Standard.leftY;
+			rightAxis = RobotMap.Control.Standard.rightY;
+			turnAxis = RobotMap.Control.Standard.rightX;
 			break;
 		default:
 			DriverStation.reportError("Invalid number of axis on control joystick", true);
@@ -134,6 +134,10 @@ public class OI {
 
 	public int getArmAxis() {
 		return armAxis;
+	}
+
+	public double getArmValue() {
+		return joystick.getRawAxis(armAxis);
 	}
 
 	public int getTurnAxis() {

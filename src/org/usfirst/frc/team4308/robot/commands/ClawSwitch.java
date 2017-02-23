@@ -8,6 +8,7 @@ public class ClawSwitch extends InstantCommand {
 
 	public ClawSwitch() {
 		super();
+		requires(Robot.arm);
 	}
 	
 	@Override

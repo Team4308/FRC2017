@@ -5,42 +5,40 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 public class DriveAngular extends DriveControl {
 
-	private static final int defaultTimeout = 2;
-	private static final double tolerance = 2.0;
-
-	private final double angle;
-	private final double maxSpeed;
-	private double error;
+	public DriveAngular() {
+		this(RobotMap.Autonomous.defaultOrientation);
+	}
 
 	public DriveAngular(double angle) {
-		this(angle, RobotMap.AUTONOMOUS.maxRotateSpeed);
+		this(angle, RobotMap.Autonomous.maxRotateSpeed);
 	}
 
 	public DriveAngular(double angle, double maxSpeed) {
-		this(angle, maxSpeed, defaultTimeout);
+		this(angle, maxSpeed, RobotMap.Autonomous.defaultTimeout);
 	}
 
 	public DriveAngular(double angle, double maxSpeed, double timeout) {
 		super(timeout);
-		this.angle = angle;
-		this.maxSpeed = maxSpeed;
-		requires(Robot.navx);
-	}
+		Robot.drive.enable();
+		Robot.drive.resetEncoders();
+		// TODO: change angle degrees to encoder readings
+		Robot.drive.setSetpoint(angle);
+		Robot.drive.angularInitialize();
+		Robot.drive.setPercentTolerance(RobotMap.Autonomous.angularPercentTolerance);
 
-	@Override
-	protected void execute() {
-		error = angle - Robot.navx.yaw();
-		if (error > angle + tolerance && error > angle - tolerance) {
-			Robot.drive.setMotorOutputs(maxSpeed, -maxSpeed); // Turn right TODO might need to flip the negative on these
-		} else if (error < angle + tolerance && error < angle - tolerance) {
-			Robot.drive.setMotorOutputs(-maxSpeed, maxSpeed); // Turn left TODO might need to flip the negative on these
-		} else {
-			end();
-		}
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.drive.onTarget() || isTimedOut();
 	}
+
+	@Override
+	protected void end() {
+		Robot.drive.disable();
+		Robot.drive.resetEncoders();
+		Robot.drive.linearInitialize();
+		super.end();
+	}
+
 }

@@ -8,17 +8,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveControl extends Command {
 
 	public DriveControl() {
-		this(RobotMap.GAME.maxTimeSeconds);
+		this(RobotMap.Game.maxTimeSeconds);
 	}
 
 	public DriveControl(double timeout) {
 		super(timeout);
 		requires(Robot.drive);
-	}
-
-	@Override
-	protected void execute() {
-		Robot.drive.execute();
 	}
 
 	@Override

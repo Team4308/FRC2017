@@ -2,38 +2,34 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArmControl;
+import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Arm extends Subsystem {
-
-	private static final double restingAngle = 45.0;
+public class Arm extends PIDSubsystem implements Loggable, Powered {
 
 	private Solenoid claw;
 	private CANTalon arm;
-	private Potentiometer armAngle;
-	private PIDController armController;
+	private AnalogPotentiometer armAngle;
 
 	private boolean grab;
 
 	public Arm() {
+		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential);
 		armAngle = new AnalogPotentiometer(RobotMap.ARM.potentiometerChannel, RobotMap.ARM.potentiometerRange);
 		grab = false;
 		claw = new Solenoid(RobotMap.ARM.pistonChannel);
 		arm = new CANTalon(RobotMap.ARM.armChannel);
 
-		armController = new PIDController(RobotMap.CONSTANT.proportional, RobotMap.CONSTANT.integral,
-				RobotMap.CONSTANT.differential, armAngle, arm);
-		armController.enable();
-		armController.setPercentTolerance(RobotMap.ARM.tolerancePercent);
-		armController.setContinuous(false);
-		armController.setSetpoint(restingAngle);
+		setPercentTolerance(RobotMap.ARM.tolerancePercent);
+		getPIDController().setContinuous(false);
+		reset();
 	}
 
 	@Override
@@ -48,15 +44,47 @@ public class Arm extends Subsystem {
 
 	// TODO: test
 	public void setAngle(double angle) {
-		armController.setSetpoint(angle * RobotMap.ARM.potentiometerRange);
+		setSetpoint(angle);
 	}
 
+	// TODO: test
 	public void reset() {
-		armController.setSetpoint(restingAngle);
+		setSetpoint(RobotMap.ARM.restingAngle);
 	}
-	
+
 	public double angle() {
 		return armAngle.get();
+	}
+
+	@Override
+	protected double returnPIDInput() {
+		return armAngle.pidGet();
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		arm.set(output);
+	}
+
+	@Override
+	public double voltage() {
+		return arm.getOutputVoltage();
+	}
+
+	@Override
+	public double current() {
+		return arm.getOutputCurrent();
+	}
+
+	@Override
+	public double temperature() {
+		return arm.getTemperature();
+	}
+
+	@Override
+	public void log() {
+		SmartDashboard.putNumber("Arm Angle", angle());
+		SmartDashboard.putBoolean("Claw State", grab);
 	}
 
 }

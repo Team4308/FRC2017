@@ -3,7 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import java.util.HashMap;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.RobotMap.POWER;
+import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.robot.commands.PowerCheck;
 import org.usfirst.frc.team4308.util.Loggable;
 
@@ -21,7 +21,7 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	private HashMap<String, CANTalon> motors;
 	private final PowerDistributionPanel pdp;
 
-	private POWER.BatteryLevel batteryLevel;
+	private Power.BatteryLevel batteryLevel;
 	private boolean currentWarning;
 	private boolean temperatureWarning;
 
@@ -29,17 +29,17 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		super();
 		motors = new HashMap<String, CANTalon>();
 		pdp = new PowerDistributionPanel();
-		batteryLevel = POWER.BatteryLevel.level(pdp.getVoltage());
+		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 		currentWarning = false;
 		temperatureWarning = false;
 
-		add("frontLeft", new CANTalon(RobotMap.DRIVE.frontLeft));
-		add("frontRight", new CANTalon(RobotMap.DRIVE.frontRight));
-		add("backLeft", new CANTalon(RobotMap.DRIVE.backLeft));
-		add("backRight", new CANTalon(RobotMap.DRIVE.backRight));
+		add("frontLeft", new CANTalon(RobotMap.Drive.frontLeft));
+		add("frontRight", new CANTalon(RobotMap.Drive.frontRight));
+		add("backLeft", new CANTalon(RobotMap.Drive.backLeft));
+		add("backRight", new CANTalon(RobotMap.Drive.backRight));
 
-		add("climbMaster", new CANTalon(RobotMap.CLIMBER.masterChannel));
-		add("climbSlave", new CANTalon(RobotMap.CLIMBER.slaveChannel));
+		add("climbMaster", new CANTalon(RobotMap.Climb.masterChannel));
+		add("climbSlave", new CANTalon(RobotMap.Climb.slaveChannel));
 	}
 
 	@Override
@@ -55,26 +55,26 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		double voltage = pdp.getVoltage();
 		double current = pdp.getTotalCurrent();
 		double temperature = pdp.getTemperature();
-		batteryLevel = POWER.BatteryLevel.level(voltage);
+		batteryLevel = Power.BatteryLevel.level(voltage);
 
-		if (current > POWER.breakerAmpLimit * cautionThreshold) {
+		if (current > Power.breakerAmpLimit * cautionThreshold) {
 			// TODO: auto initiate reduced-draw
 			return false;
-		} else if (current > POWER.breakerAmpLimit * warningThreshold) {
+		} else if (current > Power.breakerAmpLimit * warningThreshold) {
 			// TODO: warn of the high current draws
 			currentWarning = true;
 		}
 
-		if (batteryLevel.ordinal() < POWER.BatteryLevel.LOW.ordinal()) {
+		if (batteryLevel.ordinal() < Power.BatteryLevel.LOW.ordinal()) {
 			// TODO: warn of low battery charge
 			return false;
 		}
 
-		if (temperature > POWER.dangerTemp) {
+		if (temperature > Power.dangerTemp) {
 			// TODO: auto initiate reduced draw
 			// TODO: warn of instable temperature levels
 			return false;
-		} else if (temperature > POWER.warningTemp) {
+		} else if (temperature > Power.warningTemp) {
 			// TODO: warn of high temperature
 			temperatureWarning = true;
 		}

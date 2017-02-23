@@ -8,35 +8,42 @@ package org.usfirst.frc.team4308.robot;
  */
 public class RobotMap {
 
-	public static class GAME {
+	public static class Game {
 		public static final int maxTimeSeconds = 75;
 	}
 
 	public static class ARM {
 		public static final int pistonChannel = 1;
 		public static final int armChannel = 6;
+		
 		public static final double tolerancePercent = 10.0;
 		public static final int potentiometerChannel = 0;
 		public static final double potentiometerRange = 360.0;
+		
+		public static final double restingAngle = 45.0;
 	}
 
-	public static class AUTONOMOUS {
+	public static class Autonomous {
 		public static final double maxLinearSpeed = 0.5;
 		public static final double maxRotateSpeed = 1.0;
 		public static final double defaultDistance = 10.0;
+		public static final double defaultOrientation = 0.0;
+		public static final double angularPercentTolerance = 5.0;
+		public static final double distancePercentTolerance = 10.0;
+		public static final double defaultTimeout = 2.0;
 	}
 
-	public static class CONSTANT {
+	public static class Constant {
 		public static final double proportional = 0.1;
 		public static final double integral = 0.001;
 		public static final double differential = 0.0;
 		public static final double feedForward = 0.0;
 	}
 
-	public static class CONTROL {
+	public static class Control {
 		public static final int driveStick = 0;
 
-		public static class STANDARD {
+		public static class Standard {
 			public static final int leftX = 0;
 			public static final int leftY = 1;
 			public static final int leftTrigger = 2;
@@ -56,7 +63,7 @@ public class RobotMap {
 			public static final int rightClick = 10;
 		}
 
-		public static class FLIGHT {
+		public static class Flight {
 			public static final int roll = 0;
 			public static final int pitch = 1;
 			public static final int throttle = 2;
@@ -78,7 +85,7 @@ public class RobotMap {
 
 	// TODO: encoder channel correction
 	// TODO: talonSRX device ID reassignment surgery
-	public static class DRIVE {
+	public static class Drive {
 		public static final int frontLeft = 3;
 		public static final int backLeft = 1;
 		public static final int frontRight = 0;
@@ -88,17 +95,17 @@ public class RobotMap {
 		public static final int leftChannelB = 1;
 		public static final int rightChannelA = 2;
 		public static final int rightChannelB = 3;
-		
+
 		public static final double curveSensitivity = 1.0;
 		public static final double encoderPulseDistance = 0.042;
-		
-		public static class SLOW {
+
+		public static class Slow {
 			public static final double normal = 1.0;
 			public static final double slow = 0.42;
 		}
 	}
 
-	public static class CAMERA {
+	public static class Camera {
 		public static final int videoWidth = 640;
 		public static final int videoHeight = 480;
 
@@ -106,12 +113,16 @@ public class RobotMap {
 		public static final String axisName = "axis-camera.local";
 	}
 
-	public static class CLIMBER {
+	public static class Climb {
 		public static final int masterChannel = 4;
 		public static final int slaveChannel = 5;
+
+		public static final double maxForward = 1.0;
+		public static final double maxBackward = -1.0;
+		public static final double restingSpeed = 0.0;
 	}
 
-	public static class POWER {
+	public static class Power {
 		public static final int primaryAmpLimit = 40;
 		public static final int secondaryAmpLimit = 30;
 		public static final int breakerAmpLimit = 120;

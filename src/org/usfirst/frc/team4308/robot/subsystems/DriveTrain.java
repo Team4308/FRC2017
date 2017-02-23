@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 
-	private DriveControlType type;
 	private final CANTalon leftFront;
 	private final CANTalon leftBack;
 	private final CANTalon rightFront;
@@ -42,32 +41,42 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 
 	// TODO: instantiation of correct encoders
 	public DriveTrain() {
-		super(RobotMap.CONSTANT.proportional, RobotMap.CONSTANT.integral, RobotMap.CONSTANT.differential);
+		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential);
 
-		type = DriveControlType.SAMSON;
-
-		leftFront = new CANTalon(RobotMap.DRIVE.frontLeft);
-		leftBack = new CANTalon(RobotMap.DRIVE.backLeft);
-		rightFront = new CANTalon(RobotMap.DRIVE.frontRight);
-		rightBack = new CANTalon(RobotMap.DRIVE.backRight);
+		leftFront = new CANTalon(RobotMap.Drive.frontLeft);
+		leftBack = new CANTalon(RobotMap.Drive.backLeft);
+		rightFront = new CANTalon(RobotMap.Drive.frontRight);
+		rightBack = new CANTalon(RobotMap.Drive.backRight);
 
 		drive = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
 		drive.setSafetyEnabled(true);
-		drive.setSensitivity(RobotMap.DRIVE.curveSensitivity);
+		drive.setSensitivity(RobotMap.Drive.curveSensitivity);
 
+		linearInitialize();
+		getPIDController().setContinuous();
+
+		// TODO: find out the number system of the encoders
+		leftEncoder = new Encoder(RobotMap.Drive.leftChannelA, RobotMap.Drive.leftChannelB);
+		rightEncoder = new Encoder(RobotMap.Drive.rightChannelA, RobotMap.Drive.rightChannelB);
+		leftEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
+		rightEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
+
+		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
+		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+	}
+
+	public void linearInitialize() {
 		drive.setInvertedMotor(MotorType.kFrontLeft, true);
 		drive.setInvertedMotor(MotorType.kRearLeft, true);
 		drive.setInvertedMotor(MotorType.kFrontRight, true);
 		drive.setInvertedMotor(MotorType.kRearRight, true);
+	}
 
-		// TODO encode shit
-		leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
-		rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
-		leftEncoder.setDistancePerPulse(RobotMap.DRIVE.encoderPulseDistance);
-		rightEncoder.setDistancePerPulse(RobotMap.DRIVE.encoderPulseDistance);
-
-		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+	public void angularInitialize() {
+		drive.setInvertedMotor(MotorType.kFrontLeft, true);
+		drive.setInvertedMotor(MotorType.kRearLeft, true);
+		drive.setInvertedMotor(MotorType.kFrontRight, false);
+		drive.setInvertedMotor(MotorType.kRearRight, false);
 	}
 
 	@Override
@@ -127,7 +136,11 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 	}
 
 	public double getDistance() {
-		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
+		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2.0;
+	}
+
+	public double getAbsoluteDistance() {
+		return (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance())) / 2.0;
 	}
 
 	public Encoder getLeftEncoder() {
@@ -158,14 +171,12 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 
 	@Override
 	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getDistance();
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
-		// TODO Auto-generated method stub
-
+		drive.setLeftRightMotorOutputs(output, output);
 	}
 
 	public void stopMotor() {
