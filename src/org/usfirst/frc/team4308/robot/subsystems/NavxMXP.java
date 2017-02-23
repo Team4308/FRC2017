@@ -27,12 +27,7 @@ public class NavxMXP extends Subsystem implements Loggable {
 	private OverflowingArrayList<Vector3> gyroReadings;
 	private OverflowingArrayList<Vector3> displacements;
 
-	// TODO: initialize gyro
-	// TODO: reset gyro
-	// TODO: get raw readings from gyro
-	// TODO: get averaged readings from gyro
-	// TODO: access accelerometer
-	// ^^^untested^^^
+	// test gyro
 	// TODO: add error handling
 
 	public NavxMXP() {

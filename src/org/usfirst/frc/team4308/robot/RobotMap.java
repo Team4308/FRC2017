@@ -151,6 +151,8 @@ public class RobotMap {
 
 		public static final double warningTemp = 60.0;
 		public static final double dangerTemp = 85.0;
+		public static final double cautionThreshold = 0.9;
+		public static final double warningThreshold = 0.8;
 	}
 
 	public static final int pressureSensorChannel = 0;

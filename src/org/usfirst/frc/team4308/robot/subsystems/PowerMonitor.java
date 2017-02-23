@@ -1,13 +1,13 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.robot.commands.PowerCheck;
 import org.usfirst.frc.team4308.util.Loggable;
-
-import com.ctre.CANTalon;
+import org.usfirst.frc.team4308.util.Powered;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -15,31 +15,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PowerMonitor extends Subsystem implements Loggable {
 
-	private static final double cautionThreshold = 0.9;
-	private static final double warningThreshold = 0.8;
-
-	private HashMap<String, CANTalon> motors;
 	private final PowerDistributionPanel pdp;
 
 	private Power.BatteryLevel batteryLevel;
+	private ArrayList<Powered> monitors;
+
 	private boolean currentWarning;
 	private boolean temperatureWarning;
 
 	public PowerMonitor() {
 		super();
-		motors = new HashMap<String, CANTalon>();
 		pdp = new PowerDistributionPanel();
 		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 		currentWarning = false;
 		temperatureWarning = false;
+		monitors = new ArrayList<Powered>();
 
-		add("frontLeft", new CANTalon(RobotMap.Drive.frontLeft));
-		add("frontRight", new CANTalon(RobotMap.Drive.frontRight));
-		add("backLeft", new CANTalon(RobotMap.Drive.backLeft));
-		add("backRight", new CANTalon(RobotMap.Drive.backRight));
-
-		add("climbMaster", new CANTalon(RobotMap.Climb.masterChannel));
-		add("climbSlave", new CANTalon(RobotMap.Climb.slaveChannel));
+		monitors.add(Robot.arm);
+		monitors.add(Robot.climber);
+		monitors.add(Robot.drive);
+		monitors.add(Robot.pneumatics);
 	}
 
 	@Override
@@ -47,20 +42,22 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		setDefaultCommand(new PowerCheck());
 	}
 
-	public void add(String name, CANTalon motor) {
-		motors.put(name, motor);
-	}
-
+	/**
+	 * Polls the main power delivery systems for any non-optimal scenarios.
+	 * 
+	 * @return Whether the system is pulling potentially harmful levels of power
+	 *         or not
+	 */
 	public boolean check() {
 		double voltage = pdp.getVoltage();
 		double current = pdp.getTotalCurrent();
 		double temperature = pdp.getTemperature();
 		batteryLevel = Power.BatteryLevel.level(voltage);
 
-		if (current > Power.breakerAmpLimit * cautionThreshold) {
+		if (current > Power.breakerAmpLimit * Power.cautionThreshold) {
 			// TODO: auto initiate reduced-draw
 			return false;
-		} else if (current > Power.breakerAmpLimit * warningThreshold) {
+		} else if (current > Power.breakerAmpLimit * Power.warningThreshold) {
 			// TODO: warn of the high current draws
 			currentWarning = true;
 		}
@@ -79,6 +76,39 @@ public class PowerMonitor extends Subsystem implements Loggable {
 			temperatureWarning = true;
 		}
 
+		return true;
+	}
+
+	public boolean systemCheck() {
+
+		if (Robot.arm.temperature() > Power.dangerTemp) {
+			// TODO: lower arm maxspeed
+			return false;
+		} else if (Robot.arm.temperature() > Power.warningTemp) {
+			// TODO: warn driver
+		}
+
+		if (Robot.climber.temperature() > Power.dangerTemp) {
+			// TODO: lower climber maxspeed
+			return false;
+		} else if (Robot.climber.temperature() > Power.warningTemp) {
+			// TODO: warn driver
+		}
+
+		if (Robot.drive.temperature() > Power.dangerTemp) {
+			// TODO: lower drive maxspeed
+			return false;
+		} else if (Robot.drive.temperature() > Power.warningTemp) {
+			// TODO: warn driver
+		}
+
+		if (Robot.pneumatics.temperature() > Power.dangerTemp + 10.0) {
+			// TODO: stop pneumatics
+			return false;
+		} else if (Robot.pneumatics.temperature() > Power.warningTemp) {
+			// TODO: warn driver;
+		}
+		
 		return true;
 	}
 
