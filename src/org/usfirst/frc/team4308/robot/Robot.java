@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team4308.robot;
 
+import java.util.HashMap;
+
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.io.OI;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
@@ -14,23 +16,29 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
  */
-public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak?
+public class Robot extends IterativeRobot implements Loggable {
 
-	// public static PowerMonitor powermonitor; // TODO fix this (creates errors. Check github page)
+	// public static PowerMonitor powermonitor;
 	public static Pneumatics pneumatics;
 	public static DriveTrain drive;
 	public static Climber climber;
 	public static NavxMXP navx;
 	public static Arm arm;
 	public static OI oi;
+	public static HashMap<String, Command> commands;
 
-	Command autonomousCommand;
-	// SendableChooser<Command> chooser;
+	private SendableChooser<Command> autoChooser;
+	private Command autonomousCommand;
 
 	@Override
 	public void robotInit() {
@@ -43,7 +51,7 @@ public class Robot extends IterativeRobot implements Loggable { // TODO: unbreak
 		oi = new OI();
 
 		autonomousCommand = new DriveLinear();
-		// chooser = new SendableChooser<Command>();
+		autoChooser = new SendableChooser<Command>();
 
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(navx);

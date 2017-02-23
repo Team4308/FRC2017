@@ -28,7 +28,6 @@ public class ClimberControl extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drive.stopMotor();
 		Robot.climber.stopMotor();
 	}
 }

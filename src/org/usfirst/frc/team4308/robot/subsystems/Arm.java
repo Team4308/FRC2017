@@ -5,6 +5,7 @@ import org.usfirst.frc.team4308.robot.commands.ArmControl;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -22,6 +23,8 @@ public class Arm extends Subsystem {
 	private boolean grab;
 
 	public Arm() {
+		armAngle = new AnalogPotentiometer(RobotMap.ARM.potentiometerChannel, RobotMap.ARM.potentiometerRange);
+		grab = false;
 		claw = new Solenoid(RobotMap.ARM.pistonChannel);
 		arm = new CANTalon(RobotMap.ARM.armChannel);
 
@@ -43,12 +46,17 @@ public class Arm extends Subsystem {
 		grab = !grab;
 	}
 
-	public void setAngle(double angle) { // TODO: convert value from -1 to 1 into the 0V to 5V the potentiometer uses
-		armController.setSetpoint(angle);
+	// TODO: test
+	public void setAngle(double angle) {
+		armController.setSetpoint(angle * RobotMap.ARM.potentiometerRange);
 	}
 
 	public void reset() {
 		armController.setSetpoint(restingAngle);
+	}
+	
+	public double angle() {
+		return armAngle.get();
 	}
 
 }

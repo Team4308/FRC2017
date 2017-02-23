@@ -49,13 +49,13 @@ public class OI {
 
 	private final Joystick joystick;
 	private final JoystickType type;
-	// private final JoystickButton[] buttons;
 	private final DualButton climbButtons;
 
+	private final int leftAxis;
+	private final int rightAxis;
+	private final int turnAxis;
 	private final int armAxis;
 
-	// TODO: implement proper joystick recognition and axis/button assignment
-	// TODO: check if button ranges are zero indexed
 	public OI() {
 		joystick = new Joystick(RobotMap.CONTROL.driveStick);
 		type = JoystickType.fromJoystick(joystick);
@@ -66,6 +66,9 @@ public class OI {
 			new JoystickButton(joystick, RobotMap.CONTROL.FLIGHT.eastA).whenPressed(null);
 			climbButtons = new DualButton(joystick, 8, 9);
 			armAxis = RobotMap.CONTROL.FLIGHT.throttle;
+			leftAxis = RobotMap.CONTROL.FLIGHT.pitch;
+			rightAxis = RobotMap.CONTROL.FLIGHT.roll;
+			turnAxis = 0;
 			break;
 		case STANDARD: // 2 stick PlayStation style controller
 			new JoystickButton(joystick, RobotMap.CONTROL.STANDARD.a).whenPressed(new DriveAngular(-180.0));
@@ -76,11 +79,17 @@ public class OI {
 			climbButtons = new DualButton(joystick, RobotMap.CONTROL.STANDARD.leftBumper,
 					RobotMap.CONTROL.STANDARD.rightBumper);
 			armAxis = RobotMap.CONTROL.STANDARD.leftTrigger;
+			leftAxis = RobotMap.CONTROL.STANDARD.leftY;
+			rightAxis = RobotMap.CONTROL.STANDARD.rightY;
+			turnAxis = RobotMap.CONTROL.STANDARD.rightX;
 			break;
 		default:
 			DriverStation.reportError("Invalid number of axis on control joystick", true);
 			climbButtons = null;
 			armAxis = 0;
+			leftAxis = 0;
+			rightAxis = 0;
+			turnAxis = 0;
 			break;
 		}
 
@@ -99,7 +108,40 @@ public class OI {
 		return climbButtons;
 	}
 
-	public double getArmAxis() {
-		return joystick.getRawAxis(armAxis);
+	public int getLeftAxis() {
+		return leftAxis;
 	}
+
+	public double getLeftValue() {
+		return joystick.getRawAxis(leftAxis);
+	}
+
+	public int getMoveAxis() {
+		return leftAxis;
+	}
+
+	public int getRightAxis() {
+		return rightAxis;
+	}
+
+	public double getRightValue() {
+		return joystick.getRawAxis(rightAxis);
+	}
+
+	public int getRotateAxis() {
+		return rightAxis;
+	}
+
+	public int getArmAxis() {
+		return armAxis;
+	}
+
+	public int getTurnAxis() {
+		return turnAxis;
+	}
+
+	public double getTurnValue() {
+		return joystick.getRawAxis(turnAxis);
+	}
+
 }

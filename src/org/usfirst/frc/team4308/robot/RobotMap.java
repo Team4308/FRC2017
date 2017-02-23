@@ -16,6 +16,8 @@ public class RobotMap {
 		public static final int pistonChannel = 1;
 		public static final int armChannel = 6;
 		public static final double tolerancePercent = 10.0;
+		public static final int potentiometerChannel = 0;
+		public static final double potentiometerRange = 360.0;
 	}
 
 	public static class AUTONOMOUS {
@@ -86,6 +88,14 @@ public class RobotMap {
 		public static final int leftChannelB = 1;
 		public static final int rightChannelA = 2;
 		public static final int rightChannelB = 3;
+		
+		public static final double curveSensitivity = 1.0;
+		public static final double encoderPulseDistance = 0.042;
+		
+		public static class SLOW {
+			public static final double normal = 1.0;
+			public static final double slow = 0.42;
+		}
 	}
 
 	public static class CAMERA {
