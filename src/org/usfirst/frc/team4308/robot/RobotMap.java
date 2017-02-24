@@ -1,10 +1,11 @@
 package org.usfirst.frc.team4308.robot;
 
 /**
- * The RobotMap is a mapping from the ports sensors and actuators are wired into
- * to a variable name. This provides flexibility changing wiring, makes checking
- * the wiring easier and significantly reduces the number of magic numbers
- * floating around.
+ * A constants-style class that contains all the raw numbers responsible for
+ * adapting the rest of the code to hardware specifications, this class allows
+ * changes in hardware configuration to be smoothly implemented into code, as it
+ * centralizes all values that would not change between code revisions, but
+ * could between hardware revisions.
  */
 public class RobotMap {
 
@@ -12,14 +13,14 @@ public class RobotMap {
 		public static final int maxTimeSeconds = 75;
 	}
 
-	public static class ARM {
+	public static class GearArm {
 		public static final int pistonChannel = 1;
 		public static final int armChannel = 6;
-		
+
 		public static final double tolerancePercent = 10.0;
 		public static final int potentiometerChannel = 0;
 		public static final double potentiometerRange = 360.0;
-		
+
 		public static final double restingAngle = 45.0;
 	}
 
@@ -129,7 +130,7 @@ public class RobotMap {
 		public static final int pneumaticsAmpLimit = 17;
 
 		public enum BatteryLevel {
-			NOMINAL(12, 0.5), LOW(10.5, 1.0), DISCHARGED(8.0, 1.0);
+			NOMINAL(12, 0.5), LOW(10.5, 1.0), DISCHARGED(8.0, 1.5);
 
 			public final double center;
 			public final double range;
@@ -156,5 +157,4 @@ public class RobotMap {
 		public static final double warningThreshold = 0.8;
 	}
 
-	public static final int pressureSensorChannel = 0;
 }

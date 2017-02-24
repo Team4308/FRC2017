@@ -4,6 +4,13 @@ import org.usfirst.frc.team4308.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+/**
+ * Continuous command to send input from a joystick (specified in {@link OI}) to
+ * the motors of the {@link DriveTrain}, controlling its movement.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class ArcadeDrive extends Command {
 
 	public ArcadeDrive() {

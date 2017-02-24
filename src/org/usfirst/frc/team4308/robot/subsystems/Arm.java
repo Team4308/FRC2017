@@ -22,12 +22,12 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 
 	public Arm() {
 		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential);
-		armAngle = new AnalogPotentiometer(RobotMap.ARM.potentiometerChannel, RobotMap.ARM.potentiometerRange);
+		armAngle = new AnalogPotentiometer(RobotMap.GearArm.potentiometerChannel, RobotMap.GearArm.potentiometerRange);
 		grab = false;
-		claw = new Solenoid(RobotMap.ARM.pistonChannel);
-		arm = new CANTalon(RobotMap.ARM.armChannel);
+		claw = new Solenoid(RobotMap.GearArm.pistonChannel);
+		arm = new CANTalon(RobotMap.GearArm.armChannel);
 
-		setPercentTolerance(RobotMap.ARM.tolerancePercent);
+		setPercentTolerance(RobotMap.GearArm.tolerancePercent);
 		getPIDController().setContinuous(false);
 		reset();
 	}
@@ -49,7 +49,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 
 	// TODO: test
 	public void reset() {
-		setSetpoint(RobotMap.ARM.restingAngle);
+		setSetpoint(RobotMap.GearArm.restingAngle);
 	}
 
 	public double angle() {

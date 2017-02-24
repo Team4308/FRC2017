@@ -4,6 +4,14 @@ import org.usfirst.frc.team4308.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+/**
+ * Continuous command that emulates the {@link TankDrive} control scheme, but
+ * delegates the turning control to a power curve, rather than the linear input
+ * of the joystick.
+ * 
+ * @author Samson Close
+ *
+ */
 public class SamsonDrive extends Command {
 
 	private static final int power = 3;
@@ -25,7 +33,7 @@ public class SamsonDrive extends Command {
 	protected boolean isFinished() {
 		return false;
 	}
-	
+
 	@Override
 	protected void end() {
 		Robot.drive.stopMotor();

@@ -1,13 +1,10 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.robot.commands.PowerCheck;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Powered;
+import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -36,7 +33,8 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	}
 
 	/**
-	 * Polls the main power delivery systems for any non-optimal scenarios.
+	 * Polls the main power delivery systems for any non-optimal or unhealthy
+	 * scenarios.
 	 * 
 	 * @return Whether the system is pulling potentially harmful levels of power
 	 *         or not
@@ -78,9 +76,12 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	// TODO: temperature-reactive warning for arm and climber
 	/**
 	 * Polls each subsystems power status, determining whether their power using
-	 * components are taking too much power or producing too much heat
+	 * components are taking too much power or producing too much heat. Data is
+	 * returned in an order of; {@link Arm}, {@link Climber},
+	 * {@link DriveTrain}, and {@link Pneumatics}.
 	 * 
-	 * @return Whether any of the systems are
+	 * @return set of booleans that represent whether any of the power-drawing
+	 *         systems are within an unhealthy state
 	 */
 	public boolean[] systemCheck() {
 		boolean armState = true;
@@ -136,9 +137,15 @@ public class PowerMonitor extends Subsystem implements Loggable {
 
 		}
 
-		return new boolean[] {armState, climbState, driveState, pneumaticsState};
+		return new boolean[] { armState, climbState, driveState, pneumaticsState };
 	}
 
+	/**
+	 * Whether or not the system's power delivery system is currently in a power
+	 * draw state that is unhealthy.
+	 * 
+	 * @return Unhealthy or (relatively) healthy
+	 */
 	public boolean currentWarning() {
 		return currentWarning;
 	}
@@ -151,6 +158,14 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	public void log() {
 		SmartDashboard.putBoolean("Temperature Warning", temperatureWarning);
 		SmartDashboard.putBoolean("Current Warning", currentWarning);
+	}
+
+	public double voltageRatio(CANTalon talon) {
+		return talon.getOutputVoltage() / talon.getBusVoltage();
+	}
+
+	public double currentRatio(CANTalon talon) {
+		return talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID());
 	}
 
 }

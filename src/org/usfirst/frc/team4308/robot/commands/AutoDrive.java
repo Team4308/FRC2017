@@ -5,6 +5,13 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
+/**
+ * Abstract superclass containing all common methods and functions that are
+ * required for autonomous control of the {@link DriveTrain}.
+ * 
+ * @author Michael Brown
+ *
+ */
 public abstract class AutoDrive extends Command {
 
 	public AutoDrive() {

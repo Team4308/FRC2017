@@ -3,6 +3,14 @@ package org.usfirst.frc.team4308.robot.commands;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 
+/**
+ * Autonomous command responsible for bi-directional linear movement of the
+ * robot, determined by either user-specified distances or by default values
+ * (specified in {@link OI}).
+ * 
+ * @author Michael Brown
+ *
+ */
 public class DriveLinear extends AutoDrive {
 
 	public DriveLinear() {
