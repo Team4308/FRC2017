@@ -18,7 +18,6 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	private final PowerDistributionPanel pdp;
 
 	private Power.BatteryLevel batteryLevel;
-	private ArrayList<Powered> monitors;
 
 	private boolean currentWarning;
 	private boolean temperatureWarning;
@@ -29,12 +28,6 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 		currentWarning = false;
 		temperatureWarning = false;
-		monitors = new ArrayList<Powered>();
-
-		monitors.add(Robot.arm);
-		monitors.add(Robot.climber);
-		monitors.add(Robot.drive);
-		monitors.add(Robot.pneumatics);
 	}
 
 	@Override
