@@ -79,37 +79,71 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		return true;
 	}
 
-	public boolean systemCheck() {
+	// TODO: current-reactive motor speed limiting for arm, climber and drive
+	// TODO: voltage-reactive warning for arm, climber and drive
+	// TODO: temperature-reactive motor speed limiting for drive
+	// TODO: temperature-reactive warning for arm and climber
+	/**
+	 * Polls each subsystems power status, determining whether their power using
+	 * components are taking too much power or producing too much heat
+	 * 
+	 * @return Whether any of the systems are
+	 */
+	public boolean[] systemCheck() {
+		boolean armState = true;
+		boolean climbState = true;
+		boolean driveState = true;
+		boolean pneumaticsState = true;
+
+		if (Robot.arm.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+			armState = false;
+		} else if (Robot.arm.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+
+		}
 
 		if (Robot.arm.temperature() > Power.dangerTemp) {
-			// TODO: lower arm maxspeed
-			return false;
+			armState = false;
 		} else if (Robot.arm.temperature() > Power.warningTemp) {
-			// TODO: warn driver
+
+		}
+
+		if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+			climbState = false;
+		} else if (Robot.climber.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+
 		}
 
 		if (Robot.climber.temperature() > Power.dangerTemp) {
-			// TODO: lower climber maxspeed
-			return false;
+			climbState = false;
 		} else if (Robot.climber.temperature() > Power.warningTemp) {
-			// TODO: warn driver
+
+		}
+
+		if (Robot.drive.current() > Power.primaryAmpLimit * Power.cautionThreshold) {
+			driveState = false;
+		} else if (Robot.drive.current() > Power.primaryAmpLimit * Power.warningThreshold) {
+
 		}
 
 		if (Robot.drive.temperature() > Power.dangerTemp) {
-			// TODO: lower drive maxspeed
-			return false;
+			driveState = false;
 		} else if (Robot.drive.temperature() > Power.warningTemp) {
-			// TODO: warn driver
+
+		}
+
+		if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.cautionThreshold) {
+			pneumaticsState = false;
+		} else if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.warningThreshold) {
+
 		}
 
 		if (Robot.pneumatics.temperature() > Power.dangerTemp + 10.0) {
-			// TODO: stop pneumatics
-			return false;
+			pneumaticsState = false;
 		} else if (Robot.pneumatics.temperature() > Power.warningTemp) {
-			// TODO: warn driver;
+
 		}
-		
-		return true;
+
+		return new boolean[] {armState, climbState, driveState, pneumaticsState};
 	}
 
 	public boolean currentWarning() {

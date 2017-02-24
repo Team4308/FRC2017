@@ -3,7 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.DriveControl;
+import org.usfirst.frc.team4308.robot.commands.AutoDrive;
 import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -89,7 +89,7 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 			setDefaultCommand(new SamsonDrive());
 			break;
 		default:
-			setDefaultCommand(new DriveControl());
+			setDefaultCommand(new TankDrive());
 			break;
 		}
 	}

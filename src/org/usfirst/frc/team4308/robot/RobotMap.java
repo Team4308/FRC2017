@@ -30,7 +30,7 @@ public class RobotMap {
 		public static final double defaultOrientation = 0.0;
 		public static final double angularPercentTolerance = 5.0;
 		public static final double distancePercentTolerance = 10.0;
-		public static final double defaultTimeout = 2.0;
+		public static final double defaultTimeout = 5.0;
 	}
 
 	public static class Constant {
@@ -126,6 +126,7 @@ public class RobotMap {
 		public static final int primaryAmpLimit = 40;
 		public static final int secondaryAmpLimit = 30;
 		public static final int breakerAmpLimit = 120;
+		public static final int pneumaticsAmpLimit = 2;
 
 		public enum BatteryLevel {
 			NOMINAL(12, 0.5), LOW(10.5, 1.0), DISCHARGED(8.0, 1.0);

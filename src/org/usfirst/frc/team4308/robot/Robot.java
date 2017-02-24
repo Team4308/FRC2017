@@ -11,6 +11,7 @@ import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
+import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -29,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot implements Loggable {
 
-	// public static PowerMonitor powermonitor;
+	public static PowerMonitor powermonitor;
 	public static Pneumatics pneumatics;
 	public static DriveTrain drive;
 	public static Climber climber;
@@ -44,7 +45,7 @@ public class Robot extends IterativeRobot implements Loggable {
 	@Override
 	public void robotInit() {
 		commands = new HashMap<String, Command>();
-		// powermonitor = new PowerMonitor();
+		powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();

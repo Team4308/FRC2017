@@ -5,24 +5,27 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveControl extends Command {
+public abstract class AutoDrive extends Command {
 
-	public DriveControl() {
+	public AutoDrive() {
 		this(RobotMap.Game.maxTimeSeconds);
 	}
 
-	public DriveControl(double timeout) {
+	public AutoDrive(double timeout) {
 		super(timeout);
+		Robot.drive.resetEncoders();
+		Robot.drive.enable();
 		requires(Robot.drive);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.drive.onTarget() || isTimedOut();
 	}
 
 	@Override
 	protected void end() {
+		Robot.drive.disable();
 		Robot.drive.stopMotor();
 	}
 }
