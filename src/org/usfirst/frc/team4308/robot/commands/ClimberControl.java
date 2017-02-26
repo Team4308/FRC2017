@@ -1,7 +1,9 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4308.robot.RobotMap;
+
+import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  * Continuous command that sends the state of two (specified in {@link OI})
@@ -10,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Michael Brown
  *
  */
-public class ClimberControl extends Command {
+public class ClimberControl extends InstantCommand {
 
 	public ClimberControl() {
 		super();
@@ -19,12 +21,7 @@ public class ClimberControl extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.climber.set(Robot.oi.getClimbButtons().getInteger());
-	}
-
-	@Override
-	protected boolean isFinished() {
-		return false;
+		Robot.climber.set(RobotMap.Climb.maxForward);
 	}
 
 	@Override

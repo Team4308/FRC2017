@@ -1,16 +1,12 @@
 package org.usfirst.frc.team4308.robot.io;
 
-import java.util.ArrayList;
-
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
-import org.usfirst.frc.team4308.util.DualButton;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -49,7 +45,6 @@ public class OI {
 
 	private final Joystick joystick;
 	private final JoystickType type;
-	private final DualButton climbButtons;
 
 	private final int leftAxis;
 	private final int rightAxis;
@@ -63,8 +58,8 @@ public class OI {
 		switch (type) {
 		case FLIGHT: // 2 DoF joystick
 			new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.Control.Flight.eastA).whenPressed(null);
-			climbButtons = new DualButton(joystick, 8, 9);
+			new JoystickButton(joystick, RobotMap.Control.Flight.eastA).toggleWhenActive(new ClimberControl());
+
 			armAxis = RobotMap.Control.Flight.throttle;
 			leftAxis = RobotMap.Control.Flight.pitch;
 			rightAxis = RobotMap.Control.Flight.roll;
@@ -76,16 +71,15 @@ public class OI {
 			new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new DriveAngular(-90.0));
 			new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new DriveAngular(90.0));
 			new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-			climbButtons = new DualButton(joystick, RobotMap.Control.Standard.leftBumper,
-					RobotMap.Control.Standard.rightBumper);
-			armAxis = RobotMap.Control.Standard.leftTrigger;
+			new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
+
+			armAxis = RobotMap.Control.Standard.leftX;
 			leftAxis = RobotMap.Control.Standard.leftY;
 			rightAxis = RobotMap.Control.Standard.rightY;
 			turnAxis = RobotMap.Control.Standard.rightX;
 			break;
 		default:
-			DriverStation.reportError("Invalid number of axis on control joystick", true);
-			climbButtons = null;
+			DriverStation.reportError("Invalid number of axes on control joystick", true);
 			armAxis = 0;
 			leftAxis = 0;
 			rightAxis = 0;
@@ -102,10 +96,6 @@ public class OI {
 
 	public Joystick getJoystick() {
 		return joystick;
-	}
-
-	public DualButton getClimbButtons() {
-		return climbButtons;
 	}
 
 	public int getLeftAxis() {
