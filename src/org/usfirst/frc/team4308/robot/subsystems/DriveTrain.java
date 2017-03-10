@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Controller for the drive train and its motors
  *
  */
-public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
+public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	private final CANTalon leftFront;
 	private final CANTalon leftBack;
@@ -34,8 +34,6 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 
 	// TODO: instantiation of correct encoders
 	public DriveTrain() {
-		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential);
-
 		leftFront = new CANTalon(RobotMap.Drive.frontLeft);
 		leftBack = new CANTalon(RobotMap.Drive.backLeft);
 		rightFront = new CANTalon(RobotMap.Drive.frontRight);
@@ -46,7 +44,6 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 		drive.setSensitivity(RobotMap.Drive.curveSensitivity);
 
 		linearInitialize();
-		getPIDController().setContinuous();
 
 		// TODO: find out the number system of the encoders
 		leftEncoder = new Encoder(RobotMap.Drive.leftChannelA, RobotMap.Drive.leftChannelB);
@@ -160,16 +157,6 @@ public class DriveTrain extends PIDSubsystem implements Loggable, Powered {
 	public double temperature() {
 		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
 				+ rightBack.getTemperature()) / 4.0;
-	}
-
-	@Override
-	protected double returnPIDInput() {
-		return getDistance();
-	}
-
-	@Override
-	protected void usePIDOutput(double output) {
-		drive.setLeftRightMotorOutputs(output, output);
 	}
 
 	public void stopMotor() {

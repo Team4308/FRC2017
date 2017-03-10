@@ -26,7 +26,7 @@ public class SamsonDrive extends Command {
 		double curvedInput = Math.pow(Robot.oi.getJoystick().getRawAxis(Robot.oi.getTurnAxis()), power);
 		double leftValue = Robot.oi.getLeftValue() + curvedInput;
 		double rightValue = Robot.oi.getRightValue() - curvedInput;
-		Robot.drive.tankDrive(leftValue, rightValue);
+		Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);
 	}
 
 	@Override

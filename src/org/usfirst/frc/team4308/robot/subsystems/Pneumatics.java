@@ -41,7 +41,6 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 
 	@Override
 	public void log() {
-		SmartDashboard.putNumber("Pressure", compressor.getCompressorCurrent());
 		SmartDashboard.putBoolean("Pressurized", isPressurized());
 	}
 

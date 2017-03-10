@@ -9,7 +9,7 @@ import org.usfirst.frc.team4308.robot.io.OI;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team4308.robot.subsystems.NavxMXP;
+import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot implements Loggable {
 	public static Pneumatics pneumatics;
 	public static DriveTrain drive;
 	public static Climber climber;
-	public static NavxMXP navx;
+	public static Gyroscope gyro;
 	public static Arm arm;
 	public static OI oi;
 	public static HashMap<String, Command> commands;
@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot implements Loggable {
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
-		navx = new NavxMXP();
+		gyro = new Gyroscope();
 		arm = new Arm();
 		oi = new OI();
 
@@ -113,6 +113,6 @@ public class Robot extends IterativeRobot implements Loggable {
 		// pneumatics.log();
 		// drive.log();
 		climber.log();
-		navx.log();
+		gyro.log();
 	}
 }

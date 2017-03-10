@@ -59,7 +59,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 	public void stopMotor() {
 		this.master.stopMotor();
 		this.slave.stopMotor();
-		this.speed = RobotMap.Climb.restingSpeed;
+		set(RobotMap.Climb.restingSpeed);
 	}
 
 	@Override

@@ -18,25 +18,19 @@ public class DriveLinear extends AutoDrive {
 	}
 
 	public DriveLinear(double distance) {
-		this(distance, RobotMap.Autonomous.maxLinearSpeed);
-	}
-
-	public DriveLinear(double distance, double maxSpeed) {
-		this(distance, maxSpeed, RobotMap.Autonomous.defaultTimeout);
-	}
-
-	public DriveLinear(double distance, double maxSpeed, double timeout) {
-		super(timeout);
-		Robot.drive.linearInitialize();
-		Robot.drive.setSetpoint(distance);
-		Robot.drive.setPercentTolerance(RobotMap.Autonomous.distancePercentTolerance);
+		super();
+		setSetpoint(distance);
+		getPIDController().setPercentTolerance(RobotMap.Autonomous.distancePercentTolerance);
 	}
 
 	@Override
-	protected void end() {
-		Robot.drive.resetEncoders();
-		Robot.drive.linearInitialize();
-		super.end();
+	protected double returnPIDInput() {
+		return Robot.drive.getDistance();
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		Robot.drive.setLeftRightMotorOutputs(output, output);
 	}
 
 }

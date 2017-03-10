@@ -17,25 +17,19 @@ public class DriveAngular extends AutoDrive {
 	}
 
 	public DriveAngular(double angle) {
-		this(angle, RobotMap.Autonomous.maxRotateSpeed);
-	}
-
-	public DriveAngular(double angle, double maxSpeed) {
-		this(angle, maxSpeed, RobotMap.Autonomous.defaultTimeout);
-	}
-
-	public DriveAngular(double angle, double maxSpeed, double timeout) {
-		super(timeout);
-		Robot.drive.angularInitialize();
-		Robot.drive.setSetpoint(angle);
-		Robot.drive.setPercentTolerance(RobotMap.Autonomous.angularPercentTolerance);
+		super();
+		setSetpoint(angle);
+		getPIDController().setPercentTolerance(RobotMap.Autonomous.angularPercentTolerance);
 	}
 
 	@Override
-	protected void end() {
-		Robot.drive.resetEncoders();
-		Robot.drive.linearInitialize();
-		super.end();
+	protected double returnPIDInput() {
+		return Robot.gyro.azimuth();
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		Robot.drive.setLeftRightMotorOutputs(output, -output);
 	}
 
 }
