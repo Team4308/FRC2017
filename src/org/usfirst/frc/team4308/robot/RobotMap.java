@@ -14,7 +14,8 @@ public class RobotMap {
 	}
 
 	public static class GearArm {
-		public static final int pistonChannel = 1;
+		public static final int backwardChannel = 0;
+		public static final int forwardChannel = 1;
 		public static final int armChannel = 6;
 
 		public static final double tolerancePercent = 10.0;
@@ -22,6 +23,8 @@ public class RobotMap {
 		public static final double potentiometerRange = 360.0;
 
 		public static final double restingAngle = 45.0;
+
+		public static final double feedForward = 0.3;
 	}
 
 	public static class Autonomous {
@@ -29,9 +32,9 @@ public class RobotMap {
 		public static final double maxRotateSpeed = 1.0;
 		public static final double defaultDistance = 10.0;
 		public static final double defaultOrientation = 0.0;
-		public static final double angularPercentTolerance = 5.0;
 		public static final double distancePercentTolerance = 10.0;
 		public static final double defaultTimeout = 5.0;
+		public static final double angularToleranceDegrees = 2.0;
 	}
 
 	public static class Constant {

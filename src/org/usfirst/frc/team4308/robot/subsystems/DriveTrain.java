@@ -51,6 +51,10 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		leftEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 		rightEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
+		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
+		LiveWindow.addActuator("Drive Train", "leftBack", leftBack);
+		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
+		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
 		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
 		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
 	}

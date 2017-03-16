@@ -19,7 +19,10 @@ public class DriveAngular extends AutoDrive {
 	public DriveAngular(double angle) {
 		super();
 		setSetpoint(angle);
-		getPIDController().setPercentTolerance(RobotMap.Autonomous.angularPercentTolerance);
+		getPIDController().setInputRange(-180.0f, 180.0f);
+		getPIDController().setOutputRange(-1.0, 1.0);
+		getPIDController().setAbsoluteTolerance(RobotMap.Autonomous.angularToleranceDegrees);
+		getPIDController().setContinuous(true);
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class DriveAngular extends AutoDrive {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		Robot.drive.setLeftRightMotorOutputs(output, -output);
+		Robot.drive.setLeftRightMotorOutputs(-output, output);
 	}
 
 }

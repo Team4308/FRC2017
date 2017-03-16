@@ -17,7 +17,6 @@ public abstract class AutoDrive extends PIDCommand {
 	public AutoDrive() {
 		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential,
 				RobotMap.Constant.feedForward);
-		Robot.drive.resetEncoders();
 		requires(Robot.drive);
 	}
 
@@ -28,7 +27,6 @@ public abstract class AutoDrive extends PIDCommand {
 
 	@Override
 	protected void end() {
-		Robot.drive.resetEncoders();
 		Robot.drive.stopMotor();
 	}
 

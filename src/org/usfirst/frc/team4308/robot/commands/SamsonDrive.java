@@ -6,15 +6,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * Continuous command that emulates the {@link TankDrive} control scheme, but
- * delegates the turning control to a power curve, rather than the linear input
- * of the joystick.
+ * delegates the turning control to a cubic power curve, rather than the square curve of the {@link RobotDrive}.
  * 
  * @author Samson Close
  *
  */
 public class SamsonDrive extends Command {
-
-	private static final int power = 3;
 
 	public SamsonDrive() {
 		super();
@@ -23,7 +20,8 @@ public class SamsonDrive extends Command {
 
 	@Override
 	protected void execute() {
-		double curvedInput = Math.pow(Robot.oi.getJoystick().getRawAxis(Robot.oi.getTurnAxis()), power);
+		double input = Robot.oi.getJoystick().getRawAxis(Robot.oi.getTurnAxis());
+		double curvedInput = input * input * input;
 		double leftValue = Robot.oi.getLeftValue() + curvedInput;
 		double rightValue = Robot.oi.getRightValue() - curvedInput;
 		Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);

@@ -9,6 +9,7 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Climber extends Subsystem implements SpeedController, Loggable, Powered {
@@ -28,6 +29,9 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 		slave = new CANTalon(RobotMap.Climb.slaveChannel);
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
+		
+		LiveWindow.addActuator("Climber", "MasterTalon", master);
+		LiveWindow.addActuator("Climber", "SlaveMotor", slave);
 	}
 
 	@Override

@@ -20,6 +20,7 @@ public class DriveLinear extends AutoDrive {
 	public DriveLinear(double distance) {
 		super();
 		setSetpoint(distance);
+		Robot.drive.resetEncoders();
 		getPIDController().setPercentTolerance(RobotMap.Autonomous.distancePercentTolerance);
 	}
 
@@ -31,6 +32,12 @@ public class DriveLinear extends AutoDrive {
 	@Override
 	protected void usePIDOutput(double output) {
 		Robot.drive.setLeftRightMotorOutputs(output, output);
+	}
+	
+	@Override
+	protected void end() {
+		Robot.drive.resetEncoders();
+		super.end();
 	}
 
 }

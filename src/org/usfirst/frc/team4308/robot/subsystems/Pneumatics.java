@@ -6,6 +6,7 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Pneumatics extends Subsystem implements Loggable, Powered {
@@ -17,6 +18,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	public Pneumatics() {
 		super();
 		compressor = new Compressor();
+		LiveWindow.addActuator("Pneumatics", "Compressor", compressor);
 	}
 
 	@Override
@@ -42,6 +44,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	@Override
 	public void log() {
 		SmartDashboard.putBoolean("Pressurized", isPressurized());
+		SmartDashboard.putNumber("Compressor Current", current());
 	}
 
 	@Override

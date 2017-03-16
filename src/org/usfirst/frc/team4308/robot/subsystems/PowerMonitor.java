@@ -2,15 +2,16 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
-import org.usfirst.frc.team4308.robot.commands.PowerCheck;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Loop;
+
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PowerMonitor extends Subsystem implements Loggable {
+public class PowerMonitor extends Subsystem implements Loggable, Loop {
 
 	private final PowerDistributionPanel pdp;
 
@@ -29,7 +30,6 @@ public class PowerMonitor extends Subsystem implements Loggable {
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new PowerCheck());
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	 * @return Whether the system is pulling potentially harmful levels of power
 	 *         or not
 	 */
-	public boolean check() {
+	public boolean powerCheck() {
 		double voltage = pdp.getVoltage();
 		double current = pdp.getTotalCurrent();
 		double temperature = pdp.getTemperature();
@@ -166,6 +166,20 @@ public class PowerMonitor extends Subsystem implements Loggable {
 
 	public double currentRatio(CANTalon talon) {
 		return talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID());
+	}
+
+	@Override
+	public void loop() {
+		powerCheck();
+		systemCheck();
+	}
+
+	@Override
+	public void start() {
+	}
+
+	@Override
+	public void stop() {
 	}
 
 }

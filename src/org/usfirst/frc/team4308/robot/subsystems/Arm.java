@@ -8,28 +8,37 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends PIDSubsystem implements Loggable, Powered {
 
-	private Solenoid claw;
+	private DoubleSolenoid claw;
 	private CANTalon arm;
 	private AnalogPotentiometer armAngle;
 
 	private boolean grab;
 
 	public Arm() {
-		super(RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential);
+		super(Arm.class.getName(), RobotMap.Constant.proportional, RobotMap.Constant.integral,
+				RobotMap.Constant.differential, RobotMap.GearArm.feedForward);
+
 		armAngle = new AnalogPotentiometer(RobotMap.GearArm.potentiometerChannel, RobotMap.GearArm.potentiometerRange);
-		grab = false;
-		claw = new Solenoid(RobotMap.GearArm.pistonChannel);
+		claw = new DoubleSolenoid(RobotMap.GearArm.forwardChannel, RobotMap.GearArm.backwardChannel);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 
+		grab = false;
+
+		getPIDController().setInputRange(-180.0f, 180.0f);
 		setPercentTolerance(RobotMap.GearArm.tolerancePercent);
 		getPIDController().setContinuous(false);
 		reset();
+		
+		LiveWindow.addSensor("Arm", "Potentiometer", armAngle);
+		LiveWindow.addActuator("Arm", "Motor", arm);
+		LiveWindow.addActuator("Arm", "Piston", claw);
 	}
 
 	@Override
@@ -38,7 +47,11 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 	}
 
 	public void claw() {
-		claw.set(grab);
+		if (grab) {
+			claw.set(DoubleSolenoid.Value.kForward);
+		} else {
+			claw.set(DoubleSolenoid.Value.kReverse);
+		}
 		grab = !grab;
 	}
 
