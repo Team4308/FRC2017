@@ -24,7 +24,7 @@ public class DriveAngular extends AutoDrive {
 
 	@Override
 	protected double returnPIDInput() {
-		return Robot.gyro.azimuth();
+		return Robot.gyro.yaw();
 	}
 
 	@Override
