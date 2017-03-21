@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.io;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
+public class IO {
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -51,7 +52,7 @@ public class OI {
 	private final int turnAxis;
 	private final int armAxis;
 
-	public OI() {
+	public IO() {
 		joystick = new Joystick(RobotMap.Control.driveStick);
 		type = JoystickType.fromJoystick(joystick);
 
@@ -66,12 +67,9 @@ public class OI {
 			turnAxis = 0;
 			break;
 		case STANDARD: // 2 stick PlayStation style controller
-			new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new DriveAngular(-180.0));
-			new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new DriveAngular(180.0));
-			new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new DriveAngular(-90.0));
-			new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new DriveAngular(90.0));
 			new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
 			new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
+			new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
 
 			armAxis = RobotMap.Control.Standard.leftX;
 			leftAxis = RobotMap.Control.Standard.leftY;

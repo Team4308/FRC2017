@@ -14,8 +14,8 @@ public class RobotMap {
 	}
 
 	public static class GearArm {
-		public static final int backwardChannel = 0;
-		public static final int forwardChannel = 1;
+		public static final int solenoidA = 0;
+		public static final int solenoidB = 1;
 		public static final int armChannel = 6;
 
 		public static final double tolerancePercent = 10.0;
@@ -25,6 +25,8 @@ public class RobotMap {
 		public static final double restingAngle = 45.0;
 
 		public static final double feedForward = 0.3;
+
+		public static final int sensorChannel = 0;
 	}
 
 	public static class Autonomous {
@@ -63,8 +65,8 @@ public class RobotMap {
 			public static final int rightBumper = 6;
 			public static final int back = 7;
 			public static final int start = 8;
-			public static final int leftClick = 9;
-			public static final int rightClick = 10;
+			public static final int leftAnalogClick = 9;
+			public static final int rightAnalogClick = 10;
 		}
 
 		public static class Flight {
@@ -95,12 +97,10 @@ public class RobotMap {
 		public static final int frontRight = 0;
 		public static final int backRight = 2;
 
-		public static final int leftChannelA = 0;
-		public static final int leftChannelB = 1;
-		public static final int rightChannelA = 2;
-		public static final int rightChannelB = 3;
+		public static final int ChannelA = 0;
+		public static final int ChannelB = 0;
 
-		public static final double curveSensitivity = 1.0;
+		public static final double curveSensitivity = 0.5;
 		public static final double encoderPulseDistance = 0.042;
 
 		public static class Slow {

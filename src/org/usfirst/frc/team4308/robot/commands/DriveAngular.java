@@ -5,7 +5,7 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 /**
  * Autonomous command that will rotate the robot to a user-specified or default
- * (specified in {@link OI} orientation.
+ * (specified in {@link IO} orientation.
  * 
  * @author Michael Brown
  *

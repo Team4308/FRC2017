@@ -21,7 +21,7 @@ public class TankDrive extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.drive.tankDrive(Robot.oi.getJoystick(), Robot.oi.getLeftAxis(), Robot.oi.getRightAxis());
+		Robot.drive.tankDrive(Robot.io.getJoystick(), Robot.io.getLeftAxis(), Robot.io.getRightAxis());
 	}
 
 	@Override

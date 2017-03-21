@@ -67,7 +67,6 @@ public class Gyroscope extends Subsystem implements Loggable, Loop {
 
 	public void reset() {
 		gyro.resetDisplacement();
-		gyro.reset();
 	}
 
 	public boolean disturbance() {
@@ -86,7 +85,7 @@ public class Gyroscope extends Subsystem implements Loggable, Loop {
 
 	@Override
 	public void loop() {
-		
+
 	}
 
 	@Override

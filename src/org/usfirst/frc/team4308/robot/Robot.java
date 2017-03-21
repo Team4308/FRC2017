@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team4308.robot;
 
-import org.usfirst.frc.team4308.robot.io.OI;
+import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
@@ -33,26 +33,26 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Climber climber;
 	public static Gyroscope gyro;
 	public static Arm arm;
-	public static OI oi;
+	public static IO io;
 
 	private SendableChooser<Command> autoChooser;
 	private Command autonomousCommand;
 
 	@Override
 	public void robotInit() {
-		powermonitor = new PowerMonitor();
+		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
 		gyro = new Gyroscope();
 		arm = new Arm();
-		oi = new OI();
+		io = new IO();
 
 		autoChooser = new SendableChooser<Command>();
-		loops.add(gyro);
-		loops.add(powermonitor);
+		// loops.add(gyro);
+		// loops.add(powermonitor);
 
-		SmartDashboard.putData(powermonitor);
+		//SmartDashboard.putData(powermonitor);
 		SmartDashboard.putData(pneumatics);
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(climber);
@@ -120,6 +120,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		drive.log();
 		climber.log();
 		gyro.log();
+		arm.log();
 	}
 
 }

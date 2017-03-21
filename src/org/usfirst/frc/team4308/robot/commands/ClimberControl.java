@@ -6,7 +6,7 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Continuous command that sends the state of a (specified in {@link OI})
+ * Continuous command that sends the state of a (specified in {@link IO})
  * button which controls the motors on the {@link Climber} subsystem.
  * 
  * @author Michael Brown

@@ -29,9 +29,9 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 		slave = new CANTalon(RobotMap.Climb.slaveChannel);
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
-		
+
 		LiveWindow.addActuator("Climber", "MasterTalon", master);
-		LiveWindow.addActuator("Climber", "SlaveMotor", slave);
+		LiveWindow.addActuator("Climber", "SlaveTalon", slave);
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 /**
  * Autonomous command responsible for bi-directional linear movement of the
  * robot, determined by either user-specified distances or by default values
- * (specified in {@link OI}).
+ * (specified in {@link IO}).
  * 
  * @author Michael Brown
  *
@@ -20,7 +20,7 @@ public class DriveLinear extends AutoDrive {
 	public DriveLinear(double distance) {
 		super();
 		setSetpoint(distance);
-		Robot.drive.resetEncoders();
+		Robot.drive.resetEncoder();
 		getPIDController().setPercentTolerance(RobotMap.Autonomous.distancePercentTolerance);
 	}
 
@@ -36,7 +36,7 @@ public class DriveLinear extends AutoDrive {
 	
 	@Override
 	protected void end() {
-		Robot.drive.resetEncoders();
+		Robot.drive.resetEncoder();
 		super.end();
 	}
 

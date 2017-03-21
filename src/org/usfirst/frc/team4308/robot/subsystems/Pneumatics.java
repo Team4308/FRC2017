@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Pneumatics extends Subsystem implements Loggable, Powered {
-	
+
 	private static final int supplyVoltage = 12;
 
 	private Compressor compressor;
@@ -35,10 +35,17 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	}
 
 	/**
+	 * Stops the compressor.
+	 */
+	public void stop() {
+		compressor.stop();
+	}
+
+	/**
 	 * @return Whether or not the system is fully pressurized.
 	 */
 	public boolean isPressurized() {
-		return !compressor.getPressureSwitchValue();
+		return compressor.getPressureSwitchValue();
 	}
 
 	@Override

@@ -7,8 +7,10 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +20,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 	private DoubleSolenoid claw;
 	private CANTalon arm;
 	private AnalogPotentiometer armAngle;
+	private AnalogInput sensor;
 
 	private boolean grab;
 
@@ -26,8 +29,9 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 				RobotMap.Constant.differential, RobotMap.GearArm.feedForward);
 
 		armAngle = new AnalogPotentiometer(RobotMap.GearArm.potentiometerChannel, RobotMap.GearArm.potentiometerRange);
-		claw = new DoubleSolenoid(RobotMap.GearArm.forwardChannel, RobotMap.GearArm.backwardChannel);
+		claw = new DoubleSolenoid(RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
+		sensor = new AnalogInput(RobotMap.GearArm.sensorChannel);
 
 		grab = false;
 
@@ -35,10 +39,11 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 		setPercentTolerance(RobotMap.GearArm.tolerancePercent);
 		getPIDController().setContinuous(false);
 		reset();
-		
+
 		LiveWindow.addSensor("Arm", "Potentiometer", armAngle);
 		LiveWindow.addActuator("Arm", "Motor", arm);
 		LiveWindow.addActuator("Arm", "Piston", claw);
+		LiveWindow.addSensor("Arm", "Ultrasonic Sensor", sensor);
 	}
 
 	@Override
@@ -97,7 +102,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 	@Override
 	public void log() {
 		SmartDashboard.putNumber("Arm Angle", angle());
-		SmartDashboard.putBoolean("Claw State", grab);
+		SmartDashboard.putString("Claw State", grab ? "Open" : "Closed");
 	}
 
 }

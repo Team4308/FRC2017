@@ -29,10 +29,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	private final CANTalon rightFront;
 	private final CANTalon rightBack;
 	private final RobotDrive drive;
-	private Encoder leftEncoder;
-	private Encoder rightEncoder;
+	private Encoder encoder;
 
-	// TODO: instantiation of correct encoders
 	public DriveTrain() {
 		leftFront = new CANTalon(RobotMap.Drive.frontLeft);
 		leftBack = new CANTalon(RobotMap.Drive.backLeft);
@@ -46,17 +44,14 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		linearInitialize();
 
 		// TODO: find out the number system of the encoders
-		leftEncoder = new Encoder(RobotMap.Drive.leftChannelA, RobotMap.Drive.leftChannelB);
-		rightEncoder = new Encoder(RobotMap.Drive.rightChannelA, RobotMap.Drive.rightChannelB);
-		leftEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
-		rightEncoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
+		encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
+		encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
 		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
 		LiveWindow.addActuator("Drive Train", "leftBack", leftBack);
 		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
-		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
+		LiveWindow.addSensor("Drive Train", "Encoder", encoder);
 	}
 
 	public void linearInitialize() {
@@ -75,7 +70,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-		switch (Robot.oi.getJoystickType()) {
+		switch (Robot.io.getJoystickType()) {
 		case FLIGHT:
 			setDefaultCommand(new ArcadeDrive());
 			break;
@@ -114,35 +109,24 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	public void log() {
-		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
-		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());
-		SmartDashboard.putNumber("Left Speed", leftEncoder.getRate());
-		SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
+		SmartDashboard.putNumber("Distance", encoder.getDistance());
+		SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
 	public void setMaxOutput(double power) {
 		drive.setMaxOutput(power);
 	}
 
-	public void resetEncoders() {
-		leftEncoder.reset();
-		rightEncoder.reset();
+	public void resetEncoder() {
+		encoder.reset();
 	}
 
 	public double getDistance() {
-		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2.0;
+		return encoder.getDistance();
 	}
 
-	public double getAbsoluteDistance() {
-		return (Math.abs(leftEncoder.getDistance()) + Math.abs(rightEncoder.getDistance())) / 2.0;
-	}
-
-	public Encoder getLeftEncoder() {
-		return leftEncoder;
-	}
-
-	public Encoder getRightEncoder() {
-		return rightEncoder;
+	public Encoder getEncoder() {
+		return encoder;
 	}
 
 	@Override

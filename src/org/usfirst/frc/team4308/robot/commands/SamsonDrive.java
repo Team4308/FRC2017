@@ -20,10 +20,10 @@ public class SamsonDrive extends Command {
 
 	@Override
 	protected void execute() {
-		double input = Robot.oi.getJoystick().getRawAxis(Robot.oi.getTurnAxis());
+		double input = Robot.io.getJoystick().getRawAxis(Robot.io.getTurnAxis());
 		double curvedInput = input * input * input;
-		double leftValue = Robot.oi.getLeftValue() + curvedInput;
-		double rightValue = Robot.oi.getRightValue() - curvedInput;
+		double leftValue = Robot.io.getLeftValue() + curvedInput;
+		double rightValue = Robot.io.getRightValue() - curvedInput;
 		Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);
 	}
 

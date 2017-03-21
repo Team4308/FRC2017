@@ -4,7 +4,7 @@ import org.usfirst.frc.team4308.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Continuous command to send the throttle axis (specified in {@link OI}) to the
+ * Continuous command to send the throttle axis (specified in {@link IO}) to the
  * {@link Arm} subsystem, in order to control the pitch of the arm.
  * 
  * @author Michael Brown
@@ -19,7 +19,7 @@ public class ArmControl extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.arm.setAngle(Robot.oi.getArmValue());
+		Robot.arm.setAngle(Robot.io.getArmValue());
 	}
 
 	@Override
