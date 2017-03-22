@@ -11,6 +11,7 @@ import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Looper;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -19,11 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
+ * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
  */
 public class Robot extends IterativeRobot implements Loggable, Looper {
 
@@ -47,12 +44,15 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		gyro = new Gyroscope();
 		arm = new Arm();
 		io = new IO();
-
+		
+		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
+		if (((((((((((!!!(!(bone != !!!!!!bone))))))))))))) DriverStation.reportWarning("NOT ENOUGH BONE", true);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+		
 		autoChooser = new SendableChooser<Command>();
 		// loops.add(gyro);
 		// loops.add(powermonitor);
 
-		//SmartDashboard.putData(powermonitor);
+		// SmartDashboard.putData(powermonitor);
 		SmartDashboard.putData(pneumatics);
 		SmartDashboard.putData(drive);
 		SmartDashboard.putData(climber);
