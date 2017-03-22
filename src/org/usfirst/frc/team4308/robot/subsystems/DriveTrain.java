@@ -41,7 +41,10 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		drive.setSafetyEnabled(true);
 		drive.setSensitivity(RobotMap.Drive.curveSensitivity);
 
-		linearInitialize();
+		drive.setInvertedMotor(MotorType.kFrontLeft, true);
+		drive.setInvertedMotor(MotorType.kRearLeft, true);
+		drive.setInvertedMotor(MotorType.kFrontRight, true);
+		drive.setInvertedMotor(MotorType.kRearRight, true);
 
 		// TODO: find out the number system of the encoders
 		encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
@@ -52,20 +55,6 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
 		LiveWindow.addSensor("Drive Train", "Encoder", encoder);
-	}
-
-	public void linearInitialize() {
-		drive.setInvertedMotor(MotorType.kFrontLeft, true);
-		drive.setInvertedMotor(MotorType.kRearLeft, true);
-		drive.setInvertedMotor(MotorType.kFrontRight, true);
-		drive.setInvertedMotor(MotorType.kRearRight, true);
-	}
-
-	public void angularInitialize() {
-		drive.setInvertedMotor(MotorType.kFrontLeft, true);
-		drive.setInvertedMotor(MotorType.kRearLeft, true);
-		drive.setInvertedMotor(MotorType.kFrontRight, false);
-		drive.setInvertedMotor(MotorType.kRearRight, false);
 	}
 
 	@Override
@@ -89,6 +78,10 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	public void arcadeDrive(Joystick control, int moveAxis, int rotateAxis) {
 		drive.arcadeDrive(control, moveAxis, control, rotateAxis);
+	}
+
+	public void autoDrive(double move, double turn) {
+		drive.arcadeDrive(move, turn, false);
 	}
 
 	public void drive(double magnitude, double curve) {
@@ -125,7 +118,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		return encoder.getDistance();
 	}
 
-	public Encoder getEncoder() {
+	public final Encoder getEncoder() {
 		return encoder;
 	}
 

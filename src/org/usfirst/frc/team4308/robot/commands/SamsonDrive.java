@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Samson Close
  *
  */
-public class SamsonDrive extends Command {
+public class SamsonDrive extends OperatorDrive {
 
 	public SamsonDrive() {
 		super();
-		requires(Robot.drive);
 	}
 
 	@Override
@@ -26,15 +25,5 @@ public class SamsonDrive extends Command {
 		double rightValue = Robot.io.getRightValue() - curvedInput;
 		Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);
 	}
-
-	@Override
-	protected boolean isFinished() {
-		return false;
-	}
-
-	@Override
-	protected void end() {
-		Robot.drive.stopMotor();
-	}
-
+	
 }

@@ -12,26 +12,15 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Michael Brown
  *
  */
-public class TankDrive extends Command {
+public class TankDrive extends OperatorDrive {
 
 	public TankDrive() {
 		super();
-		requires(Robot.drive);
 	}
 
 	@Override
 	protected void execute() {
 		Robot.drive.tankDrive(Robot.io.getJoystick(), Robot.io.getLeftAxis(), Robot.io.getRightAxis());
-	}
-
-	@Override
-	protected boolean isFinished() {
-		return false;
-	}
-
-	@Override
-	protected void end() {
-		Robot.drive.stopMotor();
 	}
 
 }

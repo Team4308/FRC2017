@@ -31,6 +31,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
+	
+	public static boolean operatorControl;
 
 	private SendableChooser<Command> autoChooser;
 	private Command autonomousCommand;
@@ -51,6 +53,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		autoChooser = new SendableChooser<Command>();
 		// loops.add(gyro);
 		// loops.add(powermonitor);
+		
+		operatorControl = false;
 
 		// SmartDashboard.putData(powermonitor);
 		SmartDashboard.putData(pneumatics);
@@ -64,6 +68,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void disabledInit() {
 		stop();
+		operatorControl = false;
 	}
 
 	@Override
@@ -74,6 +79,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
+		operatorControl = false;
 
 		autonomousCommand = autoChooser.getSelected();
 		if (autonomousCommand != null)
@@ -90,6 +96,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void teleopInit() {
 		start();
+		operatorControl = true;
 
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
@@ -104,6 +111,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void testInit() {
+		operatorControl = true;
 		start();
 	}
 

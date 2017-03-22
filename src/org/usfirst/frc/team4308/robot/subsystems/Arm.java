@@ -20,7 +20,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 	private DoubleSolenoid claw;
 	private CANTalon arm;
 	private AnalogPotentiometer armAngle;
-	private AnalogInput sensor;
+	private AnalogInput ultrasonic;
 
 	private boolean grab;
 
@@ -31,7 +31,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 		armAngle = new AnalogPotentiometer(RobotMap.GearArm.potentiometerChannel, RobotMap.GearArm.potentiometerRange);
 		claw = new DoubleSolenoid(RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
-		sensor = new AnalogInput(RobotMap.GearArm.sensorChannel);
+		ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 
 		grab = false;
 
@@ -43,7 +43,7 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 		LiveWindow.addSensor("Arm", "Potentiometer", armAngle);
 		LiveWindow.addActuator("Arm", "Motor", arm);
 		LiveWindow.addActuator("Arm", "Piston", claw);
-		LiveWindow.addSensor("Arm", "Ultrasonic Sensor", sensor);
+		LiveWindow.addSensor("Arm", "Ultrasonic Sensor", ultrasonic);
 	}
 
 	@Override

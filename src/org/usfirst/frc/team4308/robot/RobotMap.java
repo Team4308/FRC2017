@@ -8,6 +8,13 @@ package org.usfirst.frc.team4308.robot;
  * could between hardware revisions.
  */
 public class RobotMap {
+	
+	public static final double kProportional = 0.1;
+	public static final double kIntegral = 0.001;
+	public static final double kDifferential = 0.0;
+	public static final double kFeedForward = 0.0;
+	
+	public static final double encoderPulseDistance = 0.042;
 
 	public static class Game {
 		public static final int maxTimeSeconds = 75;
