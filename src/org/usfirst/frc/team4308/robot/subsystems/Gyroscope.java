@@ -3,9 +3,6 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.AbsoluteDashboard;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Loop;
-import org.usfirst.frc.team4308.util.Vector2;
-import org.usfirst.frc.team4308.util.Vector3;
-
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -46,14 +43,6 @@ public class Gyroscope extends Subsystem implements Loggable, Loop {
 
 	public double zDistance() {
 		return gyro.getDisplacementZ();
-	}
-
-	public Vector3 displacement() {
-		return new Vector3(gyro.getDisplacementX(), gyro.getDisplacementY(), gyro.getDisplacementZ());
-	}
-
-	public Vector3 orientation() {
-		return new Vector3(gyro.getPitch(), gyro.getRoll(), gyro.getYaw());
 	}
 
 	public void initialize() {

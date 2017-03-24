@@ -99,10 +99,12 @@ public class RobotMap {
 	// TODO: encoder channel correction
 	// TODO: talonSRX device ID reassignment surgery
 	public static class Drive {
-		public static final int frontLeft = 3;
-		public static final int backLeft = 1;
-		public static final int frontRight = 0;
-		public static final int backRight = 2;
+		public static final int leftFront = 6;
+		public static final int leftMiddle = 4;
+		public static final int leftBack = 5;
+		public static final int rightFront = 3;
+		public static final int rightMiddle = 1;
+		public static final int rightBack = 2;
 
 		public static final int ChannelA = 0;
 		public static final int ChannelB = 0;

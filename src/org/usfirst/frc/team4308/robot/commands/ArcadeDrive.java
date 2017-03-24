@@ -19,7 +19,7 @@ public class ArcadeDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.arcadeDrive(Robot.io.getJoystick(), Robot.io.getMoveAxis(), Robot.io.getRotateAxis());
+		Robot.drive.arcadeDrive(Robot.io.getMoveValue(), Robot.io.getRotateValue());
 	}
 
 }

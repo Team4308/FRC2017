@@ -12,6 +12,8 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.MotorSafety;
+import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -22,37 +24,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Controller for the drive train and its motors
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, Powered {
+public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSafety {
+
+	protected MotorSafetyHelper safetyHelper;
 
 	private final CANTalon leftFront;
+	private final CANTalon leftMiddle;
 	private final CANTalon leftBack;
 	private final CANTalon rightFront;
+	private final CANTalon rightMiddle;
 	private final CANTalon rightBack;
-	private final RobotDrive drive;
 	private Encoder encoder;
+	private double maxPower;
 
 	public DriveTrain() {
-		leftFront = new CANTalon(RobotMap.Drive.frontLeft);
-		leftBack = new CANTalon(RobotMap.Drive.backLeft);
-		rightFront = new CANTalon(RobotMap.Drive.frontRight);
-		rightBack = new CANTalon(RobotMap.Drive.backRight);
+		leftFront = new CANTalon(RobotMap.Drive.leftFront);
+		leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
+		leftBack = new CANTalon(RobotMap.Drive.leftBack);
+		rightFront = new CANTalon(RobotMap.Drive.rightFront);
+		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
+		rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		drive = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
-		drive.setSafetyEnabled(true);
-		drive.setSensitivity(RobotMap.Drive.curveSensitivity);
+		safetyHelper = new MotorSafetyHelper(this);
 
-		drive.setInvertedMotor(MotorType.kFrontLeft, true);
-		drive.setInvertedMotor(MotorType.kRearLeft, true);
-		drive.setInvertedMotor(MotorType.kFrontRight, true);
-		drive.setInvertedMotor(MotorType.kRearRight, true);
-
-		// TODO: find out the number system of the encoders
 		encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
 		encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
 		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
+		LiveWindow.addActuator("Drive Train", "leftMiddle", leftMiddle);
 		LiveWindow.addActuator("Drive Train", "leftBack", leftBack);
 		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
+		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
 		LiveWindow.addSensor("Drive Train", "Encoder", encoder);
 	}
@@ -72,32 +74,44 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		}
 	}
 
-	public void arcadeDrive(double move, double rotate) {
-		drive.arcadeDrive(move, rotate);
+	public void arcadeDrive(double moveValue, double rotateValue) {
+		moveValue = limit(moveValue);
+		rotateValue = limit(rotateValue);
+
+		double leftMotorSpeed;
+		double rightMotorSpeed;
+		if (moveValue > 0.0D) {
+			if (rotateValue > 0.0D) {
+				leftMotorSpeed = moveValue - rotateValue;
+				rightMotorSpeed = Math.max(moveValue, rotateValue);
+			} else {
+				leftMotorSpeed = Math.max(moveValue, -rotateValue);
+				rightMotorSpeed = moveValue + rotateValue;
+			}
+		} else if (rotateValue > 0.0D) {
+			leftMotorSpeed = -Math.max(-moveValue, rotateValue);
+			rightMotorSpeed = moveValue + rotateValue;
+		} else {
+			leftMotorSpeed = moveValue - rotateValue;
+			rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
+		}
+
+		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
 	}
 
-	public void arcadeDrive(Joystick control, int moveAxis, int rotateAxis) {
-		drive.arcadeDrive(control, moveAxis, control, rotateAxis);
-	}
-
-	public void autoDrive(double move, double turn) {
-		drive.arcadeDrive(move, turn, false);
-	}
-
-	public void drive(double magnitude, double curve) {
-		drive.drive(magnitude, curve);
+	public void tankDrive(double leftOutput, double rightOutput) {
+		leftOutput = limit(leftOutput);
+		rightOutput = limit(rightOutput);
+		setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		drive.setLeftRightMotorOutputs(leftOutput, rightOutput);
-	}
-
-	public void tankDrive(double leftValue, double rightValue) {
-		drive.tankDrive(leftValue, rightValue);
-	}
-
-	public void tankDrive(Joystick control, int leftAxis, int rightAxis) {
-		drive.tankDrive(control, leftAxis, control, rightAxis);
+		leftFront.set(limit(leftOutput) * maxPower);
+		leftMiddle.set(limit(leftOutput) * maxPower);
+		leftBack.set(limit(leftOutput) * maxPower);
+		rightFront.set(limit(rightOutput) * maxPower);
+		rightMiddle.set(limit(rightOutput) * maxPower);
+		rightBack.set(limit(rightOutput) * maxPower);
 	}
 
 	@Override
@@ -106,8 +120,12 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
+	protected static double limit(double num) {
+		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
+	}
+
 	public void setMaxOutput(double power) {
-		drive.setMaxOutput(power);
+		maxPower = power;
 	}
 
 	public void resetEncoder() {
@@ -141,6 +159,41 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	}
 
 	public void stopMotor() {
-		drive.stopMotor();
+		leftBack.stopMotor();
+		leftMiddle.stopMotor();
+		leftBack.stopMotor();
+		rightBack.stopMotor();
+		rightMiddle.stopMotor();
+		rightBack.stopMotor();
+	}
+
+	@Override
+	public String getDescription() {
+		return this.getName();
+	}
+
+	@Override
+	public double getExpiration() {
+		return safetyHelper.getExpiration();
+	}
+
+	@Override
+	public boolean isAlive() {
+		return safetyHelper.isAlive();
+	}
+
+	@Override
+	public boolean isSafetyEnabled() {
+		return safetyHelper.isSafetyEnabled();
+	}
+
+	@Override
+	public void setExpiration(double expirationTime) {
+		safetyHelper.setExpiration(expirationTime);
+	}
+
+	@Override
+	public void setSafetyEnabled(boolean enabled) {
+		safetyHelper.setSafetyEnabled(enabled);
 	}
 }

@@ -108,6 +108,10 @@ public class IO {
 		return leftAxis;
 	}
 
+	public double getMoveValue() {
+		return joystick.getRawAxis(leftAxis);
+	}
+
 	public int getRightAxis() {
 		return rightAxis;
 	}
@@ -118,6 +122,10 @@ public class IO {
 
 	public int getRotateAxis() {
 		return rightAxis;
+	}
+
+	public double getRotateValue() {
+		return joystick.getRawAxis(rightAxis);
 	}
 
 	public int getArmAxis() {

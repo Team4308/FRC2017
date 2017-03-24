@@ -20,7 +20,7 @@ public class TankDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.tankDrive(Robot.io.getJoystick(), Robot.io.getLeftAxis(), Robot.io.getRightAxis());
+		Robot.drive.tankDrive(Robot.io.getLeftValue(), Robot.io.getRightValue());
 	}
 
 }
