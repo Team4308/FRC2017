@@ -6,6 +6,9 @@ import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.DriveAngular;
 import org.usfirst.frc.team4308.robot.commands.DriveLinear;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
+import org.usfirst.frc.team4308.robot.commands.TalonSequence;
+import org.usfirst.frc.team4308.robot.commands.TalonTest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -70,6 +73,7 @@ public class IO {
 			new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
 			new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
 			new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
+			new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new TalonSequence());
 
 			armAxis = RobotMap.Control.Standard.leftX;
 			leftAxis = RobotMap.Control.Standard.leftY;

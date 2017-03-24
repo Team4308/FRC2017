@@ -3,11 +3,13 @@ package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
+import org.usfirst.frc.team4308.robot.subsystems.Autonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
+import org.usfirst.frc.team4308.robot.subsystems.USBVision;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Looper;
 
@@ -31,6 +33,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
+	public static Autonomous autonomous;
+	public static USBVision vision;
 	
 	public static boolean operatorControl;
 
@@ -46,6 +50,9 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		gyro = new Gyroscope();
 		arm = new Arm();
 		io = new IO();
+		autonomous = new Autonomous();
+		vision = new USBVision();
+		
 		
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone))))))))))))) DriverStation.reportWarning("NOT ENOUGH BONE", true);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -80,7 +87,6 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public void autonomousInit() {
 		start();
 		operatorControl = false;
-
 		autonomousCommand = autoChooser.getSelected();
 		if (autonomousCommand != null)
 			autonomousCommand.start();
@@ -107,6 +113,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		Scheduler.getInstance().run();
 		log();
 		loop();
+
 	}
 
 	@Override

@@ -1,11 +1,12 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.commands.AutoLocator;
+import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Vector2;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Autonomous extends Subsystem {
-
+public class Autonomous extends Subsystem implements Loop{
 	// TODO: maybe use looping to constantly find heading
 	// TODO: pre-calculated locations for all team stations
 	// TOOD: possibly A star map for field
@@ -21,6 +22,7 @@ public class Autonomous extends Subsystem {
 	public boolean moveTo(Vector2 destination) {
 		// TODO: calculate hypotenuse distance, rotate towards destination, move
 		// forwards (or backwards) by hypotenuse distance
+		
 		return false;
 	}
 
@@ -35,6 +37,24 @@ public class Autonomous extends Subsystem {
 
 	public double direction() {
 		return direction;
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
