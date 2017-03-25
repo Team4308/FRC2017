@@ -4,7 +4,6 @@ import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
-import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
@@ -60,10 +59,11 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	protected void initDefaultCommand() {
 		switch (Robot.io.getJoystickType()) {
 		case FLIGHT:
-			setDefaultCommand(new ArcadeDrive());
+			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
 			break;
 		case STANDARD:
-			setDefaultCommand(new SamsonDrive());
+			setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
+			//setDefaultCommand(new SamsonDrive());
 			break;
 		default:
 			setDefaultCommand(new TankDrive());
