@@ -10,37 +10,37 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.MotorSafety;
+import edu.wpi.first.wpilibj.MotorSafetyHelper;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Arm extends PIDSubsystem implements Loggable, Powered {
+public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, SpeedController {
 
 	private static final double MAX_OUTPUT = 0.65;
+	
+	protected MotorSafetyHelper safetyHelper;
 
 	private DoubleSolenoid claw;
 	private CANTalon arm;
-	private AnalogPotentiometer armAngle;
 	private AnalogInput ultrasonic;
 
 	private boolean grab;
 
 	public Arm() {
-		super(Arm.class.getName(), RobotMap.Constant.proportional, RobotMap.Constant.integral, RobotMap.Constant.differential, RobotMap.GearArm.feedForward);
-
-		armAngle = new AnalogPotentiometer(RobotMap.GearArm.potentiometerChannel, RobotMap.GearArm.potentiometerRange);
+		super();
 		claw = new DoubleSolenoid(RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
+		safetyHelper = new MotorSafetyHelper(this);
+		safetyHelper.setExpiration(0.5D);
+		safetyHelper.setSafetyEnabled(true);
 
 		grab = false;
 
-		getPIDController().setInputRange(-180.0f, 180.0f);
-		setPercentTolerance(RobotMap.GearArm.tolerancePercent);
-		getPIDController().setContinuous(false);
-		reset();
-
-		LiveWindow.addSensor("Arm", "Potentiometer", armAngle);
 		LiveWindow.addActuator("Arm", "Motor", arm);
 		LiveWindow.addActuator("Arm", "Piston", claw);
 		// LiveWindow.addSensor("Arm", "Ultrasonic Sensor", ultrasonic);
@@ -59,29 +59,14 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 		}
 		grab = !grab;
 	}
-
-	// TODO: test
-	public void setAngle(double angle) {
-		setSetpoint(angle);
-	}
-
-	// TODO: test
-	public void reset() {
-		setSetpoint(RobotMap.GearArm.restingAngle);
-	}
-
-	public double angle() {
-		return armAngle.get();
-	}
-
-	@Override
-	protected double returnPIDInput() {
-		return armAngle.pidGet();
-	}
-
-	@Override
-	protected void usePIDOutput(double output) {
-		set(output);
+	
+	public void claw(boolean state) {
+		if (state) {
+			claw.set(DoubleSolenoid.Value.kForward);
+		} else {
+			claw.set(DoubleSolenoid.Value.kReverse);
+		}
+		grab = state;
 	}
 
 	public void set(double output) {
@@ -109,8 +94,67 @@ public class Arm extends PIDSubsystem implements Loggable, Powered {
 
 	@Override
 	public void log() {
-		SmartDashboard.putNumber("Arm Angle", angle());
 		SmartDashboard.putString("Claw State", grab ? "Open" : "Closed");
+	}
+
+	@Override
+	public void setExpiration(double expirationTime) {
+		safetyHelper.setExpiration(expirationTime);
+	}
+
+	@Override
+	public double getExpiration() {
+		return safetyHelper.getExpiration();
+	}
+
+	@Override
+	public boolean isAlive() {
+		return safetyHelper.isAlive();
+	}
+
+	@Override
+	public void stopMotor() {
+		arm.stopMotor();
+	}
+
+	@Override
+	public void setSafetyEnabled(boolean enabled) {
+		safetyHelper.setSafetyEnabled(enabled);
+	}
+
+	@Override
+	public boolean isSafetyEnabled() {
+		return safetyHelper.isSafetyEnabled();
+	}
+
+	@Override
+	public String getDescription() {
+		return this.getClass().getSimpleName();
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		arm.pidWrite(output);
+	}
+
+	@Override
+	public double get() {
+		return arm.get();
+	}
+
+	@Override
+	public void setInverted(boolean isInverted) {
+		arm.setInverted(isInverted);
+	}
+
+	@Override
+	public boolean getInverted() {
+		return arm.getInverted();
+	}
+
+	@Override
+	public void disable() {
+		arm.disable();
 	}
 
 }

@@ -31,13 +31,19 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	private final CANTalon rightFront;
 	private final CANTalon rightMiddle;
 	private final CANTalon rightBack;
+	
 	private Encoder encoder;
-	private double maxPower;
-
-	public RobotDrive robotDrive;
+	
+	private final RobotDrive driveHandler;
+	
+	private final MultiSpeedController leftDrive;
+	private final MultiSpeedController rightDrive;
+	
+	private boolean squaredDrive;
 	
 	public DriveTrain() {
 		super();
+		
 		leftFront = new CANTalon(RobotMap.Drive.leftFront);
 		leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
 		leftBack = new CANTalon(RobotMap.Drive.leftBack);
@@ -45,15 +51,17 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
 		rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		MultiSpeedController left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
-		MultiSpeedController right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
-		
-		robotDrive = new RobotDrive(left, right);
-		
+		leftDrive = new MultiSpeedController(leftFront, leftMiddle, leftBack);
+		rightDrive = new MultiSpeedController(rightFront, rightMiddle, rightBack);
+		driveHandler = new RobotDrive(leftDrive, rightDrive);
 		safetyHelper = new MotorSafetyHelper(this);
+		safetyHelper.setExpiration(0.1D);
+		safetyHelper.setSafetyEnabled(true);
 
 		// encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
+		
+		squaredDrive = true;
 
 		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
 		LiveWindow.addActuator("Drive Train", "leftMiddle", leftMiddle);
@@ -72,8 +80,6 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 			break;
 		case STANDARD:
 			setDefaultCommand(new TankDrive());
-			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
-			// setDefaultCommand(new SamsonDrive());
 			break;
 		default:
 			setDefaultCommand(new TankDrive());
@@ -82,46 +88,15 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	}
 
 	public void arcadeDrive(double moveValue, double rotateValue) {
-		moveValue = limit(moveValue);
-		rotateValue = limit(rotateValue);
-
-		double leftMotorSpeed;
-		double rightMotorSpeed;
-		if (moveValue > 0.0D) {
-			if (rotateValue > 0.0D) {
-				leftMotorSpeed = moveValue - rotateValue;
-				rightMotorSpeed = Math.max(moveValue, rotateValue);
-			} else {
-				leftMotorSpeed = Math.max(moveValue, -rotateValue);
-				rightMotorSpeed = moveValue + rotateValue;
-			}
-		} else if (rotateValue > 0.0D) {
-			leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-			rightMotorSpeed = moveValue + rotateValue;
-		} else {
-			leftMotorSpeed = moveValue - rotateValue;
-			rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-		}
-
-		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
+		driveHandler.arcadeDrive(moveValue, rotateValue, squaredDrive);
 	}
 
 	public void tankDrive(double leftOutput, double rightOutput) {
-		leftOutput = limit(leftOutput);
-		rightOutput = limit(rightOutput);
-		setLeftRightMotorOutputs(leftOutput, rightOutput);
+		driveHandler.tankDrive(leftOutput, rightOutput, squaredDrive);
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		// if (!PneumaticsToggle.isEnabled) {
-		leftFront.set(-limit(leftOutput) * maxPower);
-		leftMiddle.set(-limit(leftOutput) * maxPower);
-		leftBack.set(-limit(leftOutput) * maxPower);
-		rightFront.set(limit(rightOutput) * maxPower);
-		rightMiddle.set(limit(rightOutput) * maxPower);
-		rightBack.set(limit(rightOutput) * maxPower);
-		// }
-
+		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	@Override
@@ -130,12 +105,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
-	protected static double limit(double num) {
-		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
-	}
-
 	public void setMaxOutput(double power) {
-		maxPower = power;
+		driveHandler.setMaxOutput(power);
 	}
 
 	public void resetEncoder() {
@@ -168,12 +139,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	@Override
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
-		leftBack.stopMotor();
-		leftMiddle.stopMotor();
-		leftBack.stopMotor();
-		rightBack.stopMotor();
-		rightMiddle.stopMotor();
-		rightBack.stopMotor();
+		driveHandler.stopMotor();
 	}
 
 	@Override
