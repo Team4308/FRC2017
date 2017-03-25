@@ -33,11 +33,9 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	}
 
 	/**
-	 * Polls the main power delivery systems for any non-optimal or unhealthy
-	 * scenarios.
+	 * Polls the main power delivery systems for any non-optimal or unhealthy scenarios.
 	 * 
-	 * @return Whether the system is pulling potentially harmful levels of power
-	 *         or not
+	 * @return Whether the system is pulling potentially harmful levels of power or not
 	 */
 	public boolean powerCheck() {
 		double voltage = pdp.getVoltage();
@@ -75,13 +73,9 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	// TODO: temperature-reactive motor speed limiting for drive
 	// TODO: temperature-reactive warning for arm and climber
 	/**
-	 * Polls each subsystems power status, determining whether their power using
-	 * components are taking too much power or producing too much heat. Data is
-	 * returned in an order of; {@link Arm}, {@link Climber},
-	 * {@link DriveTrain}, and {@link Pneumatics}.
+	 * Polls each subsystems power status, determining whether their power using components are taking too much power or producing too much heat. Data is returned in an order of; {@link Arm}, {@link Climber}, {@link DriveTrain}, and {@link Pneumatics}.
 	 * 
-	 * @return set of booleans that represent whether any of the power-drawing
-	 *         systems are within an unhealthy state
+	 * @return set of booleans that represent whether any of the power-drawing systems are within an unhealthy state
 	 */
 	public boolean[] systemCheck() {
 		boolean armState = true;
@@ -101,17 +95,17 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 
 		}
 
-		if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
-			climbState = false;
-		} else if (Robot.climber.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
-
-		}
-
-		if (Robot.climber.temperature() > Power.dangerTemp) {
-			climbState = false;
-		} else if (Robot.climber.temperature() > Power.warningTemp) {
-
-		}
+		// if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+		// climbState = false;
+		// } else if (Robot.climber.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+		//
+		// }
+		//
+		// if (Robot.climber.temperature() > Power.dangerTemp) {
+		// climbState = false;
+		// } else if (Robot.climber.temperature() > Power.warningTemp) {
+		//
+		// }
 
 		if (Robot.drive.current() > Power.primaryAmpLimit * Power.cautionThreshold) {
 			driveState = false;
@@ -141,8 +135,7 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	}
 
 	/**
-	 * Whether or not the system's power delivery system is currently in a power
-	 * draw state that is unhealthy.
+	 * Whether or not the system's power delivery system is currently in a power draw state that is unhealthy.
 	 * 
 	 * @return Unhealthy or (relatively) healthy
 	 */

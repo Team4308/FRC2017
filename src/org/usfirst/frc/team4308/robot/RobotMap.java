@@ -101,7 +101,7 @@ public class RobotMap {
 	public static class Drive {
 		public static final int leftFront = 6;
 		public static final int leftMiddle = 4;
-		public static final int leftBack = 5;
+		public static final int leftBack = 0;
 		public static final int rightFront = 3;
 		public static final int rightMiddle = 1;
 		public static final int rightBack = 2;
@@ -127,7 +127,7 @@ public class RobotMap {
 	}
 
 	public static class Climb {
-		public static final int masterChannel = 4;
+		public static final int masterChannel = 7; // TODO test that these work
 		public static final int slaveChannel = 5;
 
 		public static final double maxForward = 1.0;

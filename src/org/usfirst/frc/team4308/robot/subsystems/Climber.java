@@ -3,19 +3,17 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Powered;
-
-import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Climber extends Subsystem implements SpeedController, Loggable, Powered {
+public class Climber extends Subsystem implements SpeedController, Loggable { // Powered
 
-	private final CANTalon master;
-	private final CANTalon slave;
+	private final Talon master;
+	private final Talon slave;
 	private boolean isInverted = false;
 	private double speed;
 
@@ -25,8 +23,8 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 
 	public Climber(boolean isInverted) {
 		super();
-		master = new CANTalon(RobotMap.Climb.masterChannel);
-		slave = new CANTalon(RobotMap.Climb.slaveChannel);
+		master = new Talon(RobotMap.Climb.masterChannel);
+		slave = new Talon(RobotMap.Climb.slaveChannel);
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
 
@@ -94,19 +92,19 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 		SmartDashboard.putNumber("Climb Speed", speed);
 	}
 
-	@Override
-	public double voltage() {
-		return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
-	}
-
-	@Override
-	public double current() {
-		return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
-	}
-
-	@Override
-	public double temperature() {
-		return (master.getTemperature() + slave.getTemperature()) / 2.0;
-	}
+//	@Override
+//	public double voltage() {
+//		return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
+//	}
+//
+//	@Override
+//	public double current() {
+//		return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
+//	}
+//
+//	@Override
+//	public double temperature() {
+//		return (master.getTemperature() + slave.getTemperature()) / 2.0;
+//	}
 
 }
