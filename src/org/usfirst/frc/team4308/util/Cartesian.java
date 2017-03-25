@@ -30,8 +30,16 @@ public class Cartesian {
 		return x;
 	}
 
+	public double x(double x) {
+		return this.x = x;
+	}
+
 	public double y() {
 		return y;
+	}
+
+	public double y(double y) {
+		return this.y = y;
 	}
 
 	public double sqrMagnitude() {
@@ -40,6 +48,15 @@ public class Cartesian {
 
 	public double magnitude() {
 		return Math.sqrt(sqrMagnitude());
+	}
+
+	public void inverse() {
+		x = -x;
+		y = -y;
+	}
+
+	public Polar toPolar() {
+		return new Polar(magnitude(), Math.acos(x / magnitude()));
 	}
 
 	public Cartesian sum(Cartesian operand) {
