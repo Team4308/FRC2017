@@ -62,8 +62,9 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
 			break;
 		case STANDARD:
+			setDefaultCommand(new TankDrive());
 			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
-			setDefaultCommand(new SamsonDrive());
+			// setDefaultCommand(new SamsonDrive());
 			break;
 		default:
 			setDefaultCommand(new TankDrive());

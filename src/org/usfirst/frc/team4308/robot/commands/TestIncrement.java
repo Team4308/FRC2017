@@ -1,71 +1,33 @@
 package org.usfirst.frc.team4308.robot.commands;
 
+import org.usfirst.frc.team4308.robot.RobotMap;
+
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.command.Command;
+public class TestIncrement extends ToggleCommand {
 
-public class TestIncrement extends Command {
-
-	public static final int MAX_ID = 6;
-	public static int id = 0;
-
-	private boolean first = true;
-	private boolean stopLast;
-
-	private boolean flip = false;
-	
-	public TestIncrement(boolean stopLast) {
-		super();
-		this.stopLast = stopLast;
+	public TestIncrement() {
+		super(false);
 	}
 
 	@Override
-	protected void execute() {
-		// TODO Auto-generated method stub
-		super.execute();
-
-		if (first) {
-			first = false;
-		} else {
-
-			flip = !flip;
-			
-			if (flip){
-				new CANTalon(1).set(0.65);
-				new CANTalon(2).set(0.65);
-				new CANTalon(3).set(0.65);
-				new CANTalon(0).set(0);
-				new CANTalon(4).set(0);
-				new CANTalon(6).set(0);
-			}
-			else{
-				new CANTalon(1).set(0);
-				new CANTalon(2).set(0);
-				new CANTalon(3).set(0);
-				new CANTalon(0).set(0.65);
-				new CANTalon(4).set(0.65);
-				new CANTalon(6).set(0.65);
-			}
-//			if (stopLast) {
-//				new CANTalon(id).set(0);
-//			}
-//
-//			id += 1;
-//			if (id > MAX_ID) {
-//				id = 0;
-//			}
-		}
-
-//		DriverStation.reportWarning("Testing motor: " + id, false);
-
-//		new CANTalon(id).set(0.65);
+	protected void toggleOn() {
+		new CANTalon(RobotMap.Drive.leftFront).set(-0.65);
+		new CANTalon(RobotMap.Drive.leftMiddle).set(-0.65);
+		new CANTalon(RobotMap.Drive.leftBack).set(-0.65);
+		new CANTalon(RobotMap.Drive.rightFront).set(0);
+		new CANTalon(RobotMap.Drive.rightMiddle).set(0);
+		new CANTalon(RobotMap.Drive.rightBack).set(0);
 	}
 
 	@Override
-	protected boolean isFinished() {
-		return true;
-
+	protected void toggleOff() {
+		new CANTalon(RobotMap.Drive.leftFront).set(0);
+		new CANTalon(RobotMap.Drive.leftMiddle).set(0);
+		new CANTalon(RobotMap.Drive.leftBack).set(0);
+		new CANTalon(RobotMap.Drive.rightFront).set(0.65);
+		new CANTalon(RobotMap.Drive.rightMiddle).set(0.65);
+		new CANTalon(RobotMap.Drive.rightBack).set(0.65);
 	}
 
 }

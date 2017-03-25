@@ -3,7 +3,6 @@ package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
-import org.usfirst.frc.team4308.robot.subsystems.Autonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.EasyAutonomous;
@@ -51,8 +50,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		gyro = new Gyroscope();
 		arm = new Arm();
 		io = new IO();
-		autonomous = new EasyAutonomous();
-		vision = new USBVision();
+//		autonomous = new EasyAutonomous();
+//		vision = new USBVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 
 /**
@@ -20,7 +21,7 @@ public class TankDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.tankDrive(Robot.io.getLeftValue(), Robot.io.getRightValue());
+		Robot.drive.tankDrive(Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.leftY), Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.rightY));
 	}
 
 }

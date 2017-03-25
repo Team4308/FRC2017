@@ -31,9 +31,9 @@ public class AutoLocator extends PIDCommand {
 
 
 	protected boolean isFinished() {
-		Vector2 current = Robot.autonomous.fieldLocation();
-		Vector2 delta = (Vector2) destination.sub(current);
-		double mag = delta.magnitude();
+		//Vector2 current = Robot.autonomous.fieldLocation();
+		//Vector2 delta = (Vector2) destination.sub(current);
+		//double mag = delta.magnitude();
 		
 		
 		return false;

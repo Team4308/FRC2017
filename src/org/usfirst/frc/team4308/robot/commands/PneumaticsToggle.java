@@ -2,37 +2,26 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PneumaticsToggle extends InstantCommand {
-
-	public static boolean isEnabled = true;
+public class PneumaticsToggle extends ToggleCommand {
 
 	public PneumaticsToggle() {
-		super();
+		super(true);
 		requires(Robot.pneumatics);
-		realExec();
 	}
 
 	@Override
-	protected void execute() {
-		super.execute();
-		realExec();
+	protected void toggleOn() {
+		Robot.pneumatics.start();
+
+		SmartDashboard.putBoolean("DB/LED 0", isToggled());
 	}
 
-	private void realExec() {
-		isEnabled = !isEnabled;
+	@Override
+	protected void toggleOff() {
+		Robot.pneumatics.stop();
 
-		DriverStation.reportWarning("Enabling Pneumatics: " + isEnabled, false);
-		
-		if (isEnabled) {
-			Robot.pneumatics.start();
-		} else {
-			Robot.pneumatics.stop();
-		}
-
-		SmartDashboard.putBoolean("DB/LED 0", isEnabled);
+		SmartDashboard.putBoolean("DB/LED 0", isToggled());
 	}
 }
