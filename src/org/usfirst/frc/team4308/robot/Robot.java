@@ -64,13 +64,20 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 		operatorControl = false;
 
-		// SmartDashboard.putData(powermonitor);
-		// SmartDashboard.putData(pneumatics);
-		// SmartDashboard.putData(drive);
-		// SmartDashboard.putData(climber);
-		// SmartDashboard.putData(gyro);
-		// SmartDashboard.putData(arm);
-		SmartDashboard.putData("Autonomous mode chooser", autoChooser);
+		if (powermonitor != null)
+			SmartDashboard.putData(powermonitor);
+		if (pneumatics != null)
+			SmartDashboard.putData(pneumatics);
+		if (drive != null)
+			SmartDashboard.putData(drive);
+		if (climber != null)
+			SmartDashboard.putData(climber);
+		if (gyro != null)
+			SmartDashboard.putData(gyro);
+		if (arm != null)
+			SmartDashboard.putData(arm);
+		if (autoChooser != null)
+			SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
 	@Override
@@ -88,9 +95,13 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public void autonomousInit() {
 		start();
 		operatorControl = false;
-		autonomousCommand = autoChooser.getSelected();
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		if (autoChooser != null) {
+			autonomousCommand = autoChooser.getSelected();
+			if (autonomousCommand != null)
+				autonomousCommand.start();
+		} else {
+			DriverStation.reportWarning("autoChooser is null", true);
+		}
 	}
 
 	@Override
@@ -132,11 +143,16 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void log() {
-		// pneumatics.log();
-		// drive.log();
-		// climber.log();
-		// gyro.log();
-		// arm.log();
+		if (pneumatics != null)
+			pneumatics.log();
+		if (drive != null)
+			drive.log();
+		if (climber != null)
+			climber.log();
+		if (gyro != null)
+			gyro.log();
+		if (arm != null)
+			arm.log();
 	}
 
 }
