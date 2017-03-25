@@ -2,6 +2,8 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.io.IO;
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -30,5 +32,5 @@ public class ClimberControl extends InstantCommand {
 			Robot.climber.stopMotor();
 		}
 	}
-	
+
 }

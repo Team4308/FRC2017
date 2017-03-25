@@ -12,7 +12,7 @@ public class AbsoluteDashboard {
 			return gyro;
 		}
 	}
-	
+
 	public static TableWorker Autonomous() {
 		if (auto == null) {
 			return auto = new TableWorker("Autonomous");

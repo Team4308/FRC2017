@@ -3,7 +3,9 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.AbsoluteDashboard;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Loop;
+
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;

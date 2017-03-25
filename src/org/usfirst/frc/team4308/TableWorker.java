@@ -234,7 +234,7 @@ public class TableWorker {
 
 	@Deprecated
 	public void putInt(String key, int value) {
-		table.putNumber(key, (double) value);
+		table.putNumber(key, value);
 	}
 
 	@Deprecated

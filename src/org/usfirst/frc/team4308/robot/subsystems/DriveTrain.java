@@ -3,7 +3,6 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
@@ -156,6 +155,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature() + rightBack.getTemperature()) / 4.0;
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
 		leftBack.stopMotor();

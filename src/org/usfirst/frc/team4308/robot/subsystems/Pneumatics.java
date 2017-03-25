@@ -19,7 +19,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	public Pneumatics() {
 		super();
 		compressor = new Compressor(RobotMap.PCM);
-		
+
 		LiveWindow.addActuator("Pneumatics", "Compressor", compressor);
 	}
 
@@ -29,8 +29,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	}
 
 	/**
-	 * Start the compressor going. The compressor automatically starts and stops
-	 * as it goes above and below maximum pressure.
+	 * Start the compressor going. The compressor automatically starts and stops as it goes above and below maximum pressure.
 	 */
 	public void start() {
 		compressor.start();

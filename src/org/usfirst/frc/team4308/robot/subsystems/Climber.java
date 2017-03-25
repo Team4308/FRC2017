@@ -92,19 +92,19 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 		SmartDashboard.putNumber("Climb Speed", speed);
 	}
 
-//	@Override
-//	public double voltage() {
-//		return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
-//	}
-//
-//	@Override
-//	public double current() {
-//		return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
-//	}
-//
-//	@Override
-//	public double temperature() {
-//		return (master.getTemperature() + slave.getTemperature()) / 2.0;
-//	}
+	// @Override
+	// public double voltage() {
+	// return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
+	// }
+	//
+	// @Override
+	// public double current() {
+	// return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
+	// }
+	//
+	// @Override
+	// public double temperature() {
+	// return (master.getTemperature() + slave.getTemperature()) / 2.0;
+	// }
 
 }

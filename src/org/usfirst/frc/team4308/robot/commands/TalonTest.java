@@ -25,17 +25,14 @@ public class TalonTest extends Command {
 		if (time == -1) {
 			time = Timer.getFPGATimestamp();
 		}
-		if (Timer.getFPGATimestamp() - time < 1){
+		if (Timer.getFPGATimestamp() - time < 1) {
 			current.set(0.65);
-			
-		}
-		else if (Timer.getFPGATimestamp()- time < 2){
+
+		} else if (Timer.getFPGATimestamp() - time < 2) {
 			current.set(0);
-		}
-		else if (Timer.getFPGATimestamp()- time < 3){
+		} else if (Timer.getFPGATimestamp() - time < 3) {
 			current.set(-0.65);
-		}
-		else{
+		} else {
 			current.set(0);
 			finished = true;
 		}

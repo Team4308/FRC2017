@@ -10,7 +10,7 @@ public interface Powered {
 		return Double.NaN;
 	}
 
-	public default double temperature(){
+	public default double temperature() {
 		return Double.NaN;
 	}
 

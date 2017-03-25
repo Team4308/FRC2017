@@ -33,7 +33,7 @@ public class Polar {
 			angle += 180;
 		}
 	}
-	
+
 	public void simpleAngle() {
 		double rot = angle / 360;
 		for (int i = 1; i < rot; i++) {

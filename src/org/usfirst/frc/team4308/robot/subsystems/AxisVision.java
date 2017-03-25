@@ -61,8 +61,7 @@ class USBThread implements Runnable {
 		camera.setResolution(RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 		cvsink = CameraServer.getInstance().getVideo();
-		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.usbName, RobotMap.Camera.videoWidth,
-				RobotMap.Camera.videoHeight);
+		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.usbName, RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 		Mat source = new Mat();
 		Mat output = new Mat();

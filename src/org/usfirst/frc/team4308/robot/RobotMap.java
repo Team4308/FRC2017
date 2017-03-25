@@ -1,11 +1,7 @@
 package org.usfirst.frc.team4308.robot;
 
 /**
- * A constants-style class that contains all the raw numbers responsible for
- * adapting the rest of the code to hardware specifications, this class allows
- * changes in hardware configuration to be smoothly implemented into code, as it
- * centralizes all values that would not change between code revisions, but
- * could between hardware revisions.
+ * A constants-style class that contains all the raw numbers responsible for adapting the rest of the code to hardware specifications, this class allows changes in hardware configuration to be smoothly implemented into code, as it centralizes all values that would not change between code revisions, but could between hardware revisions.
  */
 public class RobotMap {
 

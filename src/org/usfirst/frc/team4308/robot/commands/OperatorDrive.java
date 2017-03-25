@@ -19,7 +19,7 @@ public class OperatorDrive extends Command {
 	protected boolean isFinished() {
 		return isTimedOut();
 	}
-	
+
 	@Override
 	protected void end() {
 		Robot.drive.stopMotor();

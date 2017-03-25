@@ -2,10 +2,10 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.io.IO;
 
 /**
- * Autonomous command that will rotate the robot to a user-specified or default
- * (specified in {@link IO} orientation.
+ * Autonomous command that will rotate the robot to a user-specified or default (specified in {@link IO} orientation.
  * 
  * @author Michael Brown
  *
@@ -14,7 +14,7 @@ public class DriveAngular extends AutoDrive {
 
 	public DriveAngular() {
 		this(RobotMap.Autonomous.defaultOrientation);
-		
+
 		requires(Robot.gyro);
 		requires(Robot.drive);
 	}

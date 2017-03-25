@@ -21,11 +21,11 @@ public class EasyAutonomous extends Subsystem {
 		// TODO Auto-generated method stub
 
 	}
-	
-	public void go(){
+
+	public void go() {
 		Robot.drive.setLeftRightMotorOutputs(0.9, 0.9);
 		Timer.delay(2);
 		Robot.drive.setLeftRightMotorOutputs(0, 0);
 	}
-	
+
 }

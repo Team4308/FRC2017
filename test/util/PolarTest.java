@@ -1,6 +1,6 @@
 package util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
@@ -10,10 +10,10 @@ import org.junit.Test;
 import org.usfirst.frc.team4308.util.Polar;
 
 public class PolarTest {
-	
+
 	private static final int randomAngleRange = 360;
 	private static final int randomRadiusRange = 10;
-	
+
 	private Polar polar;
 	Random random;
 
