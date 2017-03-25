@@ -35,13 +35,18 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	@Override
 	protected void initDefaultCommand() {
-		//setDefaultCommand(new ClimberControl());
+		setDefaultCommand(new ClimberControl());
 	}
 
 	@Override
 	public void set(double speed) {
 		speed = Math.max(Math.min(speed, RobotMap.Climb.maxForward), RobotMap.Climb.maxBackward);
 
+		if (ClimberControl.enable){
+			speed = 0;
+			stopMotor();
+		}
+		
 		if (isInverted) {
 			master.set(speed);
 		   slave.set(-speed);
