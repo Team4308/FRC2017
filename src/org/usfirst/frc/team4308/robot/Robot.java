@@ -46,9 +46,15 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
+<<<<<<< HEAD
 		climber = new Climber();
 		gyro = new Gyroscope();
 		arm = new Arm();
+=======
+		//climber = new Climber();
+//		gyro = new Gyroscope();
+//		arm = new Arm();
+>>>>>>> parent of 5ae7792... hhh
 		io = new IO();
 		autonomous = new EasyAutonomous();
 		vision = new USBVision();

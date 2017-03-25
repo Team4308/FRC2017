@@ -72,7 +72,7 @@ public class IO {
 			case STANDARD: // 2 stick PlayStation style controller
 				// TODO B = gear
 				// new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-			//	new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
+				//new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
 //				new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new TestIncrement());
 //				new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new TalonSequence());
 				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
