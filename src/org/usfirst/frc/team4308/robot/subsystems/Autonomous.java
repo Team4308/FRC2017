@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.commands.AutoLocator;
 import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Vector2;
 

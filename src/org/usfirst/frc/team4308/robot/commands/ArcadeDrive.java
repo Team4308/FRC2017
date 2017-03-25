@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
-
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4308.robot.io.IO;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 
 /**
  * Continuous command to send input from a joystick (specified in {@link IO}) to
@@ -15,6 +15,7 @@ public class ArcadeDrive extends OperatorDrive {
 
 	public ArcadeDrive() {
 		super();
+		requires(Robot.drive);
 	}
 
 	@Override

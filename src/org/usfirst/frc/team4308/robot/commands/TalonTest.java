@@ -35,6 +35,7 @@ public class TalonTest extends Command {
 			current.set(-0.65);
 		}
 		else{
+			current.set(0);
 			finished = true;
 		}
 	}

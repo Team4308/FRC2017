@@ -1,8 +1,7 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
-
-import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 
 /**
  * Continuous command that takes the common Y axis of two analog sticks on a two
@@ -16,6 +15,7 @@ public class TankDrive extends OperatorDrive {
 
 	public TankDrive() {
 		super();
+		requires(Robot.drive);
 	}
 
 	@Override

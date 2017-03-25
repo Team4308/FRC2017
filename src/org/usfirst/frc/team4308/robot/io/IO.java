@@ -3,20 +3,17 @@ package org.usfirst.frc.team4308.robot.io;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
-import org.usfirst.frc.team4308.robot.commands.DriveAngular;
-import org.usfirst.frc.team4308.robot.commands.DriveLinear;
+import org.usfirst.frc.team4308.robot.commands.RumbleControl;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
-import org.usfirst.frc.team4308.robot.commands.TalonSequence;
-import org.usfirst.frc.team4308.robot.commands.TalonTest;
+import org.usfirst.frc.team4308.robot.commands.TestIncrement;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
+ * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control of the robot.
  */
 public class IO {
 	//// CREATING BUTTONS
@@ -50,46 +47,51 @@ public class IO {
 	private final Joystick joystick;
 	private final JoystickType type;
 
-	private final int leftAxis;
-	private final int rightAxis;
-	private final int turnAxis;
-	private final int armAxis;
+	private int leftAxis;
+	private int rightAxis;
+	private int turnAxis;
+	private int armAxis;
 
 	public IO() {
 		joystick = new Joystick(RobotMap.Control.driveStick);
 		type = JoystickType.fromJoystick(joystick);
 
-		switch (type) {
-		case FLIGHT: // 2 DoF joystick
-			new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.Control.Flight.eastA).toggleWhenActive(new ClimberControl());
+		if (type == null) {
+			DriverStation.reportWarning("type is null", true);
+		} else {
+			switch (type) {
+			case FLIGHT: // 2 DoF joystick
+				new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
+				new JoystickButton(joystick, RobotMap.Control.Flight.eastA).toggleWhenActive(new ClimberControl());
 
-			armAxis = RobotMap.Control.Flight.throttle;
-			leftAxis = RobotMap.Control.Flight.pitch;
-			rightAxis = RobotMap.Control.Flight.roll;
-			turnAxis = 0;
-			break;
-		case STANDARD: // 2 stick PlayStation style controller
-			new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
-			new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
-			new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new TalonSequence());
-
-			armAxis = RobotMap.Control.Standard.leftX;
-			leftAxis = RobotMap.Control.Standard.leftY;
-			rightAxis = RobotMap.Control.Standard.rightY;
-			turnAxis = RobotMap.Control.Standard.rightX;
-			break;
-		default:
-			DriverStation.reportError("Invalid number of axes on control joystick", true);
-			armAxis = 0;
-			leftAxis = 0;
-			rightAxis = 0;
-			turnAxis = 0;
-			break;
+				armAxis = RobotMap.Control.Flight.throttle;
+				leftAxis = RobotMap.Control.Flight.pitch;
+				rightAxis = RobotMap.Control.Flight.roll;
+				turnAxis = 0;
+				break;
+			case STANDARD: // 2 stick PlayStation style controller
+				//new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
+				//new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
+				//new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
+				// new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new TalonSequence());
+				new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new TestIncrement(true));
+				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				
+				armAxis = RobotMap.Control.Standard.leftX;
+				leftAxis = RobotMap.Control.Standard.leftY;
+				rightAxis = RobotMap.Control.Standard.rightY;
+				turnAxis = RobotMap.Control.Standard.rightX;
+				break;
+			default:
+				DriverStation.reportError("Invalid number of axes on control joystick", true);
+				
+				armAxis = 0;
+				leftAxis = 0;
+				rightAxis = 0;
+				turnAxis = 0;
+				break;
+			}
 		}
-
-		SmartDashboard.putData("Drive Forward", new DriveLinear());
 	}
 
 	public JoystickType getJoystickType() {

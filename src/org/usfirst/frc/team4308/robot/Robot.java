@@ -43,15 +43,15 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void robotInit() {
-		// powermonitor = new PowerMonitor();
+//		 powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
-		drive = new DriveTrain();
-		climber = new Climber();
-		gyro = new Gyroscope();
-		arm = new Arm();
+//		drive = new DriveTrain();
+//		climber = new Climber();
+//		gyro = new Gyroscope();
+//		arm = new Arm();
 		io = new IO();
-		autonomous = new Autonomous();
-		vision = new USBVision();
+//		autonomous = new Autonomous();
+//		vision = new USBVision();
 		
 		
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
@@ -64,11 +64,11 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		operatorControl = false;
 
 		// SmartDashboard.putData(powermonitor);
-		SmartDashboard.putData(pneumatics);
-		SmartDashboard.putData(drive);
-		SmartDashboard.putData(climber);
-		SmartDashboard.putData(gyro);
-		SmartDashboard.putData(arm);
+//		SmartDashboard.putData(pneumatics);
+//		SmartDashboard.putData(drive);
+//		SmartDashboard.putData(climber);
+//		SmartDashboard.putData(gyro);
+//		SmartDashboard.putData(arm);
 		SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
@@ -131,11 +131,11 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void log() {
-		pneumatics.log();
-		drive.log();
-		climber.log();
-		gyro.log();
-		arm.log();
+//		pneumatics.log();
+//		drive.log();
+//		climber.log();
+//		gyro.log();
+//		arm.log();
 	}
 
 }

@@ -14,6 +14,7 @@ public class Gyroscope extends Subsystem implements Loggable, Loop {
 	private AHRS gyro;
 
 	public Gyroscope() {
+		initialize();
 		LiveWindow.addSensor("Gyroscope", "navX-MXP", gyro);
 	}
 

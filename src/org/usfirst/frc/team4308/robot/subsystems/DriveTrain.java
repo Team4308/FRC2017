@@ -11,14 +11,10 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controller for the drive train and its motors
@@ -47,8 +43,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 
 		safetyHelper = new MotorSafetyHelper(this);
 
-		encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
-		encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
+		// encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
+		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
 		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
 		LiveWindow.addActuator("Drive Train", "leftMiddle", leftMiddle);
@@ -56,7 +52,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
 		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
-		LiveWindow.addSensor("Drive Train", "Encoder", encoder);
+		//LiveWindow.addSensor("Drive Train", "Encoder", encoder);
 	}
 
 	@Override
@@ -116,8 +112,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 
 	@Override
 	public void log() {
-		SmartDashboard.putNumber("Distance", encoder.getDistance());
-		SmartDashboard.putNumber("Speed", encoder.getRate());
+		//SmartDashboard.putNumber("Distance", encoder.getDistance());
+		//SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
 	protected static double limit(double num) {
@@ -158,6 +154,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 				+ rightBack.getTemperature()) / 4.0;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void stopMotor() {
 		leftBack.stopMotor();
 		leftMiddle.stopMotor();

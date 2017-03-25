@@ -2,7 +2,7 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  * Continuous command that emulates the {@link TankDrive} control scheme, but
@@ -15,6 +15,7 @@ public class SamsonDrive extends OperatorDrive {
 
 	public SamsonDrive() {
 		super();
+		requires(Robot.drive);
 	}
 
 	@Override
