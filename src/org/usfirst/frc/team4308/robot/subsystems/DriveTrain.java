@@ -11,8 +11,6 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.MotorSafety;
-import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -21,9 +19,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * Controller for the drive train and its motors
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSafety {
-
-	protected MotorSafetyHelper safetyHelper;
+public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	private final CANTalon leftFront;
 	private final CANTalon leftMiddle;
@@ -35,7 +31,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	private double maxPower;
 
 	public RobotDrive robotDrive;
-	
+
 	public DriveTrain() {
 		super();
 		leftFront = new CANTalon(RobotMap.Drive.leftFront);
@@ -47,10 +43,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 
 		MultiSpeedController left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
 		MultiSpeedController right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
-		
+
 		robotDrive = new RobotDrive(left, right);
-		
-		safetyHelper = new MotorSafetyHelper(this);
 
 		// encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
@@ -165,7 +159,6 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature() + rightBack.getTemperature()) / 4.0;
 	}
 
-	@Override
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
 		leftBack.stopMotor();
@@ -174,35 +167,5 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		rightBack.stopMotor();
 		rightMiddle.stopMotor();
 		rightBack.stopMotor();
-	}
-
-	@Override
-	public String getDescription() {
-		return this.getName();
-	}
-
-	@Override
-	public double getExpiration() {
-		return safetyHelper.getExpiration();
-	}
-
-	@Override
-	public boolean isAlive() {
-		return safetyHelper.isAlive();
-	}
-
-	@Override
-	public boolean isSafetyEnabled() {
-		return safetyHelper.isSafetyEnabled();
-	}
-
-	@Override
-	public void setExpiration(double expirationTime) {
-		safetyHelper.setExpiration(expirationTime);
-	}
-
-	@Override
-	public void setSafetyEnabled(boolean enabled) {
-		safetyHelper.setSafetyEnabled(enabled);
 	}
 }
