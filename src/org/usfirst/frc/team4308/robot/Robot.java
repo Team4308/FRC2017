@@ -47,11 +47,11 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
-//		gyro = new Gyroscope();
-//		arm = new Arm();
+		gyro = new Gyroscope();
+		arm = new Arm();
 		io = new IO();
-		// autonomous = new EasyAutonomous();
-		// vision = new USBVision();
+		autonomous = new EasyAutonomous();
+		vision = new USBVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))

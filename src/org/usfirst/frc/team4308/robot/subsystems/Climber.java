@@ -35,7 +35,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new ClimberControl());
+		//setDefaultCommand(new ClimberControl());
 	}
 
 	@Override
