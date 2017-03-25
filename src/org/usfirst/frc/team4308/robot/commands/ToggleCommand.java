@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public abstract class ToggleCommand extends InstantCommand {
 
-	private boolean init = true;
 	private boolean state;
 
 	public ToggleCommand() {
@@ -33,11 +32,7 @@ public abstract class ToggleCommand extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		if (init) {
-			init = false;
-		} else {
-			state = !state;
-		}
+		state = !state;
 
 		if (state) {
 			toggleOn();
