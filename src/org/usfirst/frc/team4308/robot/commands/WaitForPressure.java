@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class WaitForPressure extends Command {
 
 	public WaitForPressure() {
+		super();
 		requires(Robot.pneumatics);
 	}
 

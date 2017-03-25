@@ -12,6 +12,7 @@ public class TalonTest extends Command {
 	boolean finished = false;
 
 	public TalonTest(int motor) {
+		super();
 		// TODO Auto-generated constructor stub
 		current = new CANTalon(motor);
 

@@ -10,6 +10,7 @@ public class PneumaticsToggle extends InstantCommand {
 	public static boolean isEnabled = false;
 
 	public PneumaticsToggle() {
+		super();
 		requires(Robot.pneumatics);
 	}
 
