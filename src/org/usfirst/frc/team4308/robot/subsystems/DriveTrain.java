@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * Controller for the drive train and its motors
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSafety {
-
-	protected MotorSafetyHelper safetyHelper;
+public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	private final CANTalon leftFront;
 	private final CANTalon leftMiddle;
@@ -39,9 +37,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		rightFront = new CANTalon(RobotMap.Drive.rightFront);
 		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
 		rightBack = new CANTalon(RobotMap.Drive.rightBack);
-
-		safetyHelper = new MotorSafetyHelper(this);
-
+		
 		// encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
@@ -155,7 +151,6 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature() + rightBack.getTemperature()) / 4.0;
 	}
 
-	@Override
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
 		leftBack.stopMotor();
@@ -164,35 +159,5 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		rightBack.stopMotor();
 		rightMiddle.stopMotor();
 		rightBack.stopMotor();
-	}
-
-	@Override
-	public String getDescription() {
-		return this.getName();
-	}
-
-	@Override
-	public double getExpiration() {
-		return safetyHelper.getExpiration();
-	}
-
-	@Override
-	public boolean isAlive() {
-		return safetyHelper.isAlive();
-	}
-
-	@Override
-	public boolean isSafetyEnabled() {
-		return safetyHelper.isSafetyEnabled();
-	}
-
-	@Override
-	public void setExpiration(double expirationTime) {
-		safetyHelper.setExpiration(expirationTime);
-	}
-
-	@Override
-	public void setSafetyEnabled(boolean enabled) {
-		safetyHelper.setSafetyEnabled(enabled);
 	}
 }

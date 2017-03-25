@@ -23,8 +23,8 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	public Climber(boolean isInverted) {
 		super();
-		master = new Talon(RobotMap.Climb.masterChannel);
-		slave = new Talon(RobotMap.Climb.slaveChannel);
+		master = new Talon(RobotMap.Climb.climbChannel);
+		slave = new Talon(RobotMap.Climb.gearArmChannel);
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
 

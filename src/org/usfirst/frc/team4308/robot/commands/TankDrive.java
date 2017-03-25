@@ -14,7 +14,6 @@ public class TankDrive extends OperatorDrive {
 
 	public TankDrive() {
 		super();
-		requires(Robot.drive);
 	}
 
 	@Override

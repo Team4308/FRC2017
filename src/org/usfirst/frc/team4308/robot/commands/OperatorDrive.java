@@ -10,14 +10,14 @@ public class OperatorDrive extends Command {
 	public OperatorDrive() {
 		super(RobotMap.Game.maxTimeSeconds);
 		requires(Robot.drive);
-		if (!Robot.operatorControl) {
-			end();
-		}
+//		if (!Robot.operatorControl) {
+//			end();
+//		}
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut();
+		return false; //isTimedOut()
 	}
 
 	@Override

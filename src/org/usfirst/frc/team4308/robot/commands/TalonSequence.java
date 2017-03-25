@@ -1,7 +1,8 @@
 package org.usfirst.frc.team4308.robot.commands;
 
+import com.ctre.CANTalon;
+
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 public class TalonSequence extends InstantCommand {
@@ -14,7 +15,7 @@ public class TalonSequence extends InstantCommand {
 		super.execute();
 
 		if (currentID != -1) {
-			new Talon(currentID).stopMotor();
+			new CANTalon(currentID).stopMotor();
 			DriverStation.reportWarning("Stopping Motor: " + currentID, false);
 		}
 
@@ -22,7 +23,7 @@ public class TalonSequence extends InstantCommand {
 		if (currentID > MAX_ID)
 			currentID = 0;
 
-		new Talon(currentID).set(0.65);
+		new CANTalon(currentID).set(0.65);
 
 		DriverStation.reportWarning("Starting Motor: " + currentID, false);
 	}
