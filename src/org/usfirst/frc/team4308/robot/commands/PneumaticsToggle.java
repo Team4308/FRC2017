@@ -7,17 +7,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PneumaticsToggle extends InstantCommand {
 
-	public static boolean isEnabled = false;
+	public static boolean isEnabled = true;
 
 	public PneumaticsToggle() {
 		super();
 		requires(Robot.pneumatics);
+		realExec();
 	}
 
 	@Override
 	protected void execute() {
 		super.execute();
+		realExec();
+	}
 
+	private void realExec() {
 		isEnabled = !isEnabled;
 
 		if (isEnabled) {
@@ -25,7 +29,7 @@ public class PneumaticsToggle extends InstantCommand {
 		} else {
 			Robot.pneumatics.stop();
 		}
-		
+
 		SmartDashboard.putBoolean("DB/LED 0", isEnabled);
 	}
 }
