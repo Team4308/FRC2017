@@ -65,9 +65,4 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 		return compressor.getCompressorCurrent();
 	}
 
-	@Override
-	public double temperature() {
-		return 0;
-	}
-
 }
