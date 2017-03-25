@@ -1,11 +1,9 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import java.util.HashMap;
-
-import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.RobotMap.POWER;
-import org.usfirst.frc.team4308.robot.commands.PowerCheck;
+import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Loop;
 
 import com.ctre.CANTalon;
 
@@ -13,68 +11,56 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PowerMonitor extends Subsystem implements Loggable {
+public class PowerMonitor extends Subsystem implements Loggable, Loop {
 
-	private static final double cautionThreshold = 0.9;
-	private static final double warningThreshold = 0.8;
-
-	private HashMap<String, CANTalon> motors;
 	private final PowerDistributionPanel pdp;
 
-	private POWER.BatteryLevel batteryLevel;
+	private Power.BatteryLevel batteryLevel;
+
 	private boolean currentWarning;
 	private boolean temperatureWarning;
 
 	public PowerMonitor() {
 		super();
-		motors = new HashMap<String, CANTalon>();
-		pdp = new PowerDistributionPanel();
-		batteryLevel = POWER.BatteryLevel.level(pdp.getVoltage());
+		pdp = new PowerDistributionPanel(8);
+		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 		currentWarning = false;
 		temperatureWarning = false;
-
-		add("frontLeft", new CANTalon(RobotMap.DRIVE.frontLeft));
-		add("frontRight", new CANTalon(RobotMap.DRIVE.frontRight));
-		add("backLeft", new CANTalon(RobotMap.DRIVE.backLeft));
-		add("backRight", new CANTalon(RobotMap.DRIVE.backRight));
-
-		add("climbMaster", new CANTalon(RobotMap.CLIMBER.masterChannel));
-		add("climbSlave", new CANTalon(RobotMap.CLIMBER.slaveChannel));
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new PowerCheck());
 	}
 
-	public void add(String name, CANTalon motor) {
-		motors.put(name, motor);
-	}
-
-	public boolean check() {
+	/**
+	 * Polls the main power delivery systems for any non-optimal or unhealthy scenarios.
+	 * 
+	 * @return Whether the system is pulling potentially harmful levels of power or not
+	 */
+	public boolean powerCheck() {
 		double voltage = pdp.getVoltage();
 		double current = pdp.getTotalCurrent();
 		double temperature = pdp.getTemperature();
-		batteryLevel = POWER.BatteryLevel.level(voltage);
+		batteryLevel = Power.BatteryLevel.level(voltage);
 
-		if (current > POWER.breakerAmpLimit * cautionThreshold) {
+		if (current > Power.breakerAmpLimit * Power.cautionThreshold) {
 			// TODO: auto initiate reduced-draw
 			return false;
-		} else if (current > POWER.breakerAmpLimit * warningThreshold) {
+		} else if (current > Power.breakerAmpLimit * Power.warningThreshold) {
 			// TODO: warn of the high current draws
 			currentWarning = true;
 		}
 
-		if (batteryLevel.ordinal() < POWER.BatteryLevel.LOW.ordinal()) {
+		if (batteryLevel.ordinal() < Power.BatteryLevel.LOW.ordinal()) {
 			// TODO: warn of low battery charge
 			return false;
 		}
 
-		if (temperature > POWER.dangerTemp) {
+		if (temperature > Power.dangerTemp) {
 			// TODO: auto initiate reduced draw
 			// TODO: warn of instable temperature levels
 			return false;
-		} else if (temperature > POWER.warningTemp) {
+		} else if (temperature > Power.warningTemp) {
 			// TODO: warn of high temperature
 			temperatureWarning = true;
 		}
@@ -82,6 +68,77 @@ public class PowerMonitor extends Subsystem implements Loggable {
 		return true;
 	}
 
+	// TODO: current-reactive motor speed limiting for arm, climber and drive
+	// TODO: voltage-reactive warning for arm, climber and drive
+	// TODO: temperature-reactive motor speed limiting for drive
+	// TODO: temperature-reactive warning for arm and climber
+	/**
+	 * Polls each subsystems power status, determining whether their power using components are taking too much power or producing too much heat. Data is returned in an order of; {@link Arm}, {@link Climber}, {@link DriveTrain}, and {@link Pneumatics}.
+	 * 
+	 * @return set of booleans that represent whether any of the power-drawing systems are within an unhealthy state
+	 */
+	public boolean[] systemCheck() {
+		boolean armState = true;
+		boolean climbState = true;
+		boolean driveState = true;
+		boolean pneumaticsState = true;
+
+		if (Robot.arm.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+			armState = false;
+		} else if (Robot.arm.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+
+		}
+
+		if (Robot.arm.temperature() > Power.dangerTemp) {
+			armState = false;
+		} else if (Robot.arm.temperature() > Power.warningTemp) {
+
+		}
+
+		// if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+		// climbState = false;
+		// } else if (Robot.climber.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+		//
+		// }
+		//
+		// if (Robot.climber.temperature() > Power.dangerTemp) {
+		// climbState = false;
+		// } else if (Robot.climber.temperature() > Power.warningTemp) {
+		//
+		// }
+
+		if (Robot.drive.current() > Power.primaryAmpLimit * Power.cautionThreshold) {
+			driveState = false;
+		} else if (Robot.drive.current() > Power.primaryAmpLimit * Power.warningThreshold) {
+
+		}
+
+		if (Robot.drive.temperature() > Power.dangerTemp) {
+			driveState = false;
+		} else if (Robot.drive.temperature() > Power.warningTemp) {
+
+		}
+
+		if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.cautionThreshold) {
+			pneumaticsState = false;
+		} else if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.warningThreshold) {
+
+		}
+
+		if (Robot.pneumatics.temperature() > Power.dangerTemp + 10.0) {
+			pneumaticsState = false;
+		} else if (Robot.pneumatics.temperature() > Power.warningTemp) {
+
+		}
+
+		return new boolean[] { armState, climbState, driveState, pneumaticsState };
+	}
+
+	/**
+	 * Whether or not the system's power delivery system is currently in a power draw state that is unhealthy.
+	 * 
+	 * @return Unhealthy or (relatively) healthy
+	 */
 	public boolean currentWarning() {
 		return currentWarning;
 	}
@@ -94,6 +151,28 @@ public class PowerMonitor extends Subsystem implements Loggable {
 	public void log() {
 		SmartDashboard.putBoolean("Temperature Warning", temperatureWarning);
 		SmartDashboard.putBoolean("Current Warning", currentWarning);
+	}
+
+	public double voltageRatio(CANTalon talon) {
+		return talon.getOutputVoltage() / talon.getBusVoltage();
+	}
+
+	public double currentRatio(CANTalon talon) {
+		return talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID());
+	}
+
+	@Override
+	public void loop() {
+		powerCheck();
+		systemCheck();
+	}
+
+	@Override
+	public void start() {
+	}
+
+	@Override
+	public void stop() {
 	}
 
 }

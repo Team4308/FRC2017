@@ -2,45 +2,40 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.io.IO;
 
-public class DriveAngular extends DriveControl {
+/**
+ * Autonomous command that will rotate the robot to a user-specified or default (specified in {@link IO} orientation.
+ * 
+ * @author Michael Brown
+ *
+ */
+public class DriveAngular extends AutoDrive {
 
-	private static final int defaultTimeout = 2;
-	private static final double tolerance = 2.0;
+	public DriveAngular() {
+		this(RobotMap.Autonomous.defaultOrientation);
 
-	private final double angle;
-	private final double maxSpeed;
-	private double error;
+		requires(Robot.gyro);
+		requires(Robot.drive);
+	}
 
 	public DriveAngular(double angle) {
-		this(angle, RobotMap.AUTONOMOUS.maxRotateSpeed);
-	}
-
-	public DriveAngular(double angle, double maxSpeed) {
-		this(angle, maxSpeed, defaultTimeout);
-	}
-
-	public DriveAngular(double angle, double maxSpeed, double timeout) {
-		super(timeout);
-		this.angle = angle;
-		this.maxSpeed = maxSpeed;
-		requires(Robot.navx);
+		super();
+		setSetpoint(angle);
+		getPIDController().setInputRange(-180.0f, 180.0f);
+		getPIDController().setOutputRange(-1.0, 1.0);
+		getPIDController().setAbsoluteTolerance(RobotMap.Autonomous.angularToleranceDegrees);
+		getPIDController().setContinuous(true);
 	}
 
 	@Override
-	protected void execute() {
-		error = angle - Robot.navx.yaw();
-		if (error > angle + tolerance && error > angle - tolerance) {
-			Robot.drive.setMotorOutputs(maxSpeed, -maxSpeed); // Turn right TODO might need to flip the negative on these
-		} else if (error < angle + tolerance && error < angle - tolerance) {
-			Robot.drive.setMotorOutputs(-maxSpeed, maxSpeed); // Turn left TODO might need to flip the negative on these
-		} else {
-			end();
-		}
+	protected double returnPIDInput() {
+		return Robot.gyro.yaw();
 	}
 
 	@Override
-	protected boolean isFinished() {
-		return false;
+	protected void usePIDOutput(double output) {
+		Robot.drive.setLeftRightMotorOutputs(-output, output);
 	}
+
 }

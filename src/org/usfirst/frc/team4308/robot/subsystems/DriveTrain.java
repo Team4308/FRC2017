@@ -2,247 +2,166 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.DriveControl;
+import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.MultiSpeedController;
 import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.MotorSafety;
-import edu.wpi.first.wpilibj.MotorSafetyHelper;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controller for the drive train and its motors
- * 
- * @author Samson Close
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, MotorSafety, Powered {
+public class DriveTrain extends Subsystem implements Loggable, Powered {
 
-	protected MotorSafetyHelper motorSafetyHelper;
-	public static final double kDefaultExpirationTime = 0.1;
-	public static final double kDefaultMaxOutput = 1.0;
-
-	private static final double pulseDistance = 0.042;
-
-	private DriveControlType type;
-	private double maxOutput;
 	private final CANTalon leftFront;
+	private final CANTalon leftMiddle;
 	private final CANTalon leftBack;
 	private final CANTalon rightFront;
+	private final CANTalon rightMiddle;
 	private final CANTalon rightBack;
-	private Encoder leftEncoder;
-	private Encoder rightEncoder;
+	private Encoder encoder;
+	private double maxPower;
 
-	// TODO: Constructors for inputs of name, speed controllers, and integer
-	// channels
-	// TODO: instantiation of correct encoders
+	private DoubleSolenoid leftShifter;
+	private DoubleSolenoid rightShifter;
+
+	public RobotDrive robotDrive;
+
 	public DriveTrain() {
 		super();
+		leftFront = new CANTalon(RobotMap.Drive.leftFront);
+		leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
+		leftBack = new CANTalon(RobotMap.Drive.leftBack);
+		rightFront = new CANTalon(RobotMap.Drive.rightFront);
+		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
+		rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		motorSafetyHelper = new MotorSafetyHelper(this);
-		motorSafetyHelper.setExpiration(kDefaultExpirationTime);
-		motorSafetyHelper.setSafetyEnabled(true);
+		MultiSpeedController left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
+		MultiSpeedController right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
 
-		type = DriveControlType.SAMSON;
-		maxOutput = kDefaultMaxOutput;
+		robotDrive = new RobotDrive(left, right);
 
-		leftFront = new CANTalon(RobotMap.DRIVE.frontLeft);
-		leftBack = new CANTalon(RobotMap.DRIVE.backLeft);
-		rightFront = new CANTalon(RobotMap.DRIVE.frontRight);
-		rightBack = new CANTalon(RobotMap.DRIVE.backRight);
+		leftShifter = new DoubleSolenoid(RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
-		setSafetyEnabled(true);
+		// encoder = new Encoder(RobotMap.Drive.ChannelA,
+		// RobotMap.Drive.ChannelB);
+		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
-		// TODO encode shit
-		leftEncoder = new Encoder(RobotMap.DRIVE.leftChannelA, RobotMap.DRIVE.leftChannelB);
-		rightEncoder = new Encoder(RobotMap.DRIVE.rightChannelA, RobotMap.DRIVE.rightChannelB);
-		leftEncoder.setDistancePerPulse(pulseDistance);
-		rightEncoder.setDistancePerPulse(pulseDistance);
-
-		LiveWindow.addSensor("Drive Train", "Left Encoder", leftEncoder);
-		LiveWindow.addSensor("Drive Train", "Right Encoder", rightEncoder);
-	}
-
-	public void setDriveType(DriveControlType type) {
-		this.type = type;
-	}
-
-	public void execute() {
-		Joystick joystick = Robot.oi.getJoystick();
-
-		switch (Robot.oi.getJoystickType()) {
-		case STANDARD:
-			// double leftX =
-			// limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_X));
-			double leftY = limit(joystick.getRawAxis(RobotMap.CONTROL.LEFT_STICK_Y));
-			double rightX = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_X));
-			double rightY = limit(joystick.getRawAxis(RobotMap.CONTROL.RIGHT_STICK_Y));
-
-			switch (type) {
-			default:
-			case SAMSON:
-
-				// Conforms the linear input to a x^3 curve
-				// This gives more control on slower speeds and
-				// Easily allows for full acceleration
-				double curvedInput = rightX * rightX * rightX;
-
-				double leftMotor = leftY + curvedInput;
-				double rightMotor = leftY - curvedInput;
-
-				setMotorOutputs(leftMotor, rightMotor);
-				break;
-			case TANK:
-				setMotorOutputs(leftY, rightY);
-				break;
-			}
-			break;
-		case FLIGHT:
-			// TODO controls for a flight styled control stick
-			break;
-		}
+		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
+		LiveWindow.addActuator("Drive Train", "leftMiddle", leftMiddle);
+		LiveWindow.addActuator("Drive Train", "leftBack", leftBack);
+		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
+		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
+		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
+		// LiveWindow.addSensor("Drive Train", "Encoder", encoder);
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new DriveControl());
+		switch (Robot.io.getJoystickType()) {
+		case FLIGHT:
+			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+			break;
+		case STANDARD:
+			setDefaultCommand(new TankDrive());
+			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
+			// Robot.io.getRightAxis()));
+			// setDefaultCommand(new SamsonDrive());
+			break;
+		default:
+			setDefaultCommand(new TankDrive());
+			break;
+		}
+	}
+
+	public void arcadeDrive(double moveValue, double rotateValue) {
+		moveValue = limit(moveValue);
+		rotateValue = limit(rotateValue);
+
+		double leftMotorSpeed;
+		double rightMotorSpeed;
+		if (moveValue > 0.0D) {
+			if (rotateValue > 0.0D) {
+				leftMotorSpeed = moveValue - rotateValue;
+				rightMotorSpeed = Math.max(moveValue, rotateValue);
+			} else {
+				leftMotorSpeed = Math.max(moveValue, -rotateValue);
+				rightMotorSpeed = moveValue + rotateValue;
+			}
+		} else if (rotateValue > 0.0D) {
+			leftMotorSpeed = -Math.max(-moveValue, rotateValue);
+			rightMotorSpeed = moveValue + rotateValue;
+		} else {
+			leftMotorSpeed = moveValue - rotateValue;
+			rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
+		}
+
+		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
+	}
+
+	public void tankDrive(double leftOutput, double rightOutput) {
+		leftOutput = limit(leftOutput);
+		rightOutput = limit(rightOutput);
+		setLeftRightMotorOutputs(leftOutput, rightOutput);
+	}
+
+	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
+		// if (!PneumaticsToggle.isEnabled) {
+		leftFront.set(-limit(leftOutput) * maxPower);
+		leftMiddle.set(-limit(leftOutput) * maxPower);
+		leftBack.set(-limit(leftOutput) * maxPower);
+		rightFront.set(limit(rightOutput) * maxPower);
+		rightMiddle.set(limit(rightOutput) * maxPower);
+		rightBack.set(limit(rightOutput) * maxPower);
+		// }
+
 	}
 
 	@Override
 	public void log() {
-		SmartDashboard.putNumber("Left Distance", leftEncoder.getDistance());
-		SmartDashboard.putNumber("Right Distance", rightEncoder.getDistance());
-		SmartDashboard.putNumber("Left Speed", leftEncoder.getRate());
-		SmartDashboard.putNumber("Right Speed", rightEncoder.getRate());
+		// SmartDashboard.putNumber("Distance", encoder.getDistance());
+		// SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
-	public void resetEncoders() {
-		leftEncoder.reset();
-		rightEncoder.reset();
+	protected static double limit(double num) {
+		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
+	}
+
+	public void setMaxOutput(double power) {
+		maxPower = power;
+	}
+
+	public void resetEncoder() {
+		encoder.reset();
 	}
 
 	public double getDistance() {
-		return (leftEncoder.getDistance() + rightEncoder.getDistance()) / 2;
+		return encoder.getDistance();
 	}
 
-	public Encoder getLeftEncoder() {
-		return leftEncoder;
+	public final Encoder getEncoder() {
+		return encoder;
 	}
 
-	public Encoder getRightEncoder() {
-		return rightEncoder;
+	public void highGear() {
+		leftShifter.set(Value.kForward);
+		rightShifter.set(Value.kForward);
 	}
 
-	/**
-	 * @return the maximum output for the motors
-	 */
-	public double getMaxOutput() {
-		return maxOutput;
-	}
-
-	/**
-	 * Sets the outputs of the motors. The general range for these values is
-	 * -1.0 to 1.0. (Refer to getMaxOutput() to see what the range is).
-	 * 
-	 * @param leftOutput
-	 *            the output to the left motors
-	 * @param rightOutput
-	 *            the output to the left motors
-	 */
-	public void setMotorOutputs(double leftOutput, double rightOutput) {
-		if (leftFront != null) {
-			leftFront.set(limit(leftOutput) * maxOutput);
-		}
-
-		if (leftBack != null) {
-			leftBack.set(limit(leftOutput) * maxOutput);
-		}
-
-		if (rightFront != null) {
-			rightFront.set(-limit(rightOutput) * maxOutput);
-		}
-
-		if (rightBack != null) {
-			rightBack.set(-limit(rightOutput) * maxOutput);
-		}
-
-		if (motorSafetyHelper != null) {
-			motorSafetyHelper.feed();
-		}
-	}
-
-	private double limit(double num) {
-		if (num > 1.0) {
-			return 1.0;
-		}
-		if (num < -1.0) {
-			return -1.0;
-		}
-		return num;
-	}
-
-	public void setMaxOutput(double limit) {
-		this.maxOutput = Math.abs(limit);
-	}
-
-	@Override
-	public void setExpiration(double timeout) {
-		motorSafetyHelper.setExpiration(timeout);
-	}
-
-	@Override
-	public double getExpiration() {
-		return motorSafetyHelper.getExpiration();
-	}
-
-	@Override
-	public boolean isAlive() {
-		return motorSafetyHelper.isAlive();
-	}
-
-	@Override
-	public boolean isSafetyEnabled() {
-		return motorSafetyHelper.isSafetyEnabled();
-	}
-
-	@Override
-	public void setSafetyEnabled(boolean enabled) {
-		motorSafetyHelper.setSafetyEnabled(enabled);
-	}
-
-	@Override
-	public String getDescription() {
-		return "Samson's Robot Drive";
-	}
-
-	@Override
-	public void stopMotor() {
-		if (leftFront != null) {
-			// leftFront.stopMotor();
-			leftFront.set(0);
-		}
-		if (rightFront != null) {
-			// rightFront.stopMotor();
-			rightFront.set(0);
-		}
-		if (leftBack != null) {
-			// leftBack.stopMotor();
-			leftBack.set(0);
-		}
-		if (rightBack != null) {
-			// rightBack.stopMotor();
-			rightBack.set(0);
-		}
-		if (motorSafetyHelper != null) {
-			motorSafetyHelper.feed();
-		}
+	public void lowGear() {
+		leftShifter.set(Value.kReverse);
+		rightShifter.set(Value.kReverse);
 	}
 
 	@Override
@@ -261,5 +180,15 @@ public class DriveTrain extends Subsystem implements Loggable, MotorSafety, Powe
 	public double temperature() {
 		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
 				+ rightBack.getTemperature()) / 4.0;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void stopMotor() {
+		leftBack.stopMotor();
+		leftMiddle.stopMotor();
+		leftBack.stopMotor();
+		rightBack.stopMotor();
+		rightMiddle.stopMotor();
+		rightBack.stopMotor();
 	}
 }

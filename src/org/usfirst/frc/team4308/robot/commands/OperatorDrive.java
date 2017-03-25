@@ -5,29 +5,24 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveControl extends Command {
+public class OperatorDrive extends Command {
 
-	public DriveControl() {
-		this(RobotMap.GAME.maxTimeSeconds);
-	}
-
-	public DriveControl(double timeout) {
-		super(timeout);
+	public OperatorDrive() {
+		super(RobotMap.Game.maxTimeSeconds);
 		requires(Robot.drive);
-	}
-
-	@Override
-	protected void execute() {
-		Robot.drive.execute();
+//		if (!Robot.operatorControl) {
+//			end();
+//		}
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return false; //isTimedOut()
 	}
 
 	@Override
 	protected void end() {
 		Robot.drive.stopMotor();
 	}
+
 }

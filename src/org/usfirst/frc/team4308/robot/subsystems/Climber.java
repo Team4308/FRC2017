@@ -1,25 +1,20 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Powered;
 
-import com.ctre.CANTalon;
-
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Climber extends Subsystem implements SpeedController, Loggable, Powered {
+public class Climber extends Subsystem implements SpeedController, Loggable { // Powered
 
-	public static final double restingSpeed = 0.0;
-	public static final double maxForward = 1.0;
-	public static final double maxBackward = -1.0;
-
-	private final CANTalon master;
-	private final CANTalon slave;
+	private final Talon master;
+	private final Spark slave;
 	private boolean isInverted = false;
 	private double speed;
 
@@ -29,27 +24,31 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 
 	public Climber(boolean isInverted) {
 		super();
-		master = new CANTalon(RobotMap.CLIMBER.masterChannel);
-		slave = new CANTalon(RobotMap.CLIMBER.slaveChannel);
-		this.set(restingSpeed);
+		master = new Talon(RobotMap.Climb.climbB);
+		slave = new Spark(RobotMap.Climb.climbA);
+		this.set(RobotMap.Climb.restingSpeed);
+		this.isInverted = isInverted;
+
+		LiveWindow.addActuator("Climber", "MasterTalon", master);
+		LiveWindow.addActuator("Climber", "SlaveTalon", slave);
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new ClimberControl());
+		
 	}
 
 	@Override
 	public void set(double speed) {
-		speed = Math.max(Math.min(speed, maxForward), maxBackward);
-
+		speed = Math.max(Math.min(speed, RobotMap.Climb.maxForward), RobotMap.Climb.maxBackward);
+		
 		if (isInverted) {
-			master.set(-speed);
-			slave.set(speed);
+			master.set(speed);
+		  slave.set(-speed);
 			this.speed = -speed;
 		} else {
-			master.set(speed);
-			slave.set(-speed);
+			master.set(-speed);
+			slave.set(speed);
 			this.speed = speed;
 		}
 	}
@@ -63,7 +62,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 	public void stopMotor() {
 		this.master.stopMotor();
 		this.slave.stopMotor();
-		this.speed = restingSpeed;
+		set(RobotMap.Climb.restingSpeed);
 	}
 
 	@Override
@@ -94,33 +93,19 @@ public class Climber extends Subsystem implements SpeedController, Loggable, Pow
 		SmartDashboard.putNumber("Climb Speed", speed);
 	}
 
-	public void execute() {
-		switch (Robot.oi.getClimbButtons().getInteger()) {
-		case 0:
-			set(restingSpeed);
-			break;
-		case 1:
-			set(maxForward);
-			break;
-		case -1:
-			set(maxBackward);
-			break;
-		}
-	}
-
-	@Override
-	public double voltage() {
-		return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
-	}
-
-	@Override
-	public double current() {
-		return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
-	}
-
-	@Override
-	public double temperature() {
-		return (master.getTemperature() + slave.getTemperature()) / 2.0;
-	}
+	// @Override
+	// public double voltage() {
+	// return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
+	// }
+	//
+	// @Override
+	// public double current() {
+	// return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
+	// }
+	//
+	// @Override
+	// public double temperature() {
+	// return (master.getTemperature() + slave.getTemperature()) / 2.0;
+	// }
 
 }

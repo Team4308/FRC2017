@@ -1,25 +1,29 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
-
-public class SlowMode extends InstantCommand {
-
-	private static boolean slow = false;
-	private static final double SLOW_SPEED = 0.42;
-	private static final double FAST_SPEED = 1.0;
+/**
+ * Instantly firing command that will modify the {@link DriveTrain}'s maximum motor output, allowing for the same input ranges, but a much reduced corresponding motor speed.
+ * 
+ * @author Ningsong Shen
+ *
+ */
+public class SlowMode extends ToggleCommand {
 
 	public SlowMode() {
-		super();
+		super(false);
 		requires(Robot.drive);
 	}
 
 	@Override
-	protected void execute() {
-		Robot.drive.setMaxOutput(slow ? SLOW_SPEED : FAST_SPEED);
-		slow = !slow;
-		end();
+	protected void toggleOn() {
+		Robot.drive.setMaxOutput(RobotMap.Drive.Slow.slow);
 	}
 
+	@Override
+	protected void toggleOff() {
+		Robot.drive.setMaxOutput(RobotMap.Drive.Slow.normal);
+	}
 }

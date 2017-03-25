@@ -2,10 +2,16 @@ package org.usfirst.frc.team4308.util;
 
 public interface Powered {
 
-	public double voltage();
+	public default double voltage() {
+		return Double.NaN;
+	}
 
-	public double current();
+	public default double current() {
+		return Double.NaN;
+	}
 
-	public double temperature();
+	public default double temperature() {
+		return Double.NaN;
+	}
 
 }

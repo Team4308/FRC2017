@@ -2,33 +2,34 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.io.IO;
+import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.DriverStation;
 
-public class ClimberControl extends Command {
+/**
+ * Continuous command that sends the state of a (specified in {@link IO}) button which controls the motors on the {@link Climber} subsystem.
+ * 
+ * @author Michael Brown
+ *
+ */
+public class ClimberControl extends ToggleCommand {
 
 	public ClimberControl() {
-		this(RobotMap.GAME.maxTimeSeconds);
-	}
-
-	public ClimberControl(double timeout) {
-		super(timeout);
+		super(false);
 		requires(Robot.climber);
+		toggleOff();
 	}
 
 	@Override
-	protected void execute() {
-		Robot.climber.execute();
+	protected void toggleOn() {
+		Robot.climber.set(RobotMap.Climb.maxForward);
+		DriverStation.reportWarning("moving forward", true);
 	}
 
 	@Override
-	protected boolean isFinished() {
-		return false;
-	}
-
-	@Override
-	protected void end() {
-		Robot.drive.stopMotor();
+	protected void toggleOff() {
 		Robot.climber.stopMotor();
+		DriverStation.reportWarning("stopping", true);
 	}
 }
