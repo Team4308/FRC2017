@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class ClimberControl extends InstantCommand {
 
-	private boolean on = false;
+	private static boolean isRunning = false;
 
 	public ClimberControl() {
 		super();
@@ -22,12 +22,13 @@ public class ClimberControl extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		on = !on;
+		isRunning = !isRunning;
 
-		if (on) {
+		if (isRunning) {
 			Robot.climber.set(RobotMap.Climb.maxForward);
 		} else {
 			Robot.climber.stopMotor();
 		}
 	}
+	
 }

@@ -62,7 +62,7 @@ public class IO {
 			switch (type) {
 			case FLIGHT: // 2 DoF joystick
 				new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
-				new JoystickButton(joystick, RobotMap.Control.Flight.eastA).toggleWhenActive(new ClimberControl());
+				new JoystickButton(joystick, RobotMap.Control.Flight.eastA).whenPressed(new ClimberControl());
 
 				armAxis = RobotMap.Control.Flight.throttle;
 				leftAxis = RobotMap.Control.Flight.pitch;
@@ -71,7 +71,7 @@ public class IO {
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
 				//new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-				new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).whenPressed(new ClimberControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
 				// new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new TalonSequence());
 				// new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new TestIncrement());
