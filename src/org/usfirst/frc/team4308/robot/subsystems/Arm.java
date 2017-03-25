@@ -10,9 +10,11 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -21,7 +23,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, SpeedController {
 
 	private static final double MAX_OUTPUT = 0.65;
-	
+	private static final double DROP_TIME = 1;
+	private static final double CLAW_TIME = 0.5;
+
 	protected MotorSafetyHelper safetyHelper;
 
 	private DoubleSolenoid claw;
@@ -29,6 +33,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	private AnalogInput ultrasonic;
 
 	private boolean grab;
+	private boolean down;
 
 	public Arm() {
 		super();
@@ -40,6 +45,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		safetyHelper.setSafetyEnabled(true);
 
 		grab = false;
+		down = false;
 
 		LiveWindow.addActuator("Arm", "Motor", arm);
 		LiveWindow.addActuator("Arm", "Piston", claw);
@@ -51,22 +57,35 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		setDefaultCommand(new ArmControl());
 	}
 
-	public void claw() {
-		if (grab) {
-			claw.set(DoubleSolenoid.Value.kForward);
-		} else {
-			claw.set(DoubleSolenoid.Value.kReverse);
-		}
-		grab = !grab;
-	}
-	
 	public void claw(boolean state) {
-		if (state) {
-			claw.set(DoubleSolenoid.Value.kForward);
-		} else {
-			claw.set(DoubleSolenoid.Value.kReverse);
+		if (down) { // Open and control enabled
+			if (state) {
+				claw.set(Value.kForward);
+			} else {
+				claw.set(Value.kReverse);
+			}
+			grab = state;
+		} else { // Closed and control disabled
+			claw.set(Value.kReverse);
 		}
-		grab = state;
+	}
+
+	public void arm() {
+		down = !down;
+		if (down) {
+			claw(true);
+			Timer.delay(CLAW_TIME);
+			arm.set(1.0);
+			Timer.delay(DROP_TIME);
+			claw(false);
+			Timer.delay(CLAW_TIME);
+		} else {
+			claw(true);
+			Timer.delay(CLAW_TIME);
+			arm.set(0);
+			Timer.delay(DROP_TIME);
+			claw(true);
+		}
 	}
 
 	public void set(double output) {
@@ -95,6 +114,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	@Override
 	public void log() {
 		SmartDashboard.putString("Claw State", grab ? "Open" : "Closed");
+		SmartDashboard.putString("Arm State", down ? "Down" : "Up");
 	}
 
 	@Override
