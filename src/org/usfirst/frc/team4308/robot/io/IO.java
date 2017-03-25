@@ -1,8 +1,10 @@
 package org.usfirst.frc.team4308.robot.io;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
+import org.usfirst.frc.team4308.robot.commands.RumbleControl;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -68,11 +70,11 @@ public class IO {
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
 				//new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-				//new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
-				//new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
+				new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper).toggleWhenActive(new ClimberControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new ClawSwitch());
 				// new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new TalonSequence());
 				//new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new TestIncrement(true));
-				//new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new PneumaticsToggle());
 				
 				armAxis = RobotMap.Control.Standard.leftX;

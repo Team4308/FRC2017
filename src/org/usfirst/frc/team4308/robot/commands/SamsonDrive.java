@@ -1,12 +1,13 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
- * Continuous command that emulates the {@link TankDrive} control scheme, but
- * delegates the turning control to a cubic power curve, rather than the square curve of the {@link RobotDrive}.
+ * Continuous command that emulates the {@link TankDrive} control scheme, but delegates the turning control to a cubic power curve, rather than the square curve of the {@link RobotDrive}.
  * 
  * @author Samson Close
  *
@@ -20,11 +21,14 @@ public class SamsonDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		double input = Robot.io.getJoystick().getRawAxis(Robot.io.getTurnAxis());
+		Joystick joy = Robot.io.getJoystick();
+		double input = joy.getRawAxis(RobotMap.Control.Standard.leftY);
 		double curvedInput = input * input * input;
-		double leftValue = Robot.io.getLeftValue() + curvedInput;
-		double rightValue = Robot.io.getRightValue() - curvedInput;
+
+		double rightX = joy.getRawAxis(RobotMap.Control.Standard.rightX);
+		double leftValue = curvedInput - rightX;
+		double rightValue = curvedInput + rightX;
 		Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);
 	}
-	
+
 }

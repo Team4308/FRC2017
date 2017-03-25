@@ -3,7 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
+import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
@@ -62,8 +62,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
 			break;
 		case STANDARD:
-			setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
-			//setDefaultCommand(new SamsonDrive());
+			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
+			setDefaultCommand(new SamsonDrive());
 			break;
 		default:
 			setDefaultCommand(new TankDrive());
@@ -103,14 +103,15 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		if (!PneumaticsToggle.isEnabled) {
-			leftFront.set(limit(leftOutput) * maxPower);
-			leftMiddle.set(limit(leftOutput) * maxPower);
-			leftBack.set(limit(leftOutput) * maxPower);
-			rightFront.set(limit(rightOutput) * maxPower);
-			rightMiddle.set(limit(rightOutput) * maxPower);
-			rightBack.set(limit(rightOutput) * maxPower);
-		}
+		// if (!PneumaticsToggle.isEnabled) {
+		leftFront.set(-limit(leftOutput) * maxPower);
+		leftMiddle.set(-limit(leftOutput) * maxPower);
+		leftBack.set(-limit(leftOutput) * maxPower);
+		rightFront.set(limit(rightOutput) * maxPower);
+		rightMiddle.set(limit(rightOutput) * maxPower);
+		rightBack.set(limit(rightOutput) * maxPower);
+		// }
+
 	}
 
 	@Override

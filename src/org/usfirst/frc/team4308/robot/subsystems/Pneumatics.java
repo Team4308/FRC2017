@@ -17,8 +17,8 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 
 	public Pneumatics() {
 		super();
-		compressor = new Compressor();
-		compressor.stop();
+		compressor = new Compressor(9);
+		//compressor.stop();
 		LiveWindow.addActuator("Pneumatics", "Compressor", compressor);
 	}
 

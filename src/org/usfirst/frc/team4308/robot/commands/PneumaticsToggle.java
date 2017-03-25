@@ -2,6 +2,7 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,6 +25,8 @@ public class PneumaticsToggle extends InstantCommand {
 	private void realExec() {
 		isEnabled = !isEnabled;
 
+		DriverStation.reportWarning("Enabling Pneumatics: " + isEnabled, false);
+		
 		if (isEnabled) {
 			Robot.pneumatics.start();
 		} else {

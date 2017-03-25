@@ -22,7 +22,7 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 
 	public PowerMonitor() {
 		super();
-		pdp = new PowerDistributionPanel();
+		pdp = new PowerDistributionPanel(8);
 		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 		currentWarning = false;
 		temperatureWarning = false;
