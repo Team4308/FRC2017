@@ -10,8 +10,10 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -30,6 +32,9 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	private Encoder encoder;
 	private double maxPower;
 
+	private DoubleSolenoid leftShifter;
+	private DoubleSolenoid rightShifter;
+
 	public RobotDrive robotDrive;
 
 	public DriveTrain() {
@@ -46,7 +51,11 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 		robotDrive = new RobotDrive(left, right);
 
-		// encoder = new Encoder(RobotMap.Drive.ChannelA, RobotMap.Drive.ChannelB);
+		leftShifter = new DoubleSolenoid(RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+
+		// encoder = new Encoder(RobotMap.Drive.ChannelA,
+		// RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
 
 		LiveWindow.addActuator("Drive Train", "leftFront", leftFront);
@@ -66,7 +75,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 			break;
 		case STANDARD:
 			setDefaultCommand(new TankDrive());
-			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(), Robot.io.getRightAxis()));
+			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
+			// Robot.io.getRightAxis()));
 			// setDefaultCommand(new SamsonDrive());
 			break;
 		default:
@@ -144,19 +154,32 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		return encoder;
 	}
 
+	public void highGear() {
+		leftShifter.set(Value.kForward);
+		rightShifter.set(Value.kForward);
+	}
+
+	public void lowGear() {
+		leftShifter.set(Value.kReverse);
+		rightShifter.set(Value.kReverse);
+	}
+
 	@Override
 	public double voltage() {
-		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage() + rightBack.getOutputVoltage()) / 4.0;
+		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage()
+				+ rightBack.getOutputVoltage()) / 4.0;
 	}
 
 	@Override
 	public double current() {
-		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent() + rightFront.getOutputCurrent()) / 4.0;
+		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent()
+				+ rightFront.getOutputCurrent()) / 4.0;
 	}
 
 	@Override
 	public double temperature() {
-		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature() + rightBack.getTemperature()) / 4.0;
+		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
+				+ rightBack.getTemperature()) / 4.0;
 	}
 
 	@SuppressWarnings("deprecation")

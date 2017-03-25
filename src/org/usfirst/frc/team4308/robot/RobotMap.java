@@ -109,6 +109,11 @@ public class RobotMap {
 
 		public static final double curveSensitivity = 0.5;
 		public static final double encoderPulseDistance = 0.042;
+		
+		public static final int leftShifterA = 2;
+		public static final int leftShifterB = 3;
+		public static final int rightShifterA = 4;
+		public static final int rightShifterB = 5;
 
 		public static class Slow {
 			public static final double normal = 1.0;
