@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.WaitForPressure;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
@@ -17,8 +18,8 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 
 	public Pneumatics() {
 		super();
-		compressor = new Compressor(9);
-		//compressor.stop();
+		compressor = new Compressor(RobotMap.PCM);
+		
 		LiveWindow.addActuator("Pneumatics", "Compressor", compressor);
 	}
 
