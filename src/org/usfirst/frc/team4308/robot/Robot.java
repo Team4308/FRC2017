@@ -6,6 +6,7 @@ import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.Autonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team4308.robot.subsystems.EasyAutonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
@@ -33,7 +34,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
-	public static Autonomous autonomous;
+	public static EasyAutonomous autonomous;
 	public static USBVision vision;
 
 	public static boolean operatorControl;
@@ -50,7 +51,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		gyro = new Gyroscope();
 		arm = new Arm();
 		io = new IO();
-		autonomous = new Autonomous();
+		autonomous = new EasyAutonomous();
 		vision = new USBVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
@@ -94,6 +95,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
+		autonomous.go();
 		operatorControl = false;
 		if (autoChooser != null) {
 			autonomousCommand = autoChooser.getSelected();
