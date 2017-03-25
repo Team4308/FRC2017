@@ -18,7 +18,9 @@ public class TankDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.tankDrive(Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.leftY), Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.rightY));
+		
+		Robot.drive.robotDrive.tankDrive(Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.leftY), Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.rightY));
+		//Robot.drive.tankDrive(Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.leftY), Robot.io.getJoystick().getRawAxis(RobotMap.Control.Standard.rightY));
 	}
 
 }

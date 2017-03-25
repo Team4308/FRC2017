@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class ClimberControl extends InstantCommand {
 
-	private static boolean isRunning = false;
+	private static boolean isRunning = true;
 
 	public ClimberControl() {
 		super();
@@ -32,5 +32,4 @@ public class ClimberControl extends InstantCommand {
 			Robot.climber.stopMotor();
 		}
 	}
-
 }

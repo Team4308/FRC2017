@@ -128,6 +128,9 @@ public class RobotMap {
 		public static final int climbChannel = 7;
 		public static final int gearArmChannel = 5;
 
+		public static final int climbA = 0;
+		public static final int climbB = 1;
+
 		public static final double maxForward = 1.0;
 		public static final double maxBackward = -1.0;
 		public static final double restingSpeed = 0.0;
