@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static IO io;
 	public static Autonomous autonomous;
 	public static USBVision vision;
-	
+
 	public static boolean operatorControl;
 
 	private SendableChooser<Command> autoChooser;
@@ -43,32 +43,94 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void robotInit() {
-//		 powermonitor = new PowerMonitor();
+		// powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
-//		drive = new DriveTrain();
-//		climber = new Climber();
-//		gyro = new Gyroscope();
-//		arm = new Arm();
+		drive = new DriveTrain();
+		climber = new Climber();
+		gyro = new Gyroscope();
+		arm = new Arm();
 		io = new IO();
-//		autonomous = new Autonomous();
-//		vision = new USBVision();
-		
-		
+		autonomous = new Autonomous();
+		vision = new USBVision();
+
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
-		if (((((((((((!!!(!(bone != !!!!!!bone))))))))))))) DriverStation.reportWarning("NOT ENOUGH BONE", true);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-		
+		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
+			DriverStation.reportWarning("NOT ENOUGH BONE", true);
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+		;
+
 		autoChooser = new SendableChooser<Command>();
 		// loops.add(gyro);
 		// loops.add(powermonitor);
-		
+
 		operatorControl = false;
 
 		// SmartDashboard.putData(powermonitor);
-//		SmartDashboard.putData(pneumatics);
-//		SmartDashboard.putData(drive);
-//		SmartDashboard.putData(climber);
-//		SmartDashboard.putData(gyro);
-//		SmartDashboard.putData(arm);
+		// SmartDashboard.putData(pneumatics);
+		// SmartDashboard.putData(drive);
+		// SmartDashboard.putData(climber);
+		// SmartDashboard.putData(gyro);
+		// SmartDashboard.putData(arm);
 		SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
@@ -131,11 +193,11 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void log() {
-//		pneumatics.log();
-//		drive.log();
-//		climber.log();
-//		gyro.log();
-//		arm.log();
+		// pneumatics.log();
+		// drive.log();
+		// climber.log();
+		// gyro.log();
+		// arm.log();
 	}
 
 }

@@ -14,6 +14,9 @@ public class DriveAngular extends AutoDrive {
 
 	public DriveAngular() {
 		this(RobotMap.Autonomous.defaultOrientation);
+		
+		requires(Robot.gyro);
+		requires(Robot.drive);
 	}
 
 	public DriveAngular(double angle) {

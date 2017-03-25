@@ -19,7 +19,8 @@ public class ArmControl extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.arm.setAngle(Robot.io.getArmValue());
+		Robot.arm.set(Robot.io.getArmValue());
+		//Robot.arm.setAngle(Robot.io.getArmValue());
 	}
 
 	@Override

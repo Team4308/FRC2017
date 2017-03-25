@@ -19,6 +19,7 @@ public class DriveLinear extends AutoDrive {
 
 	public DriveLinear(double distance) {
 		super();
+		requires(Robot.drive);
 		setSetpoint(distance);
 		Robot.drive.resetEncoder();
 		getPIDController().setPercentTolerance(RobotMap.Autonomous.distancePercentTolerance);

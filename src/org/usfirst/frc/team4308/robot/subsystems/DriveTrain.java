@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
 import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -52,7 +53,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 		LiveWindow.addActuator("Drive Train", "rightFront", rightFront);
 		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
-		//LiveWindow.addSensor("Drive Train", "Encoder", encoder);
+		// LiveWindow.addSensor("Drive Train", "Encoder", encoder);
 	}
 
 	@Override
@@ -102,18 +103,20 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		leftFront.set(limit(leftOutput) * maxPower);
-		leftMiddle.set(limit(leftOutput) * maxPower);
-		leftBack.set(limit(leftOutput) * maxPower);
-		rightFront.set(limit(rightOutput) * maxPower);
-		rightMiddle.set(limit(rightOutput) * maxPower);
-		rightBack.set(limit(rightOutput) * maxPower);
+		if (!PneumaticsToggle.isEnabled) {
+			leftFront.set(limit(leftOutput) * maxPower);
+			leftMiddle.set(limit(leftOutput) * maxPower);
+			leftBack.set(limit(leftOutput) * maxPower);
+			rightFront.set(limit(rightOutput) * maxPower);
+			rightMiddle.set(limit(rightOutput) * maxPower);
+			rightBack.set(limit(rightOutput) * maxPower);
+		}
 	}
 
 	@Override
 	public void log() {
-		//SmartDashboard.putNumber("Distance", encoder.getDistance());
-		//SmartDashboard.putNumber("Speed", encoder.getRate());
+		// SmartDashboard.putNumber("Distance", encoder.getDistance());
+		// SmartDashboard.putNumber("Speed", encoder.getRate());
 	}
 
 	protected static double limit(double num) {
@@ -138,20 +141,17 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, MotorSaf
 
 	@Override
 	public double voltage() {
-		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage()
-				+ rightBack.getOutputVoltage()) / 4.0;
+		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage() + rightBack.getOutputVoltage()) / 4.0;
 	}
 
 	@Override
 	public double current() {
-		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent()
-				+ rightFront.getOutputCurrent()) / 4.0;
+		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent() + rightFront.getOutputCurrent()) / 4.0;
 	}
 
 	@Override
 	public double temperature() {
-		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
-				+ rightBack.getTemperature()) / 4.0;
+		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature() + rightBack.getTemperature()) / 4.0;
 	}
 
 	@SuppressWarnings("deprecation")
