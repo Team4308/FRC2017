@@ -15,25 +15,21 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class ClimberControl extends ToggleCommand {
 
-	public static boolean enable;
-	
 	public ClimberControl() {
 		super(false);
-		
+		requires(Robot.climber);
 		toggleOff();
 	}
 
 	@Override
 	protected void toggleOn() {
-		enable = isToggled();
-		//Robot.climber.set(RobotMap.Climb.maxForward);
+		Robot.climber.set(RobotMap.Climb.maxForward);
 		DriverStation.reportWarning("moving forward", true);
 	}
 
 	@Override
 	protected void toggleOff() {
-		enable = isToggled();
-		//Robot.climber.stopMotor();
+		Robot.climber.stopMotor();
 		DriverStation.reportWarning("stopping", true);
 	}
 }
