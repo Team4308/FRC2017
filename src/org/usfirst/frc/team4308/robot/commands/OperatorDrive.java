@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class OperatorDrive extends Command {
 
 	public OperatorDrive() {
-		super(RobotMap.Game.maxTimeSeconds);
+		super();
 		requires(Robot.drive);
 //		if (!Robot.operatorControl) {
 //			end();

@@ -133,7 +133,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
 		SmartDashboard.putBoolean("Gear", gear);
-		SmartDashboard.putString("DB/String 2", gear ? "High Gear" : "Low Gear");
+		SmartDashboard.putString("DB/String 1", gear ? "High Gear" : "Low Gear");
 	}
 
 	protected static double limit(double num) {

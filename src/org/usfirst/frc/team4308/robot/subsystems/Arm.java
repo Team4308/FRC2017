@@ -102,8 +102,8 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	public void log() {
 		SmartDashboard.putString("Claw State", grab ? "Open" : "Closed");
 		SmartDashboard.putString("Arm State", down ? "Down" : "Up");
-		SmartDashboard.putString("DB/String 3", grab ? "Claw Open" : "Claw Closed");
-		SmartDashboard.putString("DB/String 4", down ? "Arm Down" : "Arm Up");
+		SmartDashboard.putString("DB/String 2", grab ? "Claw Open" : "Claw Closed");
+		SmartDashboard.putString("DB/String 3", down ? "Arm Down" : "Arm Up");
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 
 	private static final int supplyVoltage = 12;
 	private static boolean isRunning;
-	
+
 	private Compressor compressor;
 
 	public Pneumatics() {
@@ -30,7 +30,8 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	}
 
 	/**
-	 * Start the compressor going. The compressor automatically starts and stops as it goes above and below maximum pressure.
+	 * Start the compressor going. The compressor automatically starts and stops
+	 * as it goes above and below maximum pressure.
 	 */
 	public void start() {
 		isRunning = true;
@@ -47,10 +48,10 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 		SmartDashboard.putBoolean("DB/LED 0", isRunning);
 	}
 
-	public boolean isRunning(){
+	public boolean isRunning() {
 		return isRunning;
 	}
-	
+
 	/**
 	 * @return Whether or not the system is fully pressurized.
 	 */
@@ -63,7 +64,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 		SmartDashboard.putBoolean("Pressurized", isPressurized());
 		SmartDashboard.putNumber("Compressor Current", current());
 		SmartDashboard.putString("DB/String 0", isPressurized() ? "Pressurized!" : "Not Pressurized");
-		SmartDashboard.putString("DB/String 1", "Compressor Current :" + current());
+		SmartDashboard.putNumber("DB/Slider 0", current());
 	}
 
 	@Override
