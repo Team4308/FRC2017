@@ -18,7 +18,7 @@ public class FlairAutonomous extends CommandGroup {
 		double right = 0.22;
 
 		// Move forward slowly for 2 seconds
-		addSequential(new EasyAutonomous(2, left, right));
+		addSequential(new EasyAutonomous(4, left, right));
 
 		// Wait for 2 seconds
 		addSequential(new EasyAutonomous(2, 0, 0));

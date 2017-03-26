@@ -40,7 +40,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
-		safetyHelper.setSafetyEnabled(true);
+		safetyHelper.setSafetyEnabled(false);
 
 		grab = false;
 		down = false;
@@ -59,7 +59,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	}
 
 	public void claw(boolean state) {
-		if (state) {
+		if (!state) {
 			claw.set(Value.kReverse);
 		} else {
 			claw.set(Value.kForward);
@@ -73,24 +73,6 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public void closeClaw() {
 		claw(false);
-	}
-
-	public void arm() {
-		down = !down;
-		if (down) {
-			claw(true);
-			Timer.delay(CLAW_TIME);
-			arm.set(1.0);
-			Timer.delay(DROP_TIME);
-			claw(false);
-			Timer.delay(CLAW_TIME);
-		} else {
-			claw(true);
-			Timer.delay(CLAW_TIME);
-			arm.set(0);
-			Timer.delay(DROP_TIME);
-			claw(true);
-		}
 	}
 
 	public void set(double output) {
