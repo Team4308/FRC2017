@@ -1,22 +1,18 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ArmControl;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,29 +55,21 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	}
 
 	public void claw() {
-		if (down) { // Open and control enabled
-			if (grab) {
-				claw.set(Value.kReverse);
-			} else {
-				claw.set(Value.kForward);
-			}
-			grab = !grab;
-		} else { // Closed and control disabled
+		if (grab) {
+			claw.set(Value.kReverse);
+		} else {
 			claw.set(Value.kForward);
 		}
+		grab = !grab;
 	}
 
 	public void claw(boolean state) {
-		if (down) { // Open and control enabled
-			if (state) {
-				claw.set(Value.kReverse);
-			} else {
-				claw.set(Value.kForward);
-			}
-			grab = state;
-		} else { // Closed and control disabled
+		if (state) {
+			claw.set(Value.kReverse);
+		} else {
 			claw.set(Value.kForward);
 		}
+		grab = state;
 	}
 
 	public void arm() {
