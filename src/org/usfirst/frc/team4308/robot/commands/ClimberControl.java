@@ -26,17 +26,11 @@ public class ClimberControl extends ToggleCommand {
 
 	@Override
 	protected void toggleOn() {
-<<<<<<< HEAD
 		Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
-=======
-		Robot.climber.set(RobotMap.Climb.maxForward);
-		DriverStation.reportWarning("moving forward", true);
->>>>>>> origin/dev
 	}
 
 	@Override
 	protected void toggleOff() {
 		Robot.climber.stopMotor();
-		DriverStation.reportWarning("stopping", true);
 	}
 }
