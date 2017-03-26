@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
@@ -11,9 +12,9 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +32,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	private DoubleSolenoid rightShifter;
 
 	public RobotDrive robotDrive;
-	
+
 	private boolean gear;
 
 	private MultiSpeedController left;
@@ -55,7 +56,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
 		gear = false;
-		
+
 		// encoder = new Encoder(RobotMap.Drive.ChannelA,
 		// RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
@@ -71,20 +72,20 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-		// switch (Robot.io.getJoystickType()) {
-		// case FLIGHT:
-		// setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
-		// break;
-		// case STANDARD:
-		setDefaultCommand(new TankDrive());
-		// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
-		// Robot.io.getRightAxis()));
-		// setDefaultCommand(new SamsonDrive());
-		// break;
-		// default:
-		// setDefaultCommand(new TankDrive());
-		// break;
-		// }
+		switch (Robot.io.getJoystickType()) {
+		case FLIGHT:
+			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+			break;
+		case STANDARD:
+			setDefaultCommand(new TankDrive());
+			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
+			// Robot.io.getRightAxis()));
+			// setDefaultCommand(new SamsonDrive());
+			break;
+		default:
+			setDefaultCommand(new TankDrive());
+			break;
+		}
 	}
 
 	public void arcadeDrive(double moveValue, double rotateValue) {
@@ -161,7 +162,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		rightShifter.set(Value.kReverse);
 		gear = false;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
 		robotDrive.stopMotor();
