@@ -2,26 +2,23 @@ package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 
-public class PneumaticsToggle extends ToggleCommand {
+public class PneumaticsToggle extends InstantCommand {
 
 	public PneumaticsToggle() {
-		super(true);
+		super();
 		requires(Robot.pneumatics);
 	}
 
 	@Override
-	protected void toggleOn() {
-		Robot.pneumatics.start();
+	protected void execute() {
+		super.execute();
 
-		SmartDashboard.putBoolean("DB/LED 0", isToggled());
-	}
-
-	@Override
-	protected void toggleOff() {
-		Robot.pneumatics.stop();
-
-		SmartDashboard.putBoolean("DB/LED 0", isToggled());
+		if (Robot.pneumatics.isRunning()) {
+			Robot.pneumatics.stop();
+		} else {
+			Robot.pneumatics.start();
+		}
 	}
 }

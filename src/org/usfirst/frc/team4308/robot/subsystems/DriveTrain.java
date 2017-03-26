@@ -12,6 +12,7 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -72,19 +73,23 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-		switch (Robot.io.getJoystickType()) {
-		case FLIGHT:
-			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
-			break;
-		case STANDARD:
-			setDefaultCommand(new TankDrive());
-			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
-			// Robot.io.getRightAxis()));
-			// setDefaultCommand(new SamsonDrive());
-			break;
-		default:
-			setDefaultCommand(new TankDrive());
-			break;
+		if (Robot.io == null || Robot.io.getJoystickType() == null) {
+			DriverStation.reportWarning("Shit man, Robot.io is null", true);
+		} else {
+			switch (Robot.io.getJoystickType()) {
+			case FLIGHT:
+				setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+				break;
+			case STANDARD:
+				setDefaultCommand(new TankDrive());
+				// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
+				// Robot.io.getRightAxis()));
+				// setDefaultCommand(new SamsonDrive());
+				break;
+			default:
+				setDefaultCommand(new TankDrive());
+				break;
+			}
 		}
 	}
 

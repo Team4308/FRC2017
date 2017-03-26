@@ -26,6 +26,7 @@ public class ClimberControl extends ToggleCommand {
 
 	@Override
 	protected void toggleOn() {
+		Robot.pneumatics.stop();
 		Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
 	}
 

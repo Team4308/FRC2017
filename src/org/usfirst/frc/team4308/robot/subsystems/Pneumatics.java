@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Pneumatics extends Subsystem implements Loggable, Powered {
 
 	private static final int supplyVoltage = 12;
-
+	private static boolean isRunning;
+	
 	private Compressor compressor;
 
 	public Pneumatics() {
 		super();
 		compressor = new Compressor(RobotMap.PCM);
-
+		isRunning = true;
 		LiveWindow.addActuator("Pneumatics", "Compressor", compressor);
 	}
 
@@ -32,16 +33,24 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	 * Start the compressor going. The compressor automatically starts and stops as it goes above and below maximum pressure.
 	 */
 	public void start() {
+		isRunning = true;
 		compressor.start();
+		SmartDashboard.putBoolean("DB/LED 0", isRunning);
 	}
 
 	/**
 	 * Stops the compressor.
 	 */
 	public void stop() {
+		isRunning = false;
 		compressor.stop();
+		SmartDashboard.putBoolean("DB/LED 0", isRunning);
 	}
 
+	public boolean isRunning(){
+		return isRunning;
+	}
+	
 	/**
 	 * @return Whether or not the system is fully pressurized.
 	 */
