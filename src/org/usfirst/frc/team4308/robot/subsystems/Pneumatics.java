@@ -53,8 +53,8 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	public void log() {
 		SmartDashboard.putBoolean("Pressurized", isPressurized());
 		SmartDashboard.putNumber("Compressor Current", current());
-		SmartDashboard.putString("DB/String 1", isPressurized() ? "Pressurized!" : "Not Pressurized");
-		SmartDashboard.putNumber("DB/Slider 1", current());
+		SmartDashboard.putString("DB/String 0", isPressurized() ? "Pressurized!" : "Not Pressurized");
+		SmartDashboard.putString("DB/String 1", "Compressor Current :" + current());
 	}
 
 	@Override
