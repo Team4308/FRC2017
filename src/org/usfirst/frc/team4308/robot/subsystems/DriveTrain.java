@@ -126,6 +126,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
+		SmartDashboard.putBoolean("Gear", gear);
 		SmartDashboard.putString("DB/String 2", gear ? "High Gear" : "Low Gear");
 	}
 
