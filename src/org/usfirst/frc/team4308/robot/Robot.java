@@ -4,6 +4,7 @@ package org.usfirst.frc.team4308.robot;
 import org.usfirst.frc.team4308.robot.commands.FlairAutonomous;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
+import org.usfirst.frc.team4308.robot.subsystems.AxisVision;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
@@ -33,7 +34,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
-	public static USBVision vision;
+//	public static USBVision frontVision;
+//	public static AxisVision climbVision; 
 
 	public static boolean operatorControl;
 	public static FlairAutonomous autonomousCommand;
@@ -48,8 +50,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		arm = new Arm();
 		io = new IO();
 		autonomousCommand = new FlairAutonomous();
-		frontVision = new USBVision();
-		climbVision = new climbVision();
+//		frontVision = new USBVision();
+//		climbVision = new AxisVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
