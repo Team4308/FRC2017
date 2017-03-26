@@ -69,20 +69,20 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-		switch (Robot.io.getJoystickType()) {
-		case FLIGHT:
-			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
-			break;
-		case STANDARD:
+//		switch (Robot.io.getJoystickType()) {
+//		case FLIGHT:
+//			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+//			break;
+//		case STANDARD:
 			setDefaultCommand(new TankDrive());
 			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
 			// Robot.io.getRightAxis()));
 			// setDefaultCommand(new SamsonDrive());
-			break;
-		default:
-			setDefaultCommand(new TankDrive());
-			break;
-		}
+//			break;
+//		default:
+//			setDefaultCommand(new TankDrive());
+//			break;
+//		}
 	}
 
 	public void arcadeDrive(double moveValue, double rotateValue) {
