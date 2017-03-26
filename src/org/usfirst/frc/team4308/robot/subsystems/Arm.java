@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArmControl;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
@@ -37,8 +38,9 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public Arm() {
 		super();
-		claw = new DoubleSolenoid(RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
+		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
+		arm.setInverted(true);
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
@@ -54,32 +56,31 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new ArmControl());
 	}
 
 	public void claw() {
 		if (down) { // Open and control enabled
 			if (grab) {
-				claw.set(Value.kForward);
-			} else {
 				claw.set(Value.kReverse);
+			} else {
+				claw.set(Value.kForward);
 			}
 			grab = !grab;
 		} else { // Closed and control disabled
-			claw.set(Value.kReverse);
+			claw.set(Value.kForward);
 		}
 	}
 
 	public void claw(boolean state) {
 		if (down) { // Open and control enabled
 			if (state) {
-				claw.set(Value.kForward);
-			} else {
 				claw.set(Value.kReverse);
+			} else {
+				claw.set(Value.kForward);
 			}
 			grab = state;
 		} else { // Closed and control disabled
-			claw.set(Value.kReverse);
+			claw.set(Value.kForward);
 		}
 	}
 
@@ -102,7 +103,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	}
 
 	public void set(double output) {
-		arm.set(limit(output) * MAX_OUTPUT);
+		arm.set(output);
 	}
 
 	protected static double limit(double num) {

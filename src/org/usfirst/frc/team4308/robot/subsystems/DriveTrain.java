@@ -51,8 +51,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 		robotDrive = new RobotDrive(left, right);
 
-		leftShifter = new DoubleSolenoid(RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
-		rightShifter = new DoubleSolenoid(RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
 		// encoder = new Encoder(RobotMap.Drive.ChannelA,
 		// RobotMap.Drive.ChannelB);

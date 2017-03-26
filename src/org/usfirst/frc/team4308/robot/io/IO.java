@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4308.robot.io;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ArmControl;
+import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
 import org.usfirst.frc.team4308.robot.commands.RumbleControl;
@@ -72,10 +74,10 @@ public class IO {
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
 				// TODO B = gear
-				// new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
-//				new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new TestIncrement());
-				new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new SwitchGear());
+				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
+				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.rightBumper).whenPressed(new SwitchGear());
 				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new PneumaticsToggle());
 

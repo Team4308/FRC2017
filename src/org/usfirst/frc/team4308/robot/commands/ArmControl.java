@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  * @author Michael Brown
  *
  */
-public class ArmControl extends InstantCommand {
-	
+public class ArmControl extends Command {
+
 	public ArmControl() {
 		super();
 		requires(Robot.arm);
@@ -23,7 +23,17 @@ public class ArmControl extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		Robot.arm.arm();
+		Robot.arm.set(0.65);
+	}
+
+	@Override
+	protected boolean isFinished() {
+		return false;
+	}
+
+	@Override
+	protected void end() {
+		Robot.arm.set(0);
 	}
 
 }

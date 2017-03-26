@@ -13,6 +13,8 @@ import org.usfirst.frc.team4308.robot.subsystems.USBVision;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Looper;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -48,7 +50,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		drive = new DriveTrain();
 		climber = new Climber();
 //		gyro = new Gyroscope();
-//		arm = new Arm();
+		arm = new Arm();
 		io = new IO();
 		// autonomous = new EasyAutonomous();
 		// vision = new USBVision();
@@ -126,7 +128,6 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		Scheduler.getInstance().run();
 		log();
 		loop();
-
 	}
 
 	@Override

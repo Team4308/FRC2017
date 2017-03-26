@@ -21,7 +21,7 @@ public class ClawSwitch extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		//Robot.arm.claw();
+		Robot.arm.arm();
 	}
 
 }

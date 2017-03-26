@@ -21,7 +21,7 @@ public class RobotMap {
 	public static class GearArm {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
-		public static final int armChannel = 6;
+		public static final int armChannel = 7;
 
 		public static final double tolerancePercent = 10.0;
 		public static final int potentiometerChannel = 0;
