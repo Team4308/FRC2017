@@ -1,10 +1,8 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.util.Loggable;
 
-import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -14,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Climber extends Subsystem implements SpeedController, Loggable { // Powered
 
 	private final Talon master;
-	private final Spark slave;
+	private final Talon slave;
 	private boolean isInverted = false;
 	private double speed;
 
@@ -25,7 +23,7 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 	public Climber(boolean isInverted) {
 		super();
 		master = new Talon(RobotMap.Climb.climbB);
-		slave = new Spark(RobotMap.Climb.climbA);
+		slave = new Talon(RobotMap.Climb.climbA);
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
 

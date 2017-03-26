@@ -3,7 +3,8 @@ package org.usfirst.frc.team4308.robot.commands;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team4308.robot.subsystems.ValueChangeRegulator;
+import org.usfirst.frc.team4308.util.ValueChangeRegulator;
+//import org.usfirst.frc.team4308.robot.subsystems.ValueChangeRegulator;
 
 /**
  * Continuous command that takes the common Y axis of two analog sticks on a two joystick controller, in order to allow individual control of the left and right side motors of the {@link DriveTrain}.
@@ -13,7 +14,7 @@ import org.usfirst.frc.team4308.robot.subsystems.ValueChangeRegulator;
  */
 public class TankDrive extends OperatorDrive {
 
-	private static final boolean TEST_REGULATOR = true;
+	private static final boolean TEST_REGULATOR = false;
 	private ValueChangeRegulator regulator;
 
 	public TankDrive() {
