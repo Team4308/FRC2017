@@ -40,7 +40,7 @@ public class RobotMap {
 		public static final double defaultDistance = 10.0;
 		public static final double defaultOrientation = 0.0;
 		public static final double distancePercentTolerance = 10.0;
-		public static final double defaultTimeout = 5.0;
+		public static final double maxTime = 14.0;
 		public static final double angularToleranceDegrees = 2.0;
 	}
 

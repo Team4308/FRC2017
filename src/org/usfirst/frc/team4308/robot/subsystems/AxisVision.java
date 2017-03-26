@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team4308.robot.RobotMap;
 
@@ -72,6 +73,7 @@ class USBThread implements Runnable {
 				continue;
 			}
 			Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+			Imgproc.getRotationMatrix2D(new Point (RobotMap.Camera.videoWidth/2, RobotMap.Camera.videoHeight/2), 90, 1);
 			outputStream.putFrame(source);
 		}
 	}

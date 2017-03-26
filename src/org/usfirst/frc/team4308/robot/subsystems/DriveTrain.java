@@ -23,12 +23,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class DriveTrain extends Subsystem implements Loggable, Powered {
 
-	private final CANTalon leftFront;
-	private final CANTalon leftMiddle;
-	private final CANTalon leftBack;
-	private final CANTalon rightFront;
-	private final CANTalon rightMiddle;
-	private final CANTalon rightBack;
 	private Encoder encoder;
 	private double maxPower;
 
@@ -37,17 +31,20 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	public RobotDrive robotDrive;
 
+	private MultiSpeedController left;
+	private MultiSpeedController right;
+
 	public DriveTrain() {
 		super();
-		leftFront = new CANTalon(RobotMap.Drive.leftFront);
-		leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
-		leftBack = new CANTalon(RobotMap.Drive.leftBack);
-		rightFront = new CANTalon(RobotMap.Drive.rightFront);
-		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
-		rightBack = new CANTalon(RobotMap.Drive.rightBack);
+		CANTalon leftFront = new CANTalon(RobotMap.Drive.leftFront);
+		CANTalon leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
+		CANTalon leftBack = new CANTalon(RobotMap.Drive.leftBack);
+		CANTalon rightFront = new CANTalon(RobotMap.Drive.rightFront);
+		CANTalon rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
+		CANTalon rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		MultiSpeedController left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
-		MultiSpeedController right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
+		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
+		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
 
 		robotDrive = new RobotDrive(left, right);
 
@@ -69,20 +66,20 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-//		switch (Robot.io.getJoystickType()) {
-//		case FLIGHT:
-//			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
-//			break;
-//		case STANDARD:
-			setDefaultCommand(new TankDrive());
-			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
-			// Robot.io.getRightAxis()));
-			// setDefaultCommand(new SamsonDrive());
-//			break;
-//		default:
-//			setDefaultCommand(new TankDrive());
-//			break;
-//		}
+		// switch (Robot.io.getJoystickType()) {
+		// case FLIGHT:
+		// setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+		// break;
+		// case STANDARD:
+		setDefaultCommand(new TankDrive());
+		// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
+		// Robot.io.getRightAxis()));
+		// setDefaultCommand(new SamsonDrive());
+		// break;
+		// default:
+		// setDefaultCommand(new TankDrive());
+		// break;
+		// }
 	}
 
 	public void arcadeDrive(double moveValue, double rotateValue) {
@@ -117,15 +114,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		// if (!PneumaticsToggle.isEnabled) {
-		leftFront.set(-limit(leftOutput) * maxPower);
-		leftMiddle.set(-limit(leftOutput) * maxPower);
-		leftBack.set(-limit(leftOutput) * maxPower);
-		rightFront.set(limit(rightOutput) * maxPower);
-		rightMiddle.set(limit(rightOutput) * maxPower);
-		rightBack.set(limit(rightOutput) * maxPower);
-		// }
-
+		robotDrive.setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	@Override
@@ -163,32 +152,9 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		leftShifter.set(Value.kReverse);
 		rightShifter.set(Value.kReverse);
 	}
-
-	@Override
-	public double voltage() {
-		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage()
-				+ rightBack.getOutputVoltage()) / 4.0;
-	}
-
-	@Override
-	public double current() {
-		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent()
-				+ rightFront.getOutputCurrent()) / 4.0;
-	}
-
-	@Override
-	public double temperature() {
-		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
-				+ rightBack.getTemperature()) / 4.0;
-	}
-
+	
 	@SuppressWarnings("deprecation")
 	public void stopMotor() {
-		leftBack.stopMotor();
-		leftMiddle.stopMotor();
-		leftBack.stopMotor();
-		rightBack.stopMotor();
-		rightMiddle.stopMotor();
-		rightBack.stopMotor();
+		robotDrive.stopMotor();
 	}
 }

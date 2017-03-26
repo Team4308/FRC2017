@@ -1,11 +1,11 @@
 
 package org.usfirst.frc.team4308.robot;
 
+import org.usfirst.frc.team4308.robot.commands.FlairAutonomous;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team4308.robot.subsystems.EasyAutonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
@@ -13,8 +13,6 @@ import org.usfirst.frc.team4308.robot.subsystems.USBVision;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Looper;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -35,13 +33,10 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
-	public static EasyAutonomous autonomous;
 	public static USBVision vision;
 
 	public static boolean operatorControl;
-
-	private SendableChooser<Command> autoChooser;
-	private Command autonomousCommand;
+	public static FlairAutonomous autonomousCommand;
 
 	@Override
 	public void robotInit() {
@@ -49,18 +44,18 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
-//		gyro = new Gyroscope();
+		// gyro = new Gyroscope();
 		arm = new Arm();
 		io = new IO();
-		// autonomous = new EasyAutonomous();
-		// vision = new USBVision();
+		autonomousCommand = new FlairAutonomous();
+		frontVision = new USBVision();
+		climbVision = new climbVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
 			DriverStation.reportWarning("NOT ENOUGH BONE", true);
 		;
 
-		autoChooser = new SendableChooser<Command>();
 		// loops.add(gyro);
 		// loops.add(powermonitor);
 
@@ -78,14 +73,12 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			SmartDashboard.putData(gyro);
 		if (arm != null)
 			SmartDashboard.putData(arm);
-		if (autoChooser != null)
-			SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
 	@Override
 	public void disabledInit() {
 		stop();
-		operatorControl = false;
+		if (autonomousCommand != null)operatorControl = false;
 	}
 
 	@Override
@@ -96,15 +89,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
-		autonomous.go();
+		autonomousCommand.start();
 		operatorControl = false;
-		if (autoChooser != null) {
-			autonomousCommand = autoChooser.getSelected();
-			if (autonomousCommand != null)
-				autonomousCommand.start();
-		} else {
-			DriverStation.reportWarning("autoChooser is null", true);
-		}
 	}
 
 	@Override
