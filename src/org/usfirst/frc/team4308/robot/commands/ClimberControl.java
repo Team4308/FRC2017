@@ -15,15 +15,18 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class ClimberControl extends ToggleCommand {
 
-	public ClimberControl() {
+	private boolean forwards;
+	
+	public ClimberControl(boolean forwards) {
 		super(false);
+		this.forwards = forwards;
 		requires(Robot.climber);
 		toggleOff();
 	}
 
 	@Override
 	protected void toggleOn() {
-		Robot.climber.set(RobotMap.Climb.maxForward);
+		Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
 	}
 
 	@Override
