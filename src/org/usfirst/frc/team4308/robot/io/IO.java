@@ -73,13 +73,16 @@ public class IO {
 				turnAxis = 0;
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
-				// TODO B = gear
+				new JoystickButton(joystick, RobotMap.Control.Standard.a);
 				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
+				new JoystickButton(joystick, RobotMap.Control.Standard.x).toggleWhenPressed(new ArmControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
-				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.leftBumper);
 				new JoystickButton(joystick, RobotMap.Control.Standard.rightBumper).whenPressed(new SwitchGear());
-				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.leftAnalogClick);
+				new JoystickButton(joystick, RobotMap.Control.Standard.rightAnalogClick);
 				new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new PneumaticsToggle());
+				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
 
 				armAxis = RobotMap.Control.Standard.leftX;
 				leftAxis = RobotMap.Control.Standard.leftY;

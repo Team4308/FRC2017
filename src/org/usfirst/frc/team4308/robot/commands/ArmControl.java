@@ -23,7 +23,7 @@ public class ArmControl extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.arm.set(0.65);
+		Robot.arm.set(1.0);
 	}
 
 	@Override
