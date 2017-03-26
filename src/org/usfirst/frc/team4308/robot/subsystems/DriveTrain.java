@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controller for the drive train and its motors
@@ -30,6 +31,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	private DoubleSolenoid rightShifter;
 
 	public RobotDrive robotDrive;
+	
+	private boolean gear;
 
 	private MultiSpeedController left;
 	private MultiSpeedController right;
@@ -51,6 +54,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
 		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
+		gear = false;
+		
 		// encoder = new Encoder(RobotMap.Drive.ChannelA,
 		// RobotMap.Drive.ChannelB);
 		// encoder.setDistancePerPulse(RobotMap.Drive.encoderPulseDistance);
@@ -121,6 +126,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
+		SmartDashboard.putString("DB/String 2", gear ? "High Gear" : "Low Gear");
 	}
 
 	protected static double limit(double num) {
@@ -146,11 +152,13 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	public void highGear() {
 		leftShifter.set(Value.kForward);
 		rightShifter.set(Value.kForward);
+		gear = true;
 	}
 
 	public void lowGear() {
 		leftShifter.set(Value.kReverse);
 		rightShifter.set(Value.kReverse);
+		gear = false;
 	}
 	
 	@SuppressWarnings("deprecation")
