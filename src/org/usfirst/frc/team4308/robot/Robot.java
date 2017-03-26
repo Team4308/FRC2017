@@ -34,8 +34,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
-//	public static USBVision frontVision;
-//	public static AxisVision climbVision; 
+	// public static USBVision frontVision;
+	// public static AxisVision climbVision;
 
 	public static boolean operatorControl;
 	public static FlairAutonomous autonomousCommand;
@@ -50,8 +50,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		arm = new Arm();
 		io = new IO();
 		autonomousCommand = new FlairAutonomous();
-//		frontVision = new USBVision();
-//		climbVision = new AxisVision();
+		// frontVision = new USBVision();
+		// climbVision = new AxisVision();
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
@@ -80,7 +80,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void disabledInit() {
 		stop();
-		if (autonomousCommand != null)operatorControl = false;
+		if (autonomousCommand != null)
+			operatorControl = false;
 	}
 
 	@Override
@@ -91,8 +92,12 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
-		autonomousCommand.start();
 		operatorControl = false;
+
+		// If the button is pressed
+		if (SmartDashboard.getBoolean("DB/Button 1", false)) {
+			autonomousCommand.start();
+		}
 	}
 
 	@Override
