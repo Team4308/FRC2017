@@ -3,7 +3,6 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
@@ -12,8 +11,8 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -27,14 +26,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	private Encoder encoder;
-	private double maxPower;
 
 	private DoubleSolenoid leftShifter;
 	private DoubleSolenoid rightShifter;
 
-	public RobotDrive robotDrive;
+	public RobotDrive driveHandler;
 
 	private boolean gear;
+	private boolean slow;
 
 	private MultiSpeedController left;
 	private MultiSpeedController right;
@@ -51,12 +50,13 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
 		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
 
-		robotDrive = new RobotDrive(left, right);
+		driveHandler = new RobotDrive(left, right);
 
 		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
 		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
 		gear = false;
+		slow = false;
 
 		// encoder = new Encoder(RobotMap.Drive.ChannelA,
 		// RobotMap.Drive.ChannelB);
@@ -75,19 +75,18 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	protected void initDefaultCommand() {
 		if (Robot.io == null || Robot.io.getJoystickType() == null) {
 			DriverStation.reportWarning("Shit man, Robot.io is null", true);
+			DriverStation.reportWarning("Control system is not present!", true);
 		} else {
 			switch (Robot.io.getJoystickType()) {
 			case FLIGHT:
-				setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
+				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
 				break;
 			case STANDARD:
-				setDefaultCommand(new TankDrive());
-				// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
-				// Robot.io.getRightAxis()));
-				// setDefaultCommand(new SamsonDrive());
+				Robot.control = new TankDrive();
 				break;
 			default:
-				setDefaultCommand(new TankDrive());
+				Robot.control = null;
+				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
 				break;
 			}
 		}
@@ -125,7 +124,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		robotDrive.setLeftRightMotorOutputs(leftOutput, rightOutput);
+		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	@Override
@@ -139,9 +138,14 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	protected static double limit(double num) {
 		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
 	}
-
-	public void setMaxOutput(double power) {
-		maxPower = power;
+	
+	public void slow() {
+		slow = !slow;
+		if (slow) {
+			driveHandler.setMaxOutput(RobotMap.Drive.Slow.slow);
+		} else {
+			driveHandler.setMaxOutput(RobotMap.Drive.Slow.normal);
+		}
 	}
 
 	public void resetEncoder() {
@@ -168,8 +172,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		gear = false;
 	}
 
-	@SuppressWarnings("deprecation")
 	public void stopMotor() {
-		robotDrive.stopMotor();
+		driveHandler.stopMotor();
 	}
 }

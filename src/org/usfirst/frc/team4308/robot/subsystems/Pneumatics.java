@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.WaitForPressure;
 import org.usfirst.frc.team4308.util.Loggable;
+import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Powered;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Pneumatics extends Subsystem implements Loggable, Powered {
+public class Pneumatics extends Subsystem implements Loggable, Powered, Loop {
 
 	private static final int supplyVoltage = 12;
 	private static boolean isRunning;
@@ -36,7 +37,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	public void start() {
 		isRunning = true;
 		compressor.start();
-		SmartDashboard.putBoolean("DB/LED 0", isRunning);
+		SmartDashboard.putBoolean("DB/Button 0", isRunning);
 	}
 
 	/**
@@ -45,11 +46,15 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	public void stop() {
 		isRunning = false;
 		compressor.stop();
-		SmartDashboard.putBoolean("DB/LED 0", isRunning);
+		SmartDashboard.putBoolean("DB/Button 0", isRunning);
 	}
 
 	public boolean isRunning() {
 		return isRunning;
+	}
+	
+	public boolean isSafetyStopped() {
+		return isRunning && !compressor.enabled();
 	}
 
 	/**
@@ -75,6 +80,15 @@ public class Pneumatics extends Subsystem implements Loggable, Powered {
 	@Override
 	public double current() {
 		return compressor.getCompressorCurrent();
+	}
+
+	@Override
+	public void loop() {
+		if (SmartDashboard.getBoolean("DB/Button 0", true)) {
+			start();
+		} else {
+			stop();
+		}
 	}
 
 }

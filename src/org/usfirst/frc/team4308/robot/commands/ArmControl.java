@@ -5,7 +5,6 @@ import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  * Continuous command to send the throttle axis (specified in {@link IO}) to the

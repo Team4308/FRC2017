@@ -13,25 +13,14 @@ public class RobotMap {
 	public static final double encoderPulseDistance = 0.042;
 
 	public static final int PCM = 9;
-
-	public static class Game {
-		public static final int maxTimeSeconds = 75;
-	}
+	
+	public static final double kAutonomousTime = 15.0;
+	public static final double kTeleoperatedTime = 120.0;
 
 	public static class GearArm {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
 		public static final int armChannel = 7;
-
-		public static final double tolerancePercent = 10.0;
-		public static final int potentiometerChannel = 0;
-		public static final double potentiometerRange = 360.0;
-
-		public static final double restingAngle = 45.0;
-
-		public static final double feedForward = 0.3;
-
-		public static final int sensorChannel = 0;
 	}
 
 	public static class Autonomous {

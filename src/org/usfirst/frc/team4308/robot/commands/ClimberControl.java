@@ -5,8 +5,6 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 /**
  * Continuous command that sends the state of a (specified in {@link IO}) button which controls the motors on the {@link Climber} subsystem.
  * 

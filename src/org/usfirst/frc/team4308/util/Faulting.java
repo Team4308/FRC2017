@@ -2,7 +2,9 @@ package org.usfirst.frc.team4308.util;
 
 public interface Faulting {
 
-	public void clearFaults();
+	public boolean[] getFaults();
+	
+	public boolean[] getStickyFaults();
 
 	public void clearStickyFaults();
 

@@ -1,6 +1,7 @@
-package org.usfirst.frc.team4308.robot.commands;
+package org.usfirst.frc.team4308.auto;
 
-import edu.wpi.first.wpilibj.Timer;
+import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class FlairAutonomous extends CommandGroup {

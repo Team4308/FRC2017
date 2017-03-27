@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public abstract class ToggleCommand extends InstantCommand {
 
-	private boolean state;
+	private static boolean state;
 
 	public ToggleCommand() {
 		this(false);

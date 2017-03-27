@@ -1,12 +1,12 @@
-package org.usfirst.frc.team4308.robot.commands;
+package org.usfirst.frc.team4308.auto;
 
 import org.usfirst.frc.team4308.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
-public class OpenClaw extends InstantCommand {
+public class CloseClaw extends InstantCommand {
 
-	public OpenClaw() {
+	public CloseClaw() {
 		super();
 	}
 

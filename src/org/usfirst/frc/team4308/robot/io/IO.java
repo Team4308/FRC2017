@@ -5,7 +5,6 @@ import org.usfirst.frc.team4308.robot.commands.ArmControl;
 import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
-import org.usfirst.frc.team4308.robot.commands.RumbleControl;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
 import org.usfirst.frc.team4308.robot.commands.SwitchGear;
 
