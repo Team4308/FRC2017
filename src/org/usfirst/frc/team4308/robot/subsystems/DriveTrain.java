@@ -11,11 +11,13 @@ import org.usfirst.frc.team4308.util.Powered;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controller for the drive train and its motors
@@ -23,36 +25,38 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class DriveTrain extends Subsystem implements Loggable, Powered {
 
-	private final CANTalon leftFront;
-	private final CANTalon leftMiddle;
-	private final CANTalon leftBack;
-	private final CANTalon rightFront;
-	private final CANTalon rightMiddle;
-	private final CANTalon rightBack;
 	private Encoder encoder;
-	private double maxPower;
 
 	private DoubleSolenoid leftShifter;
 	private DoubleSolenoid rightShifter;
 
-	public RobotDrive robotDrive;
+	public RobotDrive driveHandler;
+
+	private boolean gear;
+	private boolean slow;
+
+	private MultiSpeedController left;
+	private MultiSpeedController right;
 
 	public DriveTrain() {
 		super();
-		leftFront = new CANTalon(RobotMap.Drive.leftFront);
-		leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
-		leftBack = new CANTalon(RobotMap.Drive.leftBack);
-		rightFront = new CANTalon(RobotMap.Drive.rightFront);
-		rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
-		rightBack = new CANTalon(RobotMap.Drive.rightBack);
+		CANTalon leftFront = new CANTalon(RobotMap.Drive.leftFront);
+		CANTalon leftMiddle = new CANTalon(RobotMap.Drive.leftMiddle);
+		CANTalon leftBack = new CANTalon(RobotMap.Drive.leftBack);
+		CANTalon rightFront = new CANTalon(RobotMap.Drive.rightFront);
+		CANTalon rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
+		CANTalon rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		MultiSpeedController left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
-		MultiSpeedController right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
+		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
+		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
 
-		robotDrive = new RobotDrive(left, right);
+		driveHandler = new RobotDrive(left, right);
 
-		leftShifter = new DoubleSolenoid(RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
-		rightShifter = new DoubleSolenoid(RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+
+		gear = false;
+		slow = false;
 
 		// encoder = new Encoder(RobotMap.Drive.ChannelA,
 		// RobotMap.Drive.ChannelB);
@@ -69,19 +73,22 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	@Override
 	protected void initDefaultCommand() {
-		switch (Robot.io.getJoystickType()) {
-		case FLIGHT:
-			setDefaultCommand(new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis()));
-			break;
-		case STANDARD:
-			setDefaultCommand(new TankDrive());
-			// setDefaultCommand(new ArcadeDrive(Robot.io.getTurnAxis(),
-			// Robot.io.getRightAxis()));
-			// setDefaultCommand(new SamsonDrive());
-			break;
-		default:
-			setDefaultCommand(new TankDrive());
-			break;
+		if (Robot.io == null || Robot.io.getJoystickType() == null) {
+			DriverStation.reportWarning("Shit man, Robot.io is null", true);
+			DriverStation.reportWarning("Control system is not present!", true);
+		} else {
+			switch (Robot.io.getJoystickType()) {
+			case FLIGHT:
+				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
+				break;
+			case STANDARD:
+				Robot.control = new TankDrive();
+				break;
+			default:
+				Robot.control = null;
+				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
+				break;
+			}
 		}
 	}
 
@@ -117,29 +124,28 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
-		// if (!PneumaticsToggle.isEnabled) {
-		leftFront.set(-limit(leftOutput) * maxPower);
-		leftMiddle.set(-limit(leftOutput) * maxPower);
-		leftBack.set(-limit(leftOutput) * maxPower);
-		rightFront.set(limit(rightOutput) * maxPower);
-		rightMiddle.set(limit(rightOutput) * maxPower);
-		rightBack.set(limit(rightOutput) * maxPower);
-		// }
-
+		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	@Override
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
+		SmartDashboard.putBoolean("Gear", gear);
+		SmartDashboard.putString("DB/String 1", gear ? "High Gear" : "Low Gear");
 	}
 
 	protected static double limit(double num) {
 		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
 	}
-
-	public void setMaxOutput(double power) {
-		maxPower = power;
+	
+	public void slow() {
+		slow = !slow;
+		if (slow) {
+			driveHandler.setMaxOutput(RobotMap.Drive.Slow.slow);
+		} else {
+			driveHandler.setMaxOutput(RobotMap.Drive.Slow.normal);
+		}
 	}
 
 	public void resetEncoder() {
@@ -157,38 +163,16 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	public void highGear() {
 		leftShifter.set(Value.kForward);
 		rightShifter.set(Value.kForward);
+		gear = true;
 	}
 
 	public void lowGear() {
 		leftShifter.set(Value.kReverse);
 		rightShifter.set(Value.kReverse);
+		gear = false;
 	}
 
-	@Override
-	public double voltage() {
-		return (leftFront.getOutputVoltage() + leftBack.getOutputVoltage() + rightFront.getOutputVoltage()
-				+ rightBack.getOutputVoltage()) / 4.0;
-	}
-
-	@Override
-	public double current() {
-		return (leftFront.getOutputCurrent() + leftBack.getOutputCurrent() + rightFront.getOutputCurrent()
-				+ rightFront.getOutputCurrent()) / 4.0;
-	}
-
-	@Override
-	public double temperature() {
-		return (leftFront.getTemperature() + leftBack.getTemperature() + rightFront.getTemperature()
-				+ rightBack.getTemperature()) / 4.0;
-	}
-
-	@SuppressWarnings("deprecation")
 	public void stopMotor() {
-		leftBack.stopMotor();
-		leftMiddle.stopMotor();
-		leftBack.stopMotor();
-		rightBack.stopMotor();
-		rightMiddle.stopMotor();
-		rightBack.stopMotor();
+		driveHandler.stopMotor();
 	}
 }

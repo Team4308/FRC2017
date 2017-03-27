@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.Joystick;
 public enum JoystickType {
 	/** A classic stick with buttons on it */
 	FLIGHT(3),
+	/** A shitty thing don't ever use a controller with this or you'll be fecked lad**/
+	DIRECTINPUT(4),
 	/** A standard console controller (like XBox or PlayStation) */
 	STANDARD(6);
 

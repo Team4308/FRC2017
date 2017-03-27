@@ -13,25 +13,14 @@ public class RobotMap {
 	public static final double encoderPulseDistance = 0.042;
 
 	public static final int PCM = 9;
-
-	public static class Game {
-		public static final int maxTimeSeconds = 75;
-	}
+	
+	public static final double kAutonomousTime = 15.0;
+	public static final double kTeleoperatedTime = 120.0;
 
 	public static class GearArm {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
-		public static final int armChannel = 6;
-
-		public static final double tolerancePercent = 10.0;
-		public static final int potentiometerChannel = 0;
-		public static final double potentiometerRange = 360.0;
-
-		public static final double restingAngle = 45.0;
-
-		public static final double feedForward = 0.3;
-
-		public static final int sensorChannel = 0;
+		public static final int armChannel = 7;
 	}
 
 	public static class Autonomous {
@@ -40,7 +29,7 @@ public class RobotMap {
 		public static final double defaultDistance = 10.0;
 		public static final double defaultOrientation = 0.0;
 		public static final double distancePercentTolerance = 10.0;
-		public static final double defaultTimeout = 5.0;
+		public static final double maxTime = 14.0;
 		public static final double angularToleranceDegrees = 2.0;
 	}
 
@@ -136,8 +125,8 @@ public class RobotMap {
 		public static final int climbA = 0;
 		public static final int climbB = 1;
 
-		public static final double maxForward = 1.0;
-		public static final double maxBackward = -1.0;
+		public static final double maxForward = 0.65;
+		public static final double maxBackward = -0.65;
 		public static final double restingSpeed = 0.0;
 	}
 

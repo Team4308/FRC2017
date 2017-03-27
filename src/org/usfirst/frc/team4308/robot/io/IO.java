@@ -1,13 +1,12 @@
 package org.usfirst.frc.team4308.robot.io;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.robot.commands.ArmControl;
+import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
-import org.usfirst.frc.team4308.robot.commands.RumbleControl;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
 import org.usfirst.frc.team4308.robot.commands.SwitchGear;
-import org.usfirst.frc.team4308.robot.commands.TalonSequence;
-import org.usfirst.frc.team4308.robot.commands.TestIncrement;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -63,7 +62,7 @@ public class IO {
 			switch (type) {
 			case FLIGHT: // 2 DoF joystick
 				new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
-				new JoystickButton(joystick, RobotMap.Control.Flight.eastA).whenPressed(new ClimberControl());
+				new JoystickButton(joystick, RobotMap.Control.Flight.eastA).whenPressed(new ClimberControl(true));
 
 				armAxis = RobotMap.Control.Flight.throttle;
 				leftAxis = RobotMap.Control.Flight.pitch;
@@ -71,18 +70,21 @@ public class IO {
 				turnAxis = 0;
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
-				// TODO B = gear
-				// new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new SlowMode());
-			new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl());
-//				new JoystickButton(joystick, RobotMap.Control.Standard.a).whenPressed(new TestIncrement());
-				new JoystickButton(joystick, RobotMap.Control.Standard.x).whenPressed(new SwitchGear());
-				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
+				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl(true));
+				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.rightBumper).whenPressed(new SwitchGear());
+				// new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new ClimberControl(false));
 				new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new PneumaticsToggle());
 
 				armAxis = RobotMap.Control.Standard.leftX;
 				leftAxis = RobotMap.Control.Standard.leftY;
 				rightAxis = RobotMap.Control.Standard.rightY;
 				turnAxis = RobotMap.Control.Standard.rightX;
+				break;
+			case DIRECTINPUT:
+				DriverStation.reportError("SWITCH CONTROLLER FRON DIRECT_INPUT MODE TO XINPUT AND REBOOT ROBOT CODE", true);
 				break;
 			default:
 				DriverStation.reportError("Invalid number of axes on control joystick", true);

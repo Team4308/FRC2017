@@ -5,8 +5,6 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 /**
  * Continuous command that sends the state of a (specified in {@link IO}) button which controls the motors on the {@link Climber} subsystem.
  * 
@@ -15,21 +13,23 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class ClimberControl extends ToggleCommand {
 
-	public ClimberControl() {
+	private boolean forwards;
+	
+	public ClimberControl(boolean forwards) {
 		super(false);
+		this.forwards = forwards;
 		requires(Robot.climber);
 		toggleOff();
 	}
 
 	@Override
 	protected void toggleOn() {
-		Robot.climber.set(RobotMap.Climb.maxForward);
-		DriverStation.reportWarning("moving forward", true);
+		Robot.pneumatics.stop();
+		Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
 	}
 
 	@Override
 	protected void toggleOff() {
 		Robot.climber.stopMotor();
-		DriverStation.reportWarning("stopping", true);
 	}
 }

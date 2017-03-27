@@ -8,16 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class OperatorDrive extends Command {
 
 	public OperatorDrive() {
-		super(RobotMap.Game.maxTimeSeconds);
+		super(RobotMap.kTeleoperatedTime);
 		requires(Robot.drive);
-//		if (!Robot.operatorControl) {
-//			end();
-//		}
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false; //isTimedOut()
+		return false;
 	}
 
 	@Override

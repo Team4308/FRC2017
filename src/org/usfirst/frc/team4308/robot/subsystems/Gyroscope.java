@@ -47,6 +47,10 @@ public class Gyroscope extends Subsystem implements Loggable, Loop {
 	public double zDistance() {
 		return gyro.getDisplacementZ();
 	}
+	
+	public double heading() {
+		return gyro.getFusedHeading();
+	}
 
 	public void initialize() {
 		try {

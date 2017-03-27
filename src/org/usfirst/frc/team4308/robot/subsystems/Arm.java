@@ -1,21 +1,17 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ArmControl;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,12 +33,13 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public Arm() {
 		super();
-		claw = new DoubleSolenoid(RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
+		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
+		arm.setInverted(true);
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
-		safetyHelper.setSafetyEnabled(true);
+		safetyHelper.setSafetyEnabled(false);
 
 		grab = false;
 		down = false;
@@ -54,55 +51,31 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new ArmControl());
 	}
 
 	public void claw() {
-		if (down) { // Open and control enabled
-			if (grab) {
-				claw.set(Value.kForward);
-			} else {
-				claw.set(Value.kReverse);
-			}
-			grab = !grab;
-		} else { // Closed and control disabled
-			claw.set(Value.kReverse);
-		}
+		claw(!grab);
 	}
 
 	public void claw(boolean state) {
-		if (down) { // Open and control enabled
-			if (state) {
-				claw.set(Value.kForward);
-			} else {
-				claw.set(Value.kReverse);
-			}
-			grab = state;
-		} else { // Closed and control disabled
+		if (!state) {
 			claw.set(Value.kReverse);
+		} else {
+			claw.set(Value.kForward);
 		}
+		grab = state;
 	}
 
-	public void arm() {
-		down = !down;
-		if (down) {
-			claw(true);
-			Timer.delay(CLAW_TIME);
-			arm.set(1.0);
-			Timer.delay(DROP_TIME);
-			claw(false);
-			Timer.delay(CLAW_TIME);
-		} else {
-			claw(true);
-			Timer.delay(CLAW_TIME);
-			arm.set(0);
-			Timer.delay(DROP_TIME);
-			claw(true);
-		}
+	public void openClaw() {
+		claw(true);
+	}
+
+	public void closeClaw() {
+		claw(false);
 	}
 
 	public void set(double output) {
-		arm.set(limit(output) * MAX_OUTPUT);
+		arm.set(output);
 	}
 
 	protected static double limit(double num) {
@@ -128,6 +101,8 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	public void log() {
 		SmartDashboard.putString("Claw State", grab ? "Open" : "Closed");
 		SmartDashboard.putString("Arm State", down ? "Down" : "Up");
+		SmartDashboard.putString("DB/String 2", grab ? "Claw Open" : "Claw Closed");
+		SmartDashboard.putString("DB/String 3", down ? "Arm Down" : "Arm Up");
 	}
 
 	@Override

@@ -1,11 +1,15 @@
 
 package org.usfirst.frc.team4308.robot;
 
+import org.usfirst.frc.team4308.auto.BlindAuto;
+import org.usfirst.frc.team4308.auto.FlairAutonomous;
+import org.usfirst.frc.team4308.auto.HoldAuto;
+import org.usfirst.frc.team4308.robot.commands.OperatorDrive;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
+import org.usfirst.frc.team4308.robot.subsystems.AxisVision;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team4308.robot.subsystems.EasyAutonomous;
 import org.usfirst.frc.team4308.robot.subsystems.Gyroscope;
 import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
@@ -22,7 +26,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
  */
 public class Robot extends IterativeRobot implements Loggable, Looper {
 
@@ -33,13 +41,13 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static Gyroscope gyro;
 	public static Arm arm;
 	public static IO io;
-	public static EasyAutonomous autonomous;
-	public static USBVision vision;
+	public static USBVision frontVision;
+	public static AxisVision climbVision;
+	
+	public static OperatorDrive control;
 
-	public static boolean operatorControl;
-
-	private SendableChooser<Command> autoChooser;
-	private Command autonomousCommand;
+	public static Command autonomousCommand;
+	public static SendableChooser<Command> autoChooser;
 
 	@Override
 	public void robotInit() {
@@ -47,22 +55,24 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
-//		gyro = new Gyroscope();
-//		arm = new Arm();
+		gyro = new Gyroscope();
+		arm = new Arm();
 		io = new IO();
-		// autonomous = new EasyAutonomous();
-		// vision = new USBVision();
+		frontVision = new USBVision();
+		climbVision = new AxisVision();
+		
+		autoChooser = new SendableChooser<Command>();
+		autoChooser.addDefault("", new HoldAuto());
+		autoChooser.addObject("Flair Auto", new FlairAutonomous());
+		autoChooser.addObject("Blind Auto", new BlindAuto());
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
 			DriverStation.reportWarning("NOT ENOUGH BONE", true);
 		;
 
-		autoChooser = new SendableChooser<Command>();
-		// loops.add(gyro);
-		// loops.add(powermonitor);
-
-		operatorControl = false;
+		loops.add(gyro);
+		loops.add(pneumatics);
 
 		if (powermonitor != null)
 			SmartDashboard.putData(powermonitor);
@@ -76,14 +86,13 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			SmartDashboard.putData(gyro);
 		if (arm != null)
 			SmartDashboard.putData(arm);
-		if (autoChooser != null)
-			SmartDashboard.putData("Autonomous mode chooser", autoChooser);
 	}
 
 	@Override
 	public void disabledInit() {
 		stop();
-		operatorControl = false;
+		if (autonomousCommand != null)
+			autonomousCommand.cancel();
 	}
 
 	@Override
@@ -94,15 +103,9 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
-		autonomous.go();
-		operatorControl = false;
-		if (autoChooser != null) {
-			autonomousCommand = autoChooser.getSelected();
-			if (autonomousCommand != null)
-				autonomousCommand.start();
-		} else {
-			DriverStation.reportWarning("autoChooser is null", true);
-		}
+		autonomousCommand = autoChooser.getSelected();
+		if (autonomousCommand != null)
+			autonomousCommand.start();
 	}
 
 	@Override
@@ -115,8 +118,11 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void teleopInit() {
 		start();
-		operatorControl = true;
-
+		if (control != null) {
+			control.start();
+		} else {
+			DriverStation.reportError("No control scheme given to robot!", true);
+		}
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -126,12 +132,10 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		Scheduler.getInstance().run();
 		log();
 		loop();
-
 	}
 
 	@Override
 	public void testInit() {
-		operatorControl = true;
 		start();
 	}
 
