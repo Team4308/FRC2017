@@ -21,6 +21,7 @@ public class SamsonDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
+		if (Robot.drive != null && Robot.io != null && Robot.io.isAvailable()) {
 			Joystick joy = Robot.io.getJoystick();
 			double input = joy.getRawAxis(RobotMap.Control.Standard.leftY);
 			double curvedInput = input * input * input;
