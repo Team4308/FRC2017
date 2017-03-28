@@ -32,7 +32,7 @@ public class FlairAutonomous extends CommandGroup {
 
 		// Move backwards for 1 second
 		addSequential(new EasyAutonomous(1, -left, -right));
-		
+
 		// Closes claw
 		addSequential(new ClawSwitch());
 

@@ -4,6 +4,7 @@ import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team4308.robot.commands.TankDrive;
+import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
 import org.usfirst.frc.team4308.util.Powered;
@@ -23,7 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Controller for the drive train and its motors
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, Powered {
+public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailable {
+
+	private boolean isAvailable;
 
 	private Encoder encoder;
 
@@ -69,14 +72,13 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
 		// LiveWindow.addSensor("Drive Train", "Encoder", encoder);
+
+		isAvailable = true;
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		if (Robot.io == null || Robot.io.getJoystickType() == null) {
-			DriverStation.reportWarning("Shit man, Robot.io is null", true);
-			DriverStation.reportWarning("Control system is not present!", true);
-		} else {
+		if (Robot.io != null && Robot.io.isAvailable()) {
 			switch (Robot.io.getJoystickType()) {
 			case FLIGHT:
 				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
@@ -89,6 +91,9 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
 				break;
 			}
+		} else {
+			Robot.control = null;
+			DriverStation.reportWarning("Control system is not present!", true);
 		}
 	}
 
@@ -138,7 +143,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 	protected static double limit(double num) {
 		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
 	}
-	
+
 	public void slow() {
 		slow = !slow;
 		if (slow) {
@@ -174,5 +179,10 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	public void stopMotor() {
 		driveHandler.stopMotor();
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return isAvailable;
 	}
 }

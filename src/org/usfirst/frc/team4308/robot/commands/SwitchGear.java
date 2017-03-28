@@ -15,12 +15,14 @@ public class SwitchGear extends ToggleCommand {
 
 	@Override
 	protected void toggleOn() {
-		Robot.drive.highGear();
+		if (Robot.drive != null)
+			Robot.drive.highGear();
 	}
 
 	@Override
 	protected void toggleOff() {
-		Robot.drive.lowGear();
+		if (Robot.drive != null)
+			Robot.drive.lowGear();
 	}
 
 }

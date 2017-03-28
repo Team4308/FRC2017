@@ -19,7 +19,8 @@ public class OperatorDrive extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drive.stopMotor();
+		if (Robot.drive != null)
+			Robot.drive.stopMotor();
 	}
 
 }

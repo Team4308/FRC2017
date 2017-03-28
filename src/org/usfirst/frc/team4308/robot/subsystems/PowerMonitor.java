@@ -2,6 +2,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
+import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Loop;
 
@@ -11,11 +12,13 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PowerMonitor extends Subsystem implements Loggable, Loop {
+public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailable {
 
 	private final PowerDistributionPanel pdp;
 
 	private Power.BatteryLevel batteryLevel;
+
+	private boolean isAvailable;
 
 	private boolean currentWarning;
 	private boolean temperatureWarning;
@@ -23,7 +26,12 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	public PowerMonitor() {
 		super();
 		pdp = new PowerDistributionPanel(8);
-		batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
+		if (pdp != null) {
+			batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
+			isAvailable = true;
+		} else {
+			isAvailable = false;
+		}
 		currentWarning = false;
 		temperatureWarning = false;
 	}
@@ -38,34 +46,38 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	 * @return Whether the system is pulling potentially harmful levels of power or not
 	 */
 	public boolean powerCheck() {
-		double voltage = pdp.getVoltage();
-		double current = pdp.getTotalCurrent();
-		double temperature = pdp.getTemperature();
-		batteryLevel = Power.BatteryLevel.level(voltage);
+		if (isAvailable) {
+			double voltage = pdp.getVoltage();
+			double current = pdp.getTotalCurrent();
+			double temperature = pdp.getTemperature();
+			batteryLevel = Power.BatteryLevel.level(voltage);
 
-		if (current > Power.breakerAmpLimit * Power.cautionThreshold) {
-			// TODO: auto initiate reduced-draw
+			if (current > Power.breakerAmpLimit * Power.cautionThreshold) {
+				// TODO: auto initiate reduced-draw
+				return false;
+			} else if (current > Power.breakerAmpLimit * Power.warningThreshold) {
+				// TODO: warn of the high current draws
+				currentWarning = true;
+			}
+
+			if (batteryLevel.ordinal() < Power.BatteryLevel.LOW.ordinal()) {
+				// TODO: warn of low battery charge
+				return false;
+			}
+
+			if (temperature > Power.dangerTemp) {
+				// TODO: auto initiate reduced draw
+				// TODO: warn of instable temperature levels
+				return false;
+			} else if (temperature > Power.warningTemp) {
+				// TODO: warn of high temperature
+				temperatureWarning = true;
+			}
+
+			return true;
+		} else {
 			return false;
-		} else if (current > Power.breakerAmpLimit * Power.warningThreshold) {
-			// TODO: warn of the high current draws
-			currentWarning = true;
 		}
-
-		if (batteryLevel.ordinal() < Power.BatteryLevel.LOW.ordinal()) {
-			// TODO: warn of low battery charge
-			return false;
-		}
-
-		if (temperature > Power.dangerTemp) {
-			// TODO: auto initiate reduced draw
-			// TODO: warn of instable temperature levels
-			return false;
-		} else if (temperature > Power.warningTemp) {
-			// TODO: warn of high temperature
-			temperatureWarning = true;
-		}
-
-		return true;
 	}
 
 	// TODO: current-reactive motor speed limiting for arm, climber and drive
@@ -83,16 +95,20 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 		boolean driveState = true;
 		boolean pneumaticsState = true;
 
-		if (Robot.arm.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
-			armState = false;
-		} else if (Robot.arm.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+		if (Robot.arm != null) {
+			if (Robot.arm.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+				armState = false;
+			} else if (Robot.arm.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
 
+			}
 		}
 
-		if (Robot.arm.temperature() > Power.dangerTemp) {
-			armState = false;
-		} else if (Robot.arm.temperature() > Power.warningTemp) {
+		if (Robot.arm != null) {
+			if (Robot.arm.temperature() > Power.dangerTemp) {
+				armState = false;
+			} else if (Robot.arm.temperature() > Power.warningTemp) {
 
+			}
 		}
 
 		// if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
@@ -107,28 +123,32 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 		//
 		// }
 
-		if (Robot.drive.current() > Power.primaryAmpLimit * Power.cautionThreshold) {
-			driveState = false;
-		} else if (Robot.drive.current() > Power.primaryAmpLimit * Power.warningThreshold) {
+		if (Robot.drive != null) {
+			if (Robot.drive.current() > Power.primaryAmpLimit * Power.cautionThreshold) {
+				driveState = false;
+			} else if (Robot.drive.current() > Power.primaryAmpLimit * Power.warningThreshold) {
 
+			}
+
+			if (Robot.drive.temperature() > Power.dangerTemp) {
+				driveState = false;
+			} else if (Robot.drive.temperature() > Power.warningTemp) {
+
+			}
 		}
 
-		if (Robot.drive.temperature() > Power.dangerTemp) {
-			driveState = false;
-		} else if (Robot.drive.temperature() > Power.warningTemp) {
+		if (Robot.pneumatics != null) {
+			if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.cautionThreshold) {
+				pneumaticsState = false;
+			} else if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.warningThreshold) {
 
-		}
+			}
 
-		if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.cautionThreshold) {
-			pneumaticsState = false;
-		} else if (Robot.pneumatics.current() > Power.pneumaticsAmpLimit * Power.warningThreshold) {
+			if (Robot.pneumatics.temperature() > Power.dangerTemp + 10.0) {
+				pneumaticsState = false;
+			} else if (Robot.pneumatics.temperature() > Power.warningTemp) {
 
-		}
-
-		if (Robot.pneumatics.temperature() > Power.dangerTemp + 10.0) {
-			pneumaticsState = false;
-		} else if (Robot.pneumatics.temperature() > Power.warningTemp) {
-
+			}
 		}
 
 		return new boolean[] { armState, climbState, driveState, pneumaticsState };
@@ -158,7 +178,7 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 	}
 
 	public double currentRatio(CANTalon talon) {
-		return talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID());
+		return isAvailable ? talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID()) : 0;
 	}
 
 	@Override
@@ -173,6 +193,11 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop {
 
 	@Override
 	public void stop() {
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return isAvailable;
 	}
 
 }

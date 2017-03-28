@@ -73,7 +73,7 @@ class USBThread implements Runnable {
 				continue;
 			}
 			Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-			Imgproc.getRotationMatrix2D(new Point (RobotMap.Camera.videoWidth/2, RobotMap.Camera.videoHeight/2), 90, 1);
+			Imgproc.getRotationMatrix2D(new Point(RobotMap.Camera.videoWidth / 2, RobotMap.Camera.videoHeight / 2), 90, 1);
 			outputStream.putFrame(source);
 		}
 	}

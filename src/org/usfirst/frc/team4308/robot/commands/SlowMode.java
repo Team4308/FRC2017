@@ -17,11 +17,12 @@ public class SlowMode extends InstantCommand {
 		super();
 		requires(Robot.drive);
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
-		Robot.drive.slow();
+		if (Robot.drive != null)
+			Robot.drive.slow();
 	}
 
 }

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class PIDContainer implements PIDSource, PIDOutput {
-	
+
 	private double value;
 	private PIDSourceType type;
 

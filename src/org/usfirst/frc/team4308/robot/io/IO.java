@@ -7,6 +7,7 @@ import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
 import org.usfirst.frc.team4308.robot.commands.SwitchGear;
+import org.usfirst.frc.team4308.util.IAvailable;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +16,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 /**
  * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control of the robot.
  */
-public class IO {
+public class IO implements IAvailable {
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -44,8 +45,10 @@ public class IO {
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
 
-	private final Joystick joystick;
-	private final JoystickType type;
+	private Joystick joystick;
+	private JoystickType type;
+
+	private boolean isAvailable;
 
 	private int leftAxis;
 	private int rightAxis;
@@ -56,9 +59,15 @@ public class IO {
 		joystick = new Joystick(RobotMap.Control.driveStick);
 		type = JoystickType.fromJoystick(joystick);
 
-		if (type == null) {
-			DriverStation.reportWarning("type is null", true);
-		} else {
+		isAvailable = type != null;
+
+		armAxis = 0;
+		leftAxis = 0;
+		rightAxis = 0;
+		turnAxis = 0;
+
+		// If there's a joystick available
+		if (isAvailable) {
 			switch (type) {
 			case FLIGHT: // 2 DoF joystick
 				new JoystickButton(joystick, RobotMap.Control.Flight.eastB).whenPressed(new SlowMode());
@@ -67,7 +76,6 @@ public class IO {
 				armAxis = RobotMap.Control.Flight.throttle;
 				leftAxis = RobotMap.Control.Flight.pitch;
 				rightAxis = RobotMap.Control.Flight.roll;
-				turnAxis = 0;
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
 				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
@@ -88,13 +96,10 @@ public class IO {
 				break;
 			default:
 				DriverStation.reportError("Invalid number of axes on control joystick", true);
-
-				armAxis = 0;
-				leftAxis = 0;
-				rightAxis = 0;
-				turnAxis = 0;
 				break;
 			}
+		} else {
+			DriverStation.reportWarning("type is null", true);
 		}
 	}
 
@@ -111,7 +116,7 @@ public class IO {
 	}
 
 	public double getLeftValue() {
-		return joystick.getRawAxis(leftAxis);
+		return isAvailable ? joystick.getRawAxis(leftAxis) : 0;
 	}
 
 	public int getMoveAxis() {
@@ -119,7 +124,7 @@ public class IO {
 	}
 
 	public double getMoveValue() {
-		return joystick.getRawAxis(leftAxis);
+		return isAvailable ? joystick.getRawAxis(leftAxis) : 0;
 	}
 
 	public int getRightAxis() {
@@ -127,7 +132,7 @@ public class IO {
 	}
 
 	public double getRightValue() {
-		return joystick.getRawAxis(rightAxis);
+		return isAvailable ? joystick.getRawAxis(rightAxis) : 0;
 	}
 
 	public int getRotateAxis() {
@@ -135,7 +140,7 @@ public class IO {
 	}
 
 	public double getRotateValue() {
-		return joystick.getRawAxis(rightAxis);
+		return isAvailable ? joystick.getRawAxis(rightAxis) : 0;
 	}
 
 	public int getArmAxis() {
@@ -143,7 +148,7 @@ public class IO {
 	}
 
 	public double getArmValue() {
-		return joystick.getRawAxis(armAxis);
+		return isAvailable ? joystick.getRawAxis(armAxis) : 0;
 	}
 
 	public int getTurnAxis() {
@@ -151,7 +156,12 @@ public class IO {
 	}
 
 	public double getTurnValue() {
-		return joystick.getRawAxis(turnAxis);
+		return isAvailable ? joystick.getRawAxis(turnAxis) : 0;
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return isAvailable;
 	}
 
 }

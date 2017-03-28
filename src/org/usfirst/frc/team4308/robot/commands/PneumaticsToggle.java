@@ -15,10 +15,12 @@ public class PneumaticsToggle extends InstantCommand {
 	protected void execute() {
 		super.execute();
 
-		if (Robot.pneumatics.isRunning()) {
-			Robot.pneumatics.stop();
-		} else {
-			Robot.pneumatics.start();
+		if (Robot.pneumatics != null) {
+			if (Robot.pneumatics.isRunning()) {
+				Robot.pneumatics.stop();
+			} else {
+				Robot.pneumatics.start();
+			}
 		}
 	}
 }

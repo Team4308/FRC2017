@@ -25,7 +25,9 @@ public class ArcadeDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.arcadeDrive(Robot.io.getJoystick().getRawAxis(xAxisID), Robot.io.getJoystick().getRawAxis(yAxisID));
+		if (Robot.drive != null && Robot.io != null && Robot.io.isAvailable()) {
+			Robot.drive.arcadeDrive(Robot.io.getJoystick().getRawAxis(xAxisID), Robot.io.getJoystick().getRawAxis(yAxisID));
+		}
 	}
 
 }

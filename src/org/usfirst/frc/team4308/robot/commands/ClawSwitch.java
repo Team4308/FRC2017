@@ -30,7 +30,8 @@ public class ClawSwitch extends InstantCommand {
 	/**
 	 * Opens or closes the claw
 	 * 
-	 * @param open if this command should set the claw to be open, else it will be closed
+	 * @param open
+	 *            if this command should set the claw to be open, else it will be closed
 	 */
 	public ClawSwitch(boolean open) {
 		super();
@@ -42,10 +43,12 @@ public class ClawSwitch extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		if (toggle) {
-			Robot.arm.claw();
-		} else {
-			Robot.arm.claw(open);
+		if (Robot.arm != null) {
+			if (toggle) {
+				Robot.arm.claw();
+			} else {
+				Robot.arm.claw(open);
+			}
 		}
 	}
 

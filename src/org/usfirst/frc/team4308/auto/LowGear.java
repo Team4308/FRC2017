@@ -10,11 +10,12 @@ public class LowGear extends InstantCommand {
 		super();
 		requires(Robot.drive);
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
-		Robot.drive.lowGear();
+		if (Robot.drive != null)
+			Robot.drive.lowGear();
 	}
 
 }

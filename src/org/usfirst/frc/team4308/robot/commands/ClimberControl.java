@@ -14,22 +14,26 @@ import org.usfirst.frc.team4308.robot.subsystems.Climber;
 public class ClimberControl extends ToggleCommand {
 
 	private boolean forwards;
-	
+
 	public ClimberControl(boolean forwards) {
 		super(false);
 		this.forwards = forwards;
+		requires(Robot.pneumatics);
 		requires(Robot.climber);
 		toggleOff();
 	}
 
 	@Override
 	protected void toggleOn() {
-		Robot.pneumatics.stop();
-		Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
+		if (Robot.pneumatics != null)
+			Robot.pneumatics.stop();
+		if (Robot.climber != null)
+			Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
 	}
 
 	@Override
 	protected void toggleOff() {
-		Robot.climber.stopMotor();
+		if (Robot.climber != null)
+			Robot.climber.stopMotor();
 	}
 }

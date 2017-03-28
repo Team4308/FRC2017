@@ -16,15 +16,15 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class DriveLinear extends Command {
-	
+
 	PIDController moveController;
 	PIDController turnController;
-	
+
 	PIDContainer moveInput;
 	PIDContainer moveOutput;
 	PIDContainer turnInput;
 	PIDContainer turnOutput;
-	
+
 	private final double angle;
 
 	public DriveLinear() {
@@ -34,18 +34,19 @@ public class DriveLinear extends Command {
 	public DriveLinear(double timeout) {
 		super(timeout);
 		requires(Robot.drive);
-		
+		requires(Robot.gyro);
+
 		moveInput = new PIDContainer(PIDSourceType.kDisplacement);
 		moveOutput = new PIDContainer(PIDSourceType.kDisplacement);
 		turnInput = new PIDContainer(PIDSourceType.kDisplacement);
 		turnOutput = new PIDContainer(PIDSourceType.kDisplacement);
-		
+
 		moveController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, moveInput, moveOutput);
 		turnController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, turnInput, turnOutput);
-		
+
 		angle = Robot.gyro.heading();
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
@@ -53,7 +54,8 @@ public class DriveLinear extends Command {
 
 	@Override
 	protected void end() {
-		Robot.drive.resetEncoder();
+		if (Robot.drive != null)
+			Robot.drive.resetEncoder();
 		super.end();
 	}
 
@@ -61,7 +63,7 @@ public class DriveLinear extends Command {
 	protected boolean isFinished() {
 		return false;
 	}
-	
+
 	@Override
 	protected void interrupted() {
 		super.interrupted();

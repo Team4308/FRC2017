@@ -6,7 +6,6 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
@@ -18,15 +17,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, SpeedController {
 
-	private static final double MAX_OUTPUT = 0.65;
-	private static final double DROP_TIME = 1;
-	private static final double CLAW_TIME = 0.5;
+	// private static final double MAX_OUTPUT = 0.65;
+	// private static final double DROP_TIME = 1;
+	// private static final double CLAW_TIME = 0.5;
 
 	protected MotorSafetyHelper safetyHelper;
 
 	private DoubleSolenoid claw;
 	private CANTalon arm;
-	private AnalogInput ultrasonic;
+	// private AnalogInput ultrasonic;
 
 	private boolean grab;
 	private boolean down;
@@ -74,6 +73,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		claw(false);
 	}
 
+	@Override
 	public void set(double output) {
 		arm.set(output);
 	}
@@ -120,6 +120,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		return safetyHelper.isAlive();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void stopMotor() {
 		arm.stopMotor();

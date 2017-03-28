@@ -26,8 +26,7 @@ public class ValueChangeRegulator {
 
 		DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
 		DriverStation.reportWarning("CurrentDelta: " + (desiredValue - currentFilteredValue), false);
-		
-		
+
 		return currentFilteredValue;
 	}
 }

@@ -26,11 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
+ * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
  */
 public class Robot extends IterativeRobot implements Loggable, Looper {
 
@@ -43,7 +39,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static IO io;
 	public static USBVision frontVision;
 	public static AxisVision climbVision;
-	
+
 	public static OperatorDrive control;
 
 	public static Command autonomousCommand;
@@ -51,7 +47,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void robotInit() {
-		// powermonitor = new PowerMonitor();
+		powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
@@ -60,7 +56,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		io = new IO();
 		frontVision = new USBVision();
 		climbVision = new AxisVision();
-		
+
 		autoChooser = new SendableChooser<Command>();
 		autoChooser.addDefault("", new HoldAuto());
 		autoChooser.addObject("Flair Auto", new FlairAutonomous());
@@ -127,6 +123,10 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			autonomousCommand.cancel();
 	}
 
+	public static void println(String text) {
+		DriverStation.reportWarning(text, false);
+	}
+
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
@@ -148,6 +148,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void log() {
+		if (powermonitor != null)
+			powermonitor.log();
 		if (pneumatics != null)
 			pneumatics.log();
 		if (drive != null)
@@ -159,5 +161,4 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		if (arm != null)
 			arm.log();
 	}
-
 }

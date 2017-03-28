@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj.hal.AllianceStationID;
 import edu.wpi.first.wpilibj.hal.HAL;
 
 public class BlindAuto extends CommandGroup {
-	
+
 	boolean center;
 
 	public BlindAuto() {
 		super();
 		requires(Robot.drive);
 	}
-	
+
 	@Override
 	protected void initialize() {
 		super.initialize();
@@ -27,7 +27,7 @@ public class BlindAuto extends CommandGroup {
 			center = false;
 		}
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
@@ -44,13 +44,14 @@ public class BlindAuto extends CommandGroup {
 			addParallel(new WaitForPressure());
 		}
 	}
-	
+
 	@Override
 	protected void end() {
 		super.end();
-		Robot.drive.stopMotor();
+		if (Robot.drive != null)
+			Robot.drive.stopMotor();
 	}
-	
+
 	@Override
 	protected void interrupted() {
 		super.interrupted();

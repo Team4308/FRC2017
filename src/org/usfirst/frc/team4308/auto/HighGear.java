@@ -10,12 +10,12 @@ public class HighGear extends InstantCommand {
 		super();
 		requires(Robot.drive);
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
-		Robot.drive.highGear();
+		if (Robot.drive != null)
+			Robot.drive.highGear();
 	}
-
 
 }
