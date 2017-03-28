@@ -25,7 +25,7 @@ public class DriveLinear extends Command {
 	PIDContainer turnInput;
 	PIDContainer turnOutput;
 
-	private final double angle;
+	// private final double angle;
 
 	public DriveLinear() {
 		this(RobotMap.Autonomous.defaultDistance);
@@ -34,7 +34,7 @@ public class DriveLinear extends Command {
 	public DriveLinear(double timeout) {
 		super(timeout);
 		requires(Robot.drive);
-		requires(Robot.gyro);
+		// requires(Robot.gyro);
 
 		moveInput = new PIDContainer(PIDSourceType.kDisplacement);
 		moveOutput = new PIDContainer(PIDSourceType.kDisplacement);
@@ -44,7 +44,7 @@ public class DriveLinear extends Command {
 		moveController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, moveInput, moveOutput);
 		turnController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, turnInput, turnOutput);
 
-		angle = Robot.gyro.heading();
+		// angle = Robot.gyro.heading();
 	}
 
 	@Override

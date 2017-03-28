@@ -10,6 +10,7 @@ public class TalonSequence extends InstantCommand {
 	private static final int MAX_ID = 6;
 	public int currentID = -1;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void execute() {
 		super.execute();
