@@ -13,14 +13,17 @@ public class RobotMap {
 	public static final double encoderPulseDistance = 0.042;
 
 	public static final int PCM = 9;
+	public static final int PDP = 8;
 
 	public static final double kAutonomousTime = 15.0;
 	public static final double kTeleoperatedTime = 120.0;
+	
+	public static final int intakeChannel = 0;
 
 	public static class GearArm {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
-		public static final int armChannel = 7;
+		public static final int armChannel = 4;
 	}
 
 	public static class Autonomous {
@@ -87,11 +90,11 @@ public class RobotMap {
 	// TODO: talonSRX device ID reassignment surgery
 	public static class Drive {
 		public static final int leftFront = 6;
-		public static final int leftMiddle = 4;
-		public static final int leftBack = 0;
+		public static final int leftMiddle = 1;
+		public static final int leftBack = 5;
 		public static final int rightFront = 3;
-		public static final int rightMiddle = 1;
-		public static final int rightBack = 2;
+		public static final int rightMiddle = 2;
+		public static final int rightBack = 7;
 
 		public static final int ChannelA = 0;
 		public static final int ChannelB = 0;

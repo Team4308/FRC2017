@@ -6,6 +6,7 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
@@ -25,6 +26,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	private DoubleSolenoid claw;
 	private CANTalon arm;
+	private DigitalInput limitSwitchUp;
 	// private AnalogInput ultrasonic;
 
 	private boolean grab;
@@ -35,6 +37,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 		arm.setInverted(true);
+		limitSwitchUp = new DigitalInput(2);
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
@@ -62,7 +65,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		} else {
 			claw.set(Value.kForward);
 		}
-		grab = state;
+
 	}
 
 	public void openClaw() {
@@ -164,6 +167,10 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	@Override
 	public void disable() {
 		arm.disable();
+	}
+	
+	public boolean isArmUp(){
+		return limitSwitchUp.get();
 	}
 
 }
