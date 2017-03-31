@@ -80,7 +80,8 @@ public class IO implements IAvailable {
 			case STANDARD: // 2 stick PlayStation style controller
 				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
 				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl(true));
-				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl(true));
+				new JoystickButton(joystick, RobotMap.Control.Standard.x).toggleWhenPressed(new ArmControl(false));
 				new JoystickButton(joystick, RobotMap.Control.Standard.rightBumper).whenPressed(new SwitchGear());
 				// new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new ClimberControl(false));
