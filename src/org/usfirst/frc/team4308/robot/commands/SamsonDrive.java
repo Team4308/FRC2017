@@ -16,19 +16,18 @@ public class SamsonDrive extends OperatorDrive {
 
 	public SamsonDrive() {
 		super();
-		requires(Robot.drive);
 	}
 
 	@Override
 	protected void execute() {
-		if (Robot.drive != null && Robot.io != null && Robot.io.isAvailable()) {
+		if (Robot.io != null && Robot.io.isAvailable()) {
 			Joystick joy = Robot.io.getJoystick();
 			double input = joy.getRawAxis(RobotMap.Control.Standard.leftY);
-			double curvedInput = input * input * input;
+			//double curvedInput = input * input * input;
 
 			double rightX = joy.getRawAxis(RobotMap.Control.Standard.rightX);
-			double leftValue = curvedInput - rightX;
-			double rightValue = curvedInput + rightX;
+			double leftValue = input - rightX;
+			double rightValue = input + rightX;
 			Robot.drive.setLeftRightMotorOutputs(leftValue, rightValue);
 		}
 	}
