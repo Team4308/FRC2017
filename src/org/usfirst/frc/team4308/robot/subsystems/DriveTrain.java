@@ -1,9 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
@@ -25,6 +22,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailable {
+
+	private static final int CURRENT_LIMIT = 20; // Amps
 
 	private boolean isAvailable;
 
@@ -50,28 +49,27 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 		CANTalon rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
 		CANTalon rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
-		
-		leftFront.setCurrentLimit(50);
+		leftFront.setCurrentLimit(CURRENT_LIMIT);
 		leftFront.EnableCurrentLimit(true);
-		leftMiddle.setCurrentLimit(50);
+		leftMiddle.setCurrentLimit(CURRENT_LIMIT);
 		leftMiddle.EnableCurrentLimit(true);
-		leftBack.setCurrentLimit(50);
+		leftBack.setCurrentLimit(CURRENT_LIMIT);
 		leftBack.EnableCurrentLimit(true);
-		rightFront.setCurrentLimit(50);
+		rightFront.setCurrentLimit(CURRENT_LIMIT);
 		rightFront.EnableCurrentLimit(true);
-		rightMiddle.setCurrentLimit(50);
+		rightMiddle.setCurrentLimit(CURRENT_LIMIT);
 		rightMiddle.EnableCurrentLimit(true);
-		rightBack.setCurrentLimit(50);
+		rightBack.setCurrentLimit(CURRENT_LIMIT);
 		rightBack.EnableCurrentLimit(true);
-		
+
 		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
 		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
-		
+
 		driveHandler = new RobotDrive(left, right);
 		driveHandler.setSafetyEnabled(false);
 
-		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
-		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+		leftShifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
 		gear = false;
 		slow = false;
@@ -93,61 +91,18 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 
 	@Override
 	protected void initDefaultCommand() {
-		if (Robot.io != null && Robot.io.isAvailable()) {
-			switch (Robot.io.getJoystickType()) {
-			case FLIGHT:
-				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
-				DriverStation.reportError("Assigning SamsonDrivee as control scheme", false);
-				break;
-			case STANDARD:
-				Robot.control = new SamsonDrive();
-				//Robot.control = new TankDrive();
-				DriverStation.reportError("Assigning SamsonDrivee as control scheme", false);
-				break;
-			default:
-				Robot.control = null;
-				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
-				break;
-			}
-		} else {
-			Robot.control = null;
-			DriverStation.reportWarning("Control system is not present!", true);
-		}
-	}
 
-	public void arcadeDrive(double moveValue, double rotateValue) {
-		moveValue = limit(moveValue);
-		rotateValue = limit(rotateValue);
-
-		double leftMotorSpeed;
-		double rightMotorSpeed;
-		if (moveValue > 0.0D) {
-			if (rotateValue > 0.0D) {
-				leftMotorSpeed = moveValue - rotateValue;
-				rightMotorSpeed = Math.max(moveValue, rotateValue);
-			} else {
-				leftMotorSpeed = Math.max(moveValue, -rotateValue);
-				rightMotorSpeed = moveValue + rotateValue;
-			}
-		} else if (rotateValue > 0.0D) {
-			leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-			rightMotorSpeed = moveValue + rotateValue;
-		} else {
-			leftMotorSpeed = moveValue - rotateValue;
-			rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-		}
-
-		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
 		leftOutput = limit(leftOutput);
 		rightOutput = limit(rightOutput);
+		DriverStation.reportWarning("Motor Output: " + leftOutput + ", " + rightOutput, false);
 		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 		leftMotorFeedback = leftOutput;
 		rightMotorFeedback = rightOutput;
 	}
-	
+
 	private double leftMotorFeedback = 0.0;
 	private double rightMotorFeedback = 0.0;
 
@@ -155,7 +110,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
-		SmartDashboard.putString("Gear", gear ? "High Gear" : "Low Gear");
+		SmartDashboard.putString("Transmission", gear ? "High Gear" : "Low Gear");
 		SmartDashboard.putString("DB/String 1", gear ? "High Gear" : "Low Gear");
 		SmartDashboard.putNumber("Left Motor", leftMotorFeedback);
 		SmartDashboard.putNumber("Right Motor", rightMotorFeedback);

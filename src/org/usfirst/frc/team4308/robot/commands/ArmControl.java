@@ -4,6 +4,7 @@ import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -26,14 +27,12 @@ public class ArmControl extends ToggleCommand {
 	}
 
 	@Override
-	protected void execute() {
-		
-	}
-
-	@Override
 	protected boolean isFinished() {
 		SmartDashboard.putString("Arm State", "Off");
-		
+
+		DriverStation.reportWarning("direction: " + direction, false);
+		DriverStation.reportWarning("isArmUp: " + Robot.arm.isArmUp(), false);
+		DriverStation.reportWarning("isArmDown: " + Robot.arm.isArmDown(), false);
 
 		return (direction && Robot.arm.isArmUp()) || (!direction && Robot.arm.isArmDown());
 	}
@@ -45,14 +44,14 @@ public class ArmControl extends ToggleCommand {
 
 	@Override
 	protected void toggleOn() {
-		Robot.arm.set(0.75);
+		Robot.arm.set(-0.75);
 		SmartDashboard.putString("Arm State", "Moving Up");
 		direction = true;
 	}
 
 	@Override
 	protected void toggleOff() {
-		Robot.arm.set(-0.75);
+		Robot.arm.set(0.75);
 		SmartDashboard.putString("Arm State", "Moving Down");
 		direction = false;
 	}

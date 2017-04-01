@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- * Abstract class allowing for multiple types of video sources and outputs used in vision processing and use
+ * Abstract class allowing for multiple types of video sources and outputs used
+ * in vision processing and use
  * 
  * @author Michael
  *

@@ -8,8 +8,8 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -35,7 +35,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public Arm() {
 		super();
-		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
+		claw = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 		arm.setInverted(true);
 		try {
@@ -86,7 +86,8 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	@Override
 	public void set(double output) {
-		arm.set(output);
+		if (!grab)
+			arm.set(output);
 	}
 
 	protected static double limit(double num) {
@@ -179,12 +180,13 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public boolean isArmUp() {
 		try {
-			return limitSwitchUp.get();
+			return !limitSwitchUp.get();
 		} catch (Exception e) {
 			DriverStation.reportWarning("Plug in the switcch you asshat", false);
 		}
 		return false;
 	}
+
 	public boolean isArmDown() {
 		try {
 			return limitSwitchDown.get();

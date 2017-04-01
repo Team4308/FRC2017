@@ -1,10 +1,14 @@
 package org.usfirst.frc.team4308.robot.io;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ArmControl;
+import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team4308.robot.commands.ArmControlDown;
+import org.usfirst.frc.team4308.robot.commands.ArmControlUp;
 import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 import org.usfirst.frc.team4308.robot.commands.ClimberControl;
 import org.usfirst.frc.team4308.robot.commands.PneumaticsToggle;
+import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.commands.SlowMode;
 import org.usfirst.frc.team4308.robot.commands.SwitchGear;
 import org.usfirst.frc.team4308.util.IAvailable;
@@ -14,7 +18,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
- * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control of the robot.
+ * This class is the glue that binds the controls on the physical operator
+ * interface to the commands and command groups that allow control of the robot.
  */
 public class IO implements IAvailable {
 	//// CREATING BUTTONS
@@ -76,14 +81,20 @@ public class IO implements IAvailable {
 				armAxis = RobotMap.Control.Flight.throttle;
 				leftAxis = RobotMap.Control.Flight.pitch;
 				rightAxis = RobotMap.Control.Flight.roll;
+
+				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
 				break;
 			case STANDARD: // 2 stick PlayStation style controller
+				Robot.control = new SamsonDrive();
+
 				new JoystickButton(joystick, RobotMap.Control.Standard.b).whenPressed(new ClawSwitch());
 				new JoystickButton(joystick, RobotMap.Control.Standard.y).whenPressed(new ClimberControl(true));
-				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControl());
-				new JoystickButton(joystick, RobotMap.Control.Standard.x).toggleWhenPressed(new ArmControl());
+				new JoystickButton(joystick, RobotMap.Control.Standard.a).toggleWhenPressed(new ArmControlUp());
+				new JoystickButton(joystick, RobotMap.Control.Standard.x).toggleWhenPressed(new ArmControlDown());
 				new JoystickButton(joystick, RobotMap.Control.Standard.rightBumper).whenPressed(new SwitchGear());
-				// new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new RumbleControl());
+				// new JoystickButton(joystick,
+				// RobotMap.Control.Standard.back).whenPressed(new
+				// RumbleControl());
 				new JoystickButton(joystick, RobotMap.Control.Standard.back).whenPressed(new ClimberControl(false));
 				new JoystickButton(joystick, RobotMap.Control.Standard.start).whenPressed(new PneumaticsToggle());
 
@@ -93,9 +104,11 @@ public class IO implements IAvailable {
 				turnAxis = RobotMap.Control.Standard.rightX;
 				break;
 			case DIRECTINPUT:
-				DriverStation.reportError("SWITCH CONTROLLER FRON DIRECT_INPUT MODE TO XINPUT AND REBOOT ROBOT CODE", true);
-				break;
+				DriverStation.reportError("SWITCH CONTROLLER FRON DIRECT_INPUT MODE TO XINPUT AND REBOOT ROBOT CODE",
+						false);
 			default:
+				Robot.control = null;
+				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
 				DriverStation.reportError("Invalid number of axes on control joystick", true);
 				break;
 			}

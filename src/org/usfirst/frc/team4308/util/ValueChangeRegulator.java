@@ -1,7 +1,5 @@
 package org.usfirst.frc.team4308.util;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 public class ValueChangeRegulator {
 
 	private double maxChange;
@@ -13,9 +11,6 @@ public class ValueChangeRegulator {
 	}
 
 	public double filter(double desiredValue) {
-		return desiredValue;
-		
-		/*
 		double desiredDelta = desiredValue - currentFilteredValue;
 
 		// If going up faster than the maxChange
@@ -27,9 +22,10 @@ public class ValueChangeRegulator {
 			currentFilteredValue -= maxChange;
 		}
 
-		//DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
-		//DriverStation.reportWarning("CurrentDelta: " + (desiredValue - currentFilteredValue), false);
+		// DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
+		// DriverStation.reportWarning("CurrentDelta: " + (desiredValue -
+		// currentFilteredValue), false);
 
-		return currentFilteredValue;*/
+		return currentFilteredValue;
 	}
 }

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -25,7 +26,7 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 
 	public PowerMonitor() {
 		super();
-		pdp = new PowerDistributionPanel(8);
+		pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 		if (pdp != null) {
 			batteryLevel = Power.BatteryLevel.level(pdp.getVoltage());
 			isAvailable = true;
@@ -40,14 +41,16 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 	protected void initDefaultCommand() {
 	}
 
-	public PowerDistributionPanel getPDP(){
+	public PowerDistributionPanel getPDP() {
 		return pdp;
 	}
-	
+
 	/**
-	 * Polls the main power delivery systems for any non-optimal or unhealthy scenarios.
+	 * Polls the main power delivery systems for any non-optimal or unhealthy
+	 * scenarios.
 	 * 
-	 * @return Whether the system is pulling potentially harmful levels of power or not
+	 * @return Whether the system is pulling potentially harmful levels of power
+	 *         or not
 	 */
 	public boolean powerCheck() {
 		if (isAvailable) {
@@ -89,9 +92,13 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 	// TODO: temperature-reactive motor speed limiting for drive
 	// TODO: temperature-reactive warning for arm and climber
 	/**
-	 * Polls each subsystems power status, determining whether their power using components are taking too much power or producing too much heat. Data is returned in an order of; {@link Arm}, {@link Climber}, {@link DriveTrain}, and {@link Pneumatics}.
+	 * Polls each subsystems power status, determining whether their power using
+	 * components are taking too much power or producing too much heat. Data is
+	 * returned in an order of; {@link Arm}, {@link Climber},
+	 * {@link DriveTrain}, and {@link Pneumatics}.
 	 * 
-	 * @return set of booleans that represent whether any of the power-drawing systems are within an unhealthy state
+	 * @return set of booleans that represent whether any of the power-drawing
+	 *         systems are within an unhealthy state
 	 */
 	public boolean[] systemCheck() {
 		boolean armState = true;
@@ -115,9 +122,11 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 			}
 		}
 
-		// if (Robot.climber.current() > Power.secondaryAmpLimit * Power.cautionThreshold) {
+		// if (Robot.climber.current() > Power.secondaryAmpLimit *
+		// Power.cautionThreshold) {
 		// climbState = false;
-		// } else if (Robot.climber.current() > Power.secondaryAmpLimit * Power.warningThreshold) {
+		// } else if (Robot.climber.current() > Power.secondaryAmpLimit *
+		// Power.warningThreshold) {
 		//
 		// }
 		//
@@ -159,7 +168,8 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 	}
 
 	/**
-	 * Whether or not the system's power delivery system is currently in a power draw state that is unhealthy.
+	 * Whether or not the system's power delivery system is currently in a power
+	 * draw state that is unhealthy.
 	 * 
 	 * @return Unhealthy or (relatively) healthy
 	 */
@@ -174,7 +184,7 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 	@Override
 	public void log() {
 		SmartDashboard.putNumber("PDP Current", pdp.getTotalCurrent());
-		
+
 		SmartDashboard.putBoolean("Temperature Warning", temperatureWarning);
 		SmartDashboard.putBoolean("Current Warning", currentWarning);
 	}

@@ -7,7 +7,6 @@ import org.usfirst.frc.team4308.auto.HoldAuto;
 import org.usfirst.frc.team4308.auto.LeftAuto;
 import org.usfirst.frc.team4308.auto.RightAuto;
 import org.usfirst.frc.team4308.robot.commands.OperatorDrive;
-import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 import org.usfirst.frc.team4308.robot.subsystems.AxisVision;
@@ -18,7 +17,6 @@ import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.robot.subsystems.USBVision;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Looper;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -68,7 +66,7 @@ public class Robot extends IterativeRobot implements Loggable {
 		autoChooser.addDefault("", new HoldAuto());
 		autoChooser.addObject("Gear Auto", new FlairAutonomous());
 		autoChooser.addObject("Blind Auto", new BlindAuto());
-		
+
 		// TODO test this shit
 		autoChooser.addObject("Left Side Baseline", new LeftAuto());
 		autoChooser.addObject("Right Side Baseline", new RightAuto());
@@ -78,8 +76,8 @@ public class Robot extends IterativeRobot implements Loggable {
 			DriverStation.reportWarning("NOT ENOUGH BONE", true);
 		;
 
-		//loops.add(gyro);
-		//loops.add(pneumatics);
+		// loops.add(gyro);
+		// loops.add(pneumatics);
 
 		if (powermonitor != null)
 			SmartDashboard.putData(powermonitor);
@@ -99,7 +97,7 @@ public class Robot extends IterativeRobot implements Loggable {
 
 	@Override
 	public void disabledInit() {
-		//stop();
+		// stop();
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -111,7 +109,7 @@ public class Robot extends IterativeRobot implements Loggable {
 
 	@Override
 	public void autonomousInit() {
-		//start();
+		// start();
 		autonomousCommand = autoChooser.getSelected();
 
 		if (autonomousCommand != null)
@@ -122,15 +120,17 @@ public class Robot extends IterativeRobot implements Loggable {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		//loop();
+		// loop();
 	}
 
 	@Override
 	public void teleopInit() {
-		//start();
-		
-		//Robot.control = new SamsonDrive();
-		
+		// start();
+
+		if (io != null && !io.isAvailable()) {
+			io = new IO();
+		}
+
 		if (control != null) {
 			control.start();
 		} else {
@@ -148,19 +148,19 @@ public class Robot extends IterativeRobot implements Loggable {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		//loop();
+		// loop();
 	}
 
 	@Override
 	public void testInit() {
-		//start();
+		// start();
 	}
 
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 		log();
-		//loop();
+		// loop();
 	}
 
 	@Override

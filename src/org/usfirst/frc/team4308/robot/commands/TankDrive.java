@@ -6,7 +6,9 @@ import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team4308.util.ValueChangeRegulator;
 
 /**
- * Continuous command that takes the common Y axis of two analog sticks on a two joystick controller, in order to allow individual control of the left and right side motors of the {@link DriveTrain}.
+ * Continuous command that takes the common Y axis of two analog sticks on a two
+ * joystick controller, in order to allow individual control of the left and
+ * right side motors of the {@link DriveTrain}.
  * 
  * @author Michael Brown
  *

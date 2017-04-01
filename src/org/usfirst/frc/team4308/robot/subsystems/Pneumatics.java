@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.WaitForPressure;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Loop;
@@ -22,7 +21,7 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 
 	public Pneumatics() {
 		super();
-		compressor = new Compressor(RobotMap.PCM);
+		compressor = new Compressor(RobotMap.PCM_ID);
 		isAvailable = compressor != null;
 		isRunning = isAvailable;
 		if (isAvailable)
@@ -34,7 +33,8 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 	}
 
 	/**
-	 * Start the compressor going. The compressor automatically starts and stops as it goes above and below maximum pressure.
+	 * Start the compressor going. The compressor automatically starts and stops
+	 * as it goes above and below maximum pressure.
 	 */
 	@Override
 	public void start() {

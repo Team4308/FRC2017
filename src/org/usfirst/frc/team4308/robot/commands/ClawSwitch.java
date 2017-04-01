@@ -3,12 +3,12 @@ package org.usfirst.frc.team4308.robot.commands;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Instantly firing command that indiscriminately switches the state of the {@link Solenoid} controlling the claw on the {@link Arm} subsystem.
+ * Instantly firing command that indiscriminately switches the state of the
+ * {@link Solenoid} controlling the claw on the {@link Arm} subsystem.
  * 
  * @author Michael Brown
  *
@@ -32,7 +32,8 @@ public class ClawSwitch extends InstantCommand {
 	 * Opens or closes the claw
 	 * 
 	 * @param open
-	 *            if this command should set the claw to be open, else it will be closed
+	 *            if this command should set the claw to be open, else it will
+	 *            be closed
 	 */
 	public ClawSwitch(boolean open) {
 		super();
@@ -44,11 +45,11 @@ public class ClawSwitch extends InstantCommand {
 
 	@Override
 	protected void execute() {
-			if (toggle) {
-				Robot.arm.claw();
-			} else {
-				Robot.arm.claw(open);
-			}
+		if (toggle) {
+			Robot.arm.claw();
+		} else {
+			Robot.arm.claw(open);
+		}
 	}
 
 }

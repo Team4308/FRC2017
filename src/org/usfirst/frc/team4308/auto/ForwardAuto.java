@@ -1,17 +1,13 @@
 package org.usfirst.frc.team4308.auto;
 
-import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
-
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class LeftAuto extends CommandGroup {
+public class ForwardAuto extends CommandGroup {
 
-	public LeftAuto() {
+	public ForwardAuto() {
 		super();
 
-		// Closes the claw (just in case the double solenoid is left open)
-		addSequential(new ClawSwitch(false));
-
+		// Closes the claw (just in case t
 		double left = 0.37;
 		double right = 0.22;
 

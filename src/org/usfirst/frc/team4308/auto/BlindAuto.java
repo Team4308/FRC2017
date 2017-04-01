@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4308.auto;
 
 import org.usfirst.frc.team4308.robot.Robot;
-import org.usfirst.frc.team4308.robot.commands.WaitForPressure;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;

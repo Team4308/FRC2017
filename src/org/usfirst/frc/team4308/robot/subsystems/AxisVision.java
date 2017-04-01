@@ -62,7 +62,8 @@ class USBThread implements Runnable {
 		camera.setResolution(RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 		cvsink = CameraServer.getInstance().getVideo();
-		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.usbName, RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
+		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.usbName, RobotMap.Camera.videoWidth,
+				RobotMap.Camera.videoHeight);
 
 		Mat source = new Mat();
 		Mat output = new Mat();
@@ -73,7 +74,8 @@ class USBThread implements Runnable {
 				continue;
 			}
 			Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-			Imgproc.getRotationMatrix2D(new Point(RobotMap.Camera.videoWidth / 2, RobotMap.Camera.videoHeight / 2), 90, 1);
+			Imgproc.getRotationMatrix2D(new Point(RobotMap.Camera.videoWidth / 2, RobotMap.Camera.videoHeight / 2), 90,
+					1);
 			outputStream.putFrame(source);
 		}
 	}

@@ -22,7 +22,7 @@ public class EasyAutonomous extends Command {
 		super.execute();
 
 		if (Robot.drive != null)
-			Robot.drive.setLeftRightMotorOutputs(-leftMotor, -rightMotor);
+			Robot.drive.setLeftRightMotorOutputs(leftMotor, -rightMotor);
 	}
 
 	@Override

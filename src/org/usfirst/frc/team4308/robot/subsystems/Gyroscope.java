@@ -107,7 +107,8 @@ public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
 			AbsoluteDashboard.Gyroscope().putNumber("FusedHeading", gyro.getFusedHeading());
 
 			// These functions are compatible w/the WPI Gyro Class, providing a
-			// simple path for upgrading from the Kit-of-Parts gyro to the navx-MXP
+			// simple path for upgrading from the Kit-of-Parts gyro to the
+			// navx-MXP
 			AbsoluteDashboard.Gyroscope().putNumber("TotalYaw", gyro.getAngle());
 			AbsoluteDashboard.Gyroscope().putNumber("YawRateDPS", gyro.getRate());
 
@@ -118,19 +119,24 @@ public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
 			AbsoluteDashboard.Gyroscope().putBoolean("IsMoving", gyro.isMoving());
 			AbsoluteDashboard.Gyroscope().putBoolean("IsRotating", gyro.isRotating());
 
-			// Display estimates of velocity/displacement. Note that these values
-			// are not expected to be accurate enough for estimating robot position
+			// Display estimates of velocity/displacement. Note that these
+			// values
+			// are not expected to be accurate enough for estimating robot
+			// position
 			// on a FIRST FRC Robotics Field, due to accelerometer noise and the
-			// compounding of these errors due to single (velocity) integration and
+			// compounding of these errors due to single (velocity) integration
+			// and
 			// especially double (displacement) integration.
 			AbsoluteDashboard.Gyroscope().putNumber("Velocity_X", gyro.getVelocityX());
 			AbsoluteDashboard.Gyroscope().putNumber("Velocity_Y", gyro.getVelocityY());
 			AbsoluteDashboard.Gyroscope().putNumber("Displacement_X", gyro.getDisplacementX());
 			AbsoluteDashboard.Gyroscope().putNumber("Displacement_Y", gyro.getDisplacementY());
 
-			// Display Raw Gyro/Accelerometer/Magnetometer Values NOTE: These values
+			// Display Raw Gyro/Accelerometer/Magnetometer Values NOTE: These
+			// values
 			// are not normally necessary, but are made available for advanced
-			// users. Before using this data, please consider whether the processed
+			// users. Before using this data, please consider whether the
+			// processed
 			// data (see above) will suit your needs.
 			AbsoluteDashboard.Gyroscope().putNumber("RawGyro_X", gyro.getRawGyroX());
 			AbsoluteDashboard.Gyroscope().putNumber("RawGyro_Y", gyro.getRawGyroY());
@@ -154,9 +160,12 @@ public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
 			// Sensor Board Information
 			AbsoluteDashboard.Gyroscope().putString("FirmwareVersion", gyro.getFirmwareVersion());
 
-			// Quaternion Data Quaternions are fascinating, and are the most compact
-			// representation of orientation data. All of the Yaw, Pitch and Roll
-			// Values can be derived from the Quaternions. If interested in motion
+			// Quaternion Data Quaternions are fascinating, and are the most
+			// compact
+			// representation of orientation data. All of the Yaw, Pitch and
+			// Roll
+			// Values can be derived from the Quaternions. If interested in
+			// motion
 			// processing, knowledge of Quaternions is highly recommended.
 
 			AbsoluteDashboard.Gyroscope().putNumber("QuaternionW", gyro.getQuaternionW());
