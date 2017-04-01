@@ -10,7 +10,7 @@ public class HoldAuto extends CommandGroup {
 
 	public HoldAuto() {
 		super();
-		addParallel(new WaitForPressure());
+		// TODO? addParallel(new WaitForPressure());
 		addParallel(new WaitCommand(RobotMap.kAutonomousTime));
 	}
 

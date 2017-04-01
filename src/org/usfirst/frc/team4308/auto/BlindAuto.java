@@ -33,7 +33,7 @@ public class BlindAuto extends CommandGroup {
 		super.execute();
 		if (center) {
 			addSequential(new CloseClaw());
-			addSequential(new WaitForPressure());
+			// TODO?addSequential(new WaitForPressure());
 			addSequential(new EasyAutonomous(2, 1, 1));
 			addSequential(new WaitCommand(0.3));
 			addSequential(new OpenClaw());
@@ -41,7 +41,7 @@ public class BlindAuto extends CommandGroup {
 			addSequential(new CloseClaw());
 		} else {
 			addSequential(new EasyAutonomous(4, 1, 1));
-			addParallel(new WaitForPressure());
+			// TODO? addParallel(new WaitForPressure());
 		}
 	}
 

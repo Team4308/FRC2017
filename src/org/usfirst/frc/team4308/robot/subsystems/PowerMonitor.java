@@ -40,6 +40,10 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 	protected void initDefaultCommand() {
 	}
 
+	public PowerDistributionPanel getPDP(){
+		return pdp;
+	}
+	
 	/**
 	 * Polls the main power delivery systems for any non-optimal or unhealthy scenarios.
 	 * 
@@ -169,6 +173,8 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 
 	@Override
 	public void log() {
+		SmartDashboard.putNumber("PDP Current", pdp.getTotalCurrent());
+		
 		SmartDashboard.putBoolean("Temperature Warning", temperatureWarning);
 		SmartDashboard.putBoolean("Current Warning", currentWarning);
 	}

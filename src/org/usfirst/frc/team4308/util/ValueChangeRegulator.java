@@ -13,6 +13,9 @@ public class ValueChangeRegulator {
 	}
 
 	public double filter(double desiredValue) {
+		return desiredValue;
+		
+		/*
 		double desiredDelta = desiredValue - currentFilteredValue;
 
 		// If going up faster than the maxChange
@@ -24,9 +27,9 @@ public class ValueChangeRegulator {
 			currentFilteredValue -= maxChange;
 		}
 
-		DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
-		DriverStation.reportWarning("CurrentDelta: " + (desiredValue - currentFilteredValue), false);
+		//DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
+		//DriverStation.reportWarning("CurrentDelta: " + (desiredValue - currentFilteredValue), false);
 
-		return currentFilteredValue;
+		return currentFilteredValue;*/
 	}
 }

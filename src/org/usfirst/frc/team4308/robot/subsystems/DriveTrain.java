@@ -50,10 +50,25 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 		CANTalon rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
 		CANTalon rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
+		
+		leftFront.setCurrentLimit(50);
+		leftFront.EnableCurrentLimit(true);
+		leftMiddle.setCurrentLimit(50);
+		leftMiddle.EnableCurrentLimit(true);
+		leftBack.setCurrentLimit(50);
+		leftBack.EnableCurrentLimit(true);
+		rightFront.setCurrentLimit(50);
+		rightFront.EnableCurrentLimit(true);
+		rightMiddle.setCurrentLimit(50);
+		rightMiddle.EnableCurrentLimit(true);
+		rightBack.setCurrentLimit(50);
+		rightBack.EnableCurrentLimit(true);
+		
 		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
 		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
-
+		
 		driveHandler = new RobotDrive(left, right);
+		driveHandler.setSafetyEnabled(false);
 
 		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
 		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
@@ -82,10 +97,12 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 			switch (Robot.io.getJoystickType()) {
 			case FLIGHT:
 				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
+				DriverStation.reportError("Assigning SamsonDrivee as control scheme", false);
 				break;
 			case STANDARD:
 				Robot.control = new SamsonDrive();
 				//Robot.control = new TankDrive();
+				DriverStation.reportError("Assigning SamsonDrivee as control scheme", false);
 				break;
 			default:
 				Robot.control = null;
@@ -123,22 +140,25 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
 	}
 
-	public void tankDrive(double leftOutput, double rightOutput) {
+	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
 		leftOutput = limit(leftOutput);
 		rightOutput = limit(rightOutput);
-		setLeftRightMotorOutputs(leftOutput, rightOutput);
-	}
-
-	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
 		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
+		leftMotorFeedback = leftOutput;
+		rightMotorFeedback = rightOutput;
 	}
+	
+	private double leftMotorFeedback = 0.0;
+	private double rightMotorFeedback = 0.0;
 
 	@Override
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
-		SmartDashboard.putBoolean("Gear", gear);
+		SmartDashboard.putString("Gear", gear ? "High Gear" : "Low Gear");
 		SmartDashboard.putString("DB/String 1", gear ? "High Gear" : "Low Gear");
+		SmartDashboard.putNumber("Left Motor", leftMotorFeedback);
+		SmartDashboard.putNumber("Right Motor", rightMotorFeedback);
 	}
 
 	protected static double limit(double num) {

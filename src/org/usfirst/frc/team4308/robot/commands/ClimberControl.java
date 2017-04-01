@@ -28,7 +28,7 @@ public class ClimberControl extends ToggleCommand {
 		if (Robot.pneumatics != null)
 			Robot.pneumatics.stop();
 		if (Robot.climber != null)
-			Robot.climber.set(forwards ? RobotMap.Climb.maxForward : RobotMap.Climb.maxBackward);
+			Robot.climber.set(forwards ? RobotMap.Climb.maxBackward : RobotMap.Climb.maxForward);
 	}
 
 	@Override

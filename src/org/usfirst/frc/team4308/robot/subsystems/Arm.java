@@ -8,6 +8,7 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
@@ -26,7 +27,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	private DoubleSolenoid claw;
 	private CANTalon arm;
-	private DigitalInput limitSwitchUp;
+	private DigitalInput limitSwitchUp, limitSwitchDown;
 	// private AnalogInput ultrasonic;
 
 	private boolean grab;
@@ -37,7 +38,13 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 		arm.setInverted(true);
-		limitSwitchUp = new DigitalInput(2);
+		try {
+			limitSwitchUp = new DigitalInput(1);
+			limitSwitchDown = new DigitalInput(0);
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plugg in the switcch you asshat", true);
+		}
+
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
@@ -61,7 +68,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	public void claw(boolean state) {
 		grab = state;
-		
+
 		if (state) {
 			claw.set(Value.kReverse);
 		} else {
@@ -169,9 +176,21 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	public void disable() {
 		arm.disable();
 	}
-	
-	public boolean isArmUp(){
-		return limitSwitchUp.get();
-	}
 
+	public boolean isArmUp() {
+		try {
+			return limitSwitchUp.get();
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plug in the switcch you asshat", false);
+		}
+		return false;
+	}
+	public boolean isArmDown() {
+		try {
+			return limitSwitchDown.get();
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plug in the switcch you asshat", false);
+		}
+		return false;
+	}
 }
