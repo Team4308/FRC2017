@@ -4,6 +4,8 @@ package org.usfirst.frc.team4308.robot;
 import org.usfirst.frc.team4308.auto.BlindAuto;
 import org.usfirst.frc.team4308.auto.FlairAutonomous;
 import org.usfirst.frc.team4308.auto.HoldAuto;
+import org.usfirst.frc.team4308.auto.LeftAuto;
+import org.usfirst.frc.team4308.auto.RightAuto;
 import org.usfirst.frc.team4308.robot.commands.OperatorDrive;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
@@ -26,7 +28,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the IterativeRobot documentation. If you change the name of this class or the package after creating this project, you must also update the manifest file in the resource directory.
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
  */
 public class Robot extends IterativeRobot implements Loggable, Looper {
 
@@ -61,6 +67,10 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		autoChooser.addDefault("", new HoldAuto());
 		autoChooser.addObject("Flair Auto", new FlairAutonomous());
 		autoChooser.addObject("Blind Auto", new BlindAuto());
+		
+		// TODO test this shit
+		autoChooser.addObject("Left Side Baseline", new LeftAuto());
+		autoChooser.addObject("Right Side Baseline", new RightAuto());
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
@@ -82,6 +92,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			SmartDashboard.putData(gyro);
 		if (arm != null)
 			SmartDashboard.putData(arm);
+		if (autoChooser != null)
+			SmartDashboard.putData("Autonomous Selector", autoChooser);
 	}
 
 	@Override
@@ -99,7 +111,8 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	@Override
 	public void autonomousInit() {
 		start();
-		autonomousCommand = autoChooser.getSelected();
+		// autonomousCommand = autoChooser.getSelected();
+
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}

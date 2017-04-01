@@ -3,7 +3,7 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.TankDrive;
+import org.usfirst.frc.team4308.robot.commands.SamsonDrive;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
@@ -84,7 +84,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
 				break;
 			case STANDARD:
-				Robot.control = new TankDrive();
+				Robot.control = new SamsonDrive();
+				//Robot.control = new TankDrive();
 				break;
 			default:
 				Robot.control = null;

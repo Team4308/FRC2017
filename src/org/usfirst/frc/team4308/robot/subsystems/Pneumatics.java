@@ -31,7 +31,6 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new WaitForPressure());
 	}
 
 	/**

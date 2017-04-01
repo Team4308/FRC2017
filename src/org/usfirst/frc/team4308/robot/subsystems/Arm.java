@@ -60,12 +60,13 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	}
 
 	public void claw(boolean state) {
-		if (!state) {
+		grab = state;
+		
+		if (state) {
 			claw.set(Value.kReverse);
 		} else {
 			claw.set(Value.kForward);
 		}
-
 	}
 
 	public void openClaw() {

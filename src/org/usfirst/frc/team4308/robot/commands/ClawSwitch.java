@@ -3,6 +3,7 @@ package org.usfirst.frc.team4308.robot.commands;
 import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -43,13 +44,11 @@ public class ClawSwitch extends InstantCommand {
 
 	@Override
 	protected void execute() {
-		if (Robot.arm != null) {
 			if (toggle) {
 				Robot.arm.claw();
 			} else {
 				Robot.arm.claw(open);
 			}
-		}
 	}
 
 }
