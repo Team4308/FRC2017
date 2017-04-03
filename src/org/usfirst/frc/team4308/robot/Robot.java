@@ -2,6 +2,7 @@
 package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.auto.BlindAuto;
+import org.usfirst.frc.team4308.auto.CenterAuto;
 import org.usfirst.frc.team4308.auto.FlairAutonomous;
 import org.usfirst.frc.team4308.auto.HoldAuto;
 import org.usfirst.frc.team4308.auto.LeftAuto;
@@ -64,12 +65,15 @@ public class Robot extends IterativeRobot implements Loggable {
 
 		autoChooser = new SendableChooser<Command>();
 		autoChooser.addDefault("", new HoldAuto());
-		autoChooser.addObject("Gear Auto", new FlairAutonomous());
+		//TODO Test this shit
+		autoChooser.addObject("Test Auto", new FlairAutonomous());
+		autoChooser.addObject("Gear Auto", new CenterAuto());
 		autoChooser.addObject("Blind Auto", new BlindAuto());
 
-		// TODO test this shit
-		autoChooser.addObject("Left Side Baseline", new LeftAuto());
-		autoChooser.addObject("Right Side Baseline", new RightAuto());
+		// TODO test this shit as well
+		//autoChooser.addObject("Left Side Baseline", new LeftAuto());
+		//autoChooser.addObject("Right Side Baseline", new RightAuto());
+		//autoChooser.addObject("Move Forward", new ForwardAuto());
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
@@ -120,13 +124,11 @@ public class Robot extends IterativeRobot implements Loggable {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		// loop();
 	}
 
 	@Override
 	public void teleopInit() {
-		// start();
-
+		// If the IO failed to instanciate then retry at runtime
 		if (io != null && !io.isAvailable()) {
 			io = new IO();
 		}
@@ -148,19 +150,16 @@ public class Robot extends IterativeRobot implements Loggable {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		// loop();
 	}
 
 	@Override
 	public void testInit() {
-		// start();
 	}
 
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 		log();
-		// loop();
 	}
 
 	@Override

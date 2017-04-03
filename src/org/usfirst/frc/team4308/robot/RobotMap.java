@@ -28,7 +28,7 @@ public class RobotMap {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
 		public static final int armChannel = 4;
-		public static final double speedUp = -0.35;
+		public static final double speedUp = -0.15;
 		public static final double speedDown = 0.75;
 	}
 
@@ -116,7 +116,7 @@ public class RobotMap {
 		public static final int climbB = 1;
 
 		public static final double maxForward = 0.65;
-		public static final double maxBackward = -0.65;
+		public static final double maxBackward = -0.4;
 		public static final double restingSpeed = 0.0;
 	}
 
@@ -138,10 +138,11 @@ public class RobotMap {
 			}
 
 			public static BatteryLevel level(double level) {
-				for (int i = values().length; i >= 0; i--) {
+				for (int i = values().length - 1; i >= 0; i--) {
 					BatteryLevel l = values()[i];
 
-					// if the provided value is within the range of the level enum
+					// if the provided value is within the range of the level
+					// enum
 					if (level >= l.center - l.range) {
 						return l;
 					}

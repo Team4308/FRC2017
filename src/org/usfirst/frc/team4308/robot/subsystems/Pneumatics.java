@@ -1,9 +1,9 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Loop;
 import org.usfirst.frc.team4308.util.Powered;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IAvailable {
+public class Pneumatics extends Subsystem implements Loggable, Powered, IAvailable {
 
 	private static final int supplyVoltage = 12;
 	private static boolean isRunning;
@@ -36,7 +36,6 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 	 * Start the compressor going. The compressor automatically starts and stops
 	 * as it goes above and below maximum pressure.
 	 */
-	@Override
 	public void start() {
 		if (isAvailable) {
 			isRunning = true;
@@ -45,10 +44,17 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 		}
 	}
 
+	public void toggle() {
+		if (isRunning()) {
+			stop();
+		} else {
+			start();
+		}
+	}
+
 	/**
 	 * Stops the compressor.
 	 */
-	@Override
 	public void stop() {
 		if (isAvailable) {
 			isRunning = false;
@@ -89,15 +95,6 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, Loop, IA
 	@Override
 	public double current() {
 		return isAvailable ? compressor.getCompressorCurrent() : 0;
-	}
-
-	@Override
-	public void loop() {
-		if (SmartDashboard.getBoolean("DB/Button 0", true)) {
-			start();
-		} else {
-			stop();
-		}
 	}
 
 	@Override

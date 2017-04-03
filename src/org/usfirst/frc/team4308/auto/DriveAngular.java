@@ -19,51 +19,65 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveAngular extends Command {
 
-	PIDController moveController;
 	PIDController turnController;
-
-	PIDContainer moveInput;
-	PIDContainer moveOutput;
 	PIDContainer turnInput;
 	PIDContainer turnOutput;
-
-	private final double angle;
-	public static double desiredAngle;
 
 	public DriveAngular(double timeout, double desiredAngle) {
 		super(timeout);
 		requires(Robot.drive);
-		// requires(Robot.gyro);
+		requires(Robot.gyro);
 
-		moveInput = new PIDContainer(PIDSourceType.kDisplacement);
-		moveOutput = new PIDContainer(PIDSourceType.kDisplacement);
 		turnInput = new PIDContainer(PIDSourceType.kDisplacement);
 		turnOutput = new PIDContainer(PIDSourceType.kDisplacement);
 
-		moveController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential,
-				moveInput, moveOutput);
 		turnController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential,
 				turnInput, turnOutput);
+		turnController.setAbsoluteTolerance(RobotMap.Autonomous.angularToleranceDegrees);
+		turnController.setOutputRange(-0.27, 0.27);
+		turnController.setContinuous(true);
 
-		angle = Robot.gyro.heading();
 		turnController.setSetpoint(desiredAngle);
 	}
 
+	private double startAngle;
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		turnController.reset();
+		Robot.gyro.reset();
+		startAngle = Robot.gyro.angle();
+		turnController.enable();
+		
+		Robot.println("Initializing with start value of : " + startAngle);
+	}
+	
 	@Override
 	protected void execute() {
 		super.execute();
+		
+		double currentAngle = Robot.gyro.angle() - startAngle;
+		turnInput.pidWrite(currentAngle);
+		double drive = turnOutput.pidGet();
+		Robot.drive.driveHandler.arcadeDrive(0, drive, false);
+		
+		Robot.println("Agnel: " + Robot.gyro.angle());
+		Robot.println("GyroValue: " + currentAngle);
+		Robot.println("rotating: " + drive);
+		
 	}
 
 	@Override
 	protected void end() {
-		if (Robot.drive != null)
-			Robot.drive.resetEncoder();
 		super.end();
+		Robot.drive.stopMotor();
+		turnController.disable();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return turnController.onTarget();
 	}
 
 	@Override

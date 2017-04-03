@@ -29,6 +29,7 @@ public class ArmControlDown extends Command {
 	@Override
 	protected void execute() {
 		super.execute();
+		Robot.println("Moving arm down");
 		Robot.arm.set(RobotMap.GearArm.speedDown);
 	}
 

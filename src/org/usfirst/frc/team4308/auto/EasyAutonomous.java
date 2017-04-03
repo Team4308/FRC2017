@@ -21,20 +21,17 @@ public class EasyAutonomous extends Command {
 	protected void execute() {
 		super.execute();
 
-		if (Robot.drive != null)
-			Robot.drive.setLeftRightMotorOutputs(leftMotor, -rightMotor);
+		Robot.drive.setLeftRightMotorOutputs(-leftMotor, -rightMotor);
 	}
 
 	@Override
 	protected void end() {
 		super.end();
-		if (Robot.drive != null)
-			Robot.drive.stopMotor();
+		Robot.drive.stopMotor();
 	}
 
 	@Override
 	protected boolean isFinished() {
 		return isTimedOut();
 	}
-
 }

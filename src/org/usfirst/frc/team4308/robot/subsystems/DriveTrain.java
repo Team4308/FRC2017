@@ -97,7 +97,7 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
 		leftOutput = limit(leftOutput);
 		rightOutput = limit(rightOutput);
-		DriverStation.reportWarning("Motor Output: " + leftOutput + ", " + rightOutput, false);
+		//DriverStation.reportWarning("Motor Output: " + leftOutput + ", " + rightOutput, false);
 		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 		leftMotorFeedback = leftOutput;
 		rightMotorFeedback = rightOutput;

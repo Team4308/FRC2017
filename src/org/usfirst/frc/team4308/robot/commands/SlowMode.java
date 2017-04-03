@@ -23,8 +23,7 @@ public class SlowMode extends InstantCommand {
 	@Override
 	protected void execute() {
 		super.execute();
-		if (Robot.drive != null)
-			Robot.drive.slow();
+		Robot.drive.slow();
 	}
 
 }

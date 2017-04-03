@@ -23,8 +23,8 @@ public class SamsonDrive extends OperatorDrive {
 	public SamsonDrive() {
 		super();
 
-		leftRegulator = new ValueChangeRegulator(0.05);
-		rightRegulator = new ValueChangeRegulator(0.05);
+		// leftRegulator = new ValueChangeRegulator(0.05);
+		// rightRegulator = new ValueChangeRegulator(0.05);
 	}
 
 	@Override

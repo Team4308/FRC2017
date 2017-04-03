@@ -37,8 +37,7 @@ public class TankDrive extends OperatorDrive {
 				right = rightRegulator.filter(right);
 			}
 
-			if (Robot.drive != null && Robot.drive.driveHandler != null)
-				Robot.drive.driveHandler.tankDrive(left, right);
+			Robot.drive.driveHandler.tankDrive(left, right);
 		}
 	}
 

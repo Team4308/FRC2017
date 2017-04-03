@@ -5,7 +5,6 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Loop;
 
 import com.ctre.CANTalon;
 
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailable {
+public class PowerMonitor extends Subsystem implements Loggable, IAvailable {
 
 	private final PowerDistributionPanel pdp;
 
@@ -183,6 +182,9 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 
 	@Override
 	public void log() {
+		powerCheck();
+		systemCheck();
+
 		SmartDashboard.putNumber("PDP Current", pdp.getTotalCurrent());
 
 		SmartDashboard.putBoolean("Temperature Warning", temperatureWarning);
@@ -195,20 +197,6 @@ public class PowerMonitor extends Subsystem implements Loggable, Loop, IAvailabl
 
 	public double currentRatio(CANTalon talon) {
 		return isAvailable ? talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID()) : 0;
-	}
-
-	@Override
-	public void loop() {
-		powerCheck();
-		systemCheck();
-	}
-
-	@Override
-	public void start() {
-	}
-
-	@Override
-	public void stop() {
 	}
 
 	@Override

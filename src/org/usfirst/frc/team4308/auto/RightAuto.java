@@ -9,40 +9,19 @@ public class RightAuto extends CommandGroup {
 	public RightAuto() {
 		super();
 
-		// Closes the claw (just in case the double solenoid is left open)
-		addSequential(new ClawSwitch(false));
+		// Rotate to face right of airship
+		addSequential(new DriveAngular(15, 45));
 
-		double left = 0.37;
-		double right = 0.22;
+		// Travel to Avoid Airship
+		addParallel(new DriveAngular(15, 45));
+		addParallel(new DriveLinear(15, 1));
 
-		// Move forward slowly for 4 seconds
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Rotate to Face Right
-		addSequential(new EasyAutonomous(2, left * 4, 0));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Move forward slowly for 4 seconds
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Rotate back straight for 2 seconds
-		addSequential(new EasyAutonomous(2, 0, right * 4));
+		// Rotate to Face Forward
+		addSequential(new DriveAngular(15, 0));
 
 		// Pass Baseline
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// addSequential(new DriveAngular());
-		// addSequential(new DriveLinear());
-		// addSequential(new DriveAngular(-0.0));
-		// addSequential(new DriveLinear(-10));
+		addParallel(new DriveAngular(15, 0));
+		addParallel(new DriveLinear(15, 1));
 	}
 
 }

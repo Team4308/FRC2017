@@ -14,14 +14,12 @@ public class WaitForPressure extends Command {
 	@Override
 	protected void initialize() {
 		super.initialize();
-		if (Robot.pneumatics != null && !Robot.pneumatics.isRunning()) {
-			Robot.pneumatics.start();
-		}
+		Robot.pneumatics.start();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Robot.pneumatics != null ? Robot.pneumatics.isPressurized() : false;
+		return Robot.pneumatics.isPressurized();
 	}
 
 }

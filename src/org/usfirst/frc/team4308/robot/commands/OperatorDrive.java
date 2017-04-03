@@ -22,5 +22,4 @@ public class OperatorDrive extends Command {
 		if (Robot.drive != null)
 			Robot.drive.stopMotor();
 	}
-
 }

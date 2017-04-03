@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4308.auto;
 
+import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.commands.ClawSwitch;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -9,40 +10,19 @@ public class LeftAuto extends CommandGroup {
 	public LeftAuto() {
 		super();
 
-		// Closes the claw (just in case the double solenoid is left open)
-		addSequential(new ClawSwitch(false));
-
-		double left = 0.37;
-		double right = 0.22;
-
-		// Move forward slowly for 4 seconds
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Rotate to Face Left
-		addSequential(new EasyAutonomous(2, 0, right * 4));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Move forward slowly for 4 seconds
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
-
-		// Rotate back straight for 2 seconds
-		addSequential(new EasyAutonomous(2, left * 4, 0));
-
-		// Pass Bseline
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// addSequential(new DriveAngular());
-		// addSequential(new DriveLinear());
-		// addSequential(new DriveAngular(-0.0));
-		// addSequential(new DriveLinear(-10));
+		//Rotate to face left of airship
+		addSequential(new DriveAngular(15, -45));
+		
+		//Travel to Avoid Airship
+		addParallel(new DriveAngular(15,-45));
+		addParallel(new DriveLinear(15, 1));
+		
+		//Rotate to Face Forward
+		addSequential(new DriveAngular(15, 0));
+		
+		//Pass Baseline
+		addParallel(new DriveAngular(15,0));
+		addParallel(new DriveLinear(15, 1));
 	}
 
 }

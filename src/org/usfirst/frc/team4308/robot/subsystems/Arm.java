@@ -60,6 +60,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	@Override
 	protected void initDefaultCommand() {
+		closeClaw();
 	}
 
 	public void claw() {
@@ -70,9 +71,9 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		grab = state;
 
 		if (state) {
-			claw.set(Value.kReverse);
-		} else {
 			claw.set(Value.kForward);
+		} else {
+			claw.set(Value.kReverse);
 		}
 	}
 

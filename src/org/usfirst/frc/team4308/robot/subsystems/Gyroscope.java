@@ -3,7 +3,6 @@ package org.usfirst.frc.team4308.robot.subsystems;
 import org.usfirst.frc.team4308.AbsoluteDashboard;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Loop;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -12,8 +11,11 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
+public class Gyroscope extends Subsystem implements Loggable, IAvailable {
 
+	// TODO: make gyro wait when calibrating gyro.isCalibrating
+	// TODO: if we ever use an ultrasonic, we can reconfig its speed of sound
+	// based on barometric from the gyro.
 	private boolean isAvailable;
 	private AHRS gyro;
 
@@ -36,6 +38,10 @@ public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
 
 	public double yaw() {
 		return gyro.getYaw();
+	}
+	
+	public double angle(){
+		return gyro.getAngle();
 	}
 
 	public double xDistance() {
@@ -65,27 +71,22 @@ public class Gyroscope extends Subsystem implements Loggable, Loop, IAvailable {
 	}
 
 	public void reset() {
-		if (isAvailable)
+		if (isAvailable) {
 			gyro.resetDisplacement();
+			gyro.reset();
+		}
 	}
 
 	public boolean disturbance() {
 		return isAvailable && gyro.isMagneticDisturbance() && gyro.isAltitudeValid();
 	}
 
-	@Override
 	public void start() {
 		initialize();
 	}
 
-	@Override
 	public void stop() {
 		reset();
-	}
-
-	@Override
-	public void loop() {
-
 	}
 
 	@Override

@@ -2,13 +2,13 @@ package org.usfirst.frc.team4308.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class FlairAutonomous extends CommandGroup {
+public class TestAutonomous extends CommandGroup {
 
-	public FlairAutonomous() {
+	public TestAutonomous() {
 		super();
 
 		// Rotate 90 degrees
-	//	addSequential(new DriveAngular(5, 45));
+		addSequential(new DriveAngular(5, 90));
 //		
 //		// Wait
 //		addSequential(new EasyAutonomous(4, 0, 0));
@@ -16,13 +16,13 @@ public class FlairAutonomous extends CommandGroup {
 //		// Move forward 2m
 //		addSequential(new DriveLinear(5, 2));
 		
-		double left = 0.37;
-		double right = 0.22;
-		
-		addSequential(new EasyAutonomous(4, left, right));
-
-		// Wait 1 second
-		addSequential(new EasyAutonomous(1, 0, 0));
+//		double left = 0.37;
+//		double right = 0.22;
+//		
+//		addSequential(new EasyAutonomous(4, left, right));
+//
+//		// Wait 1 second
+//		addSequential(new EasyAutonomous(1, 0, 0));
 		
 		/*
 		// Closes the claw (just in case the double solenoid is left open)
