@@ -43,6 +43,12 @@ public class USBVision extends Vison {
 
 }
 
+/**
+ * Vision Thread for handling video input from a network-attached Axis Camera.
+ * 
+ * @author Michael Brown
+ *
+ */
 class AxisThread implements Runnable {
 
 	CvSource outputStream;

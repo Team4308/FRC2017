@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
@@ -11,6 +10,13 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * A subsystem for controlling a PCM, and its compressor and pressure switch
+ * valve. Essential for properly operating pneumatics.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class Pneumatics extends Subsystem implements Loggable, Powered, IAvailable {
 
 	private static final int supplyVoltage = 12;
@@ -44,6 +50,9 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, IAvailab
 		}
 	}
 
+	/**
+	 * Toggles the running state of the compressor.
+	 */
 	public void toggle() {
 		if (isRunning()) {
 			stop();
@@ -63,10 +72,16 @@ public class Pneumatics extends Subsystem implements Loggable, Powered, IAvailab
 		}
 	}
 
+	/**
+	 * @return Whether the compressor is running or not.
+	 */
 	public boolean isRunning() {
 		return isRunning;
 	}
 
+	/**
+	 * @return If the compressor is in its running state, but is not pumping pressure. 
+	 */
 	public boolean isSafetyStopped() {
 		return isRunning && !compressor.enabled();
 	}

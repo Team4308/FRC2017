@@ -10,7 +10,6 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,7 +17,12 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Controller for the drive train and its motors
+ * A controlling subsystem responsible for a 6 wheel drive train and its motors,
+ * as well as its pneumatic ball shifters. Encoders were to be available, but
+ * were never implemented. Currently only one encoder is written in, but two
+ * would be available on the robot.
+ *
+ * @author Michael Brown
  *
  */
 public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailable {
@@ -97,7 +101,8 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
 		leftOutput = limit(leftOutput);
 		rightOutput = limit(rightOutput);
-		//DriverStation.reportWarning("Motor Output: " + leftOutput + ", " + rightOutput, false);
+		// DriverStation.reportWarning("Motor Output: " + leftOutput + ", " +
+		// rightOutput, false);
 		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
 		leftMotorFeedback = leftOutput;
 		rightMotorFeedback = rightOutput;
@@ -120,6 +125,9 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
 	}
 
+	/**
+	 * Toggle between the motors running at near-half speed or full speed.
+	 */
 	public void slow() {
 		slow = !slow;
 		if (slow) {
@@ -129,24 +137,42 @@ public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailab
 		}
 	}
 
+	/**
+	 * Resets the encoder attached to the drive train.
+	 */
 	public void resetEncoder() {
 		encoder.reset();
 	}
 
+	/**
+	 * @return How far have the encoders rotated thus far.
+	 */
 	public double getDistance() {
 		return encoder.getDistance();
 	}
 
+	/**
+	 * Returns the encoder that the drive train uses, allowing closer access and
+	 * configuration.
+	 * 
+	 * @return The encoder attached to this drive train.
+	 */
 	public final Encoder getEncoder() {
 		return encoder;
 	}
 
+	/**
+	 * Switches the robot's ball shifter into high speed mode.
+	 */
 	public void highGear() {
 		leftShifter.set(Value.kForward);
 		rightShifter.set(Value.kForward);
 		gear = true;
 	}
 
+	/**
+	 * Switches the robot's ball shifter into high torque mode.
+	 */
 	public void lowGear() {
 		leftShifter.set(Value.kReverse);
 		rightShifter.set(Value.kReverse);

@@ -11,6 +11,13 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+/**
+ * A subsystem that controls and logs the output of an attached Gyroscope, in
+ * this case, Kauai Labs's navX-MXP.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class Gyroscope extends Subsystem implements Loggable, IAvailable {
 
 	// TODO: make gyro wait when calibrating gyro.isCalibrating
@@ -39,8 +46,8 @@ public class Gyroscope extends Subsystem implements Loggable, IAvailable {
 	public double yaw() {
 		return gyro.getYaw();
 	}
-	
-	public double angle(){
+
+	public double angle() {
 		return gyro.getAngle();
 	}
 

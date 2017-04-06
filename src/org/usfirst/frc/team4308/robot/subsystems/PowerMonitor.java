@@ -12,6 +12,13 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Currently unimplemented power management system. Allows techniques such as
+ * brownout avoidance and extraneous system shutoff.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class PowerMonitor extends Subsystem implements Loggable, IAvailable {
 
 	private final PowerDistributionPanel pdp;
@@ -191,10 +198,26 @@ public class PowerMonitor extends Subsystem implements Loggable, IAvailable {
 		SmartDashboard.putBoolean("Current Warning", currentWarning);
 	}
 
+	/**
+	 * Determines the ratio of voltage sent to a CANTalon (bus) and the voltage
+	 * sent to the motor it is attached to (output).
+	 * 
+	 * @param talon
+	 *            The CANTalon whose voltage is under examination.
+	 * @return The ratio of voltage in and voltage out.
+	 */
 	public double voltageRatio(CANTalon talon) {
 		return talon.getOutputVoltage() / talon.getBusVoltage();
 	}
 
+	/**
+	 * Determines the ratio of current sent to a CANTalon (input) and the
+	 * current sent to the motor it is controlling (output).
+	 * 
+	 * @param talon
+	 *            The CANTalon whose current is under examination.
+	 * @return The ratio of current in and current out.
+	 */
 	public double currentRatio(CANTalon talon) {
 		return isAvailable ? talon.getOutputCurrent() / pdp.getCurrent(talon.getDeviceID()) : 0;
 	}

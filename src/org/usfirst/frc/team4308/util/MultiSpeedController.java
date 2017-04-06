@@ -2,6 +2,14 @@ package org.usfirst.frc.team4308.util;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
+/**
+ * Wrapper class allowing any set of motor controllers to be synced with each
+ * other, and controlled from a single point. Taken from a reddit post
+ * explaining this concept.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class MultiSpeedController implements SpeedController {
 
 	private static final double restingSpeed = 0.0;

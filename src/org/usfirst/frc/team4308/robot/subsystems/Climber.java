@@ -10,6 +10,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * A subsystem responsible for controlling a ratcheted rope climbing system.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class Climber extends Subsystem implements SpeedController, Loggable, IAvailable { // Powered
 
 	private final Talon master;

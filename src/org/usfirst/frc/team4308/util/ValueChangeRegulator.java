@@ -1,5 +1,11 @@
 package org.usfirst.frc.team4308.util;
 
+/**
+ * Regulates the change of an input, typically from a joystick.
+ * 
+ * @author Samson Close
+ *
+ */
 public class ValueChangeRegulator {
 
 	private double maxChange;

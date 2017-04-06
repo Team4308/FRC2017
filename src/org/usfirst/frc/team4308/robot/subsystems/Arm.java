@@ -17,6 +17,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * A subsystem used to control an arm that can pickup and dropoff gears.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, SpeedController {
 
 	// private static final double MAX_OUTPUT = 0.65;
