@@ -4,8 +4,15 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
+/**
+ * Simple container class that allows close control of the inputs and outputs a
+ * {@link PIDController} would use.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class PIDContainer implements PIDSource, PIDOutput {
-	
+
 	private double value;
 	private PIDSourceType type;
 

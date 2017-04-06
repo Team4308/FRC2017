@@ -11,13 +11,14 @@ public class RumbleControl extends Command {
 
 	@Override
 	protected void execute() {
-		// TODO Auto-generated method stub
 		super.execute();
 
-		Joystick joystick = Robot.io.getJoystick();
+		if (Robot.io != null && Robot.io.isAvailable()) {
+			Joystick joystick = Robot.io.getJoystick();
 
-		joystick.setRumble(RumbleType.kLeftRumble, joystick.getRawAxis(RobotMap.Control.Standard.leftTrigger));
-		joystick.setRumble(RumbleType.kRightRumble, joystick.getRawAxis(RobotMap.Control.Standard.rightTrigger));
+			joystick.setRumble(RumbleType.kLeftRumble, joystick.getRawAxis(RobotMap.Control.Standard.leftTrigger));
+			joystick.setRumble(RumbleType.kRightRumble, joystick.getRawAxis(RobotMap.Control.Standard.rightTrigger));
+		}
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 package org.usfirst.frc.team4308.util;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
+/**
+ * Regulates the change of an input, typically from a joystick.
+ * 
+ * @author Samson Close
+ *
+ */
 public class ValueChangeRegulator {
 
 	private double maxChange;
@@ -24,10 +28,10 @@ public class ValueChangeRegulator {
 			currentFilteredValue -= maxChange;
 		}
 
-		DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
-		DriverStation.reportWarning("CurrentDelta: " + (desiredValue - currentFilteredValue), false);
-		
-		
+		// DriverStation.reportWarning("DesiredDelta: " + desiredDelta, false);
+		// DriverStation.reportWarning("CurrentDelta: " + (desiredValue -
+		// currentFilteredValue), false);
+
 		return currentFilteredValue;
 	}
 }

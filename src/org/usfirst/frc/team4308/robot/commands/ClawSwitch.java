@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Instantly firing command that indiscriminately switches the state of the {@link Solenoid} controlling the claw on the {@link Arm} subsystem.
+ * Instantly firing command that indiscriminately switches the state of the
+ * {@link Solenoid} controlling the claw on the {@link Arm} subsystem.
  * 
  * @author Michael Brown
  *
@@ -30,7 +31,9 @@ public class ClawSwitch extends InstantCommand {
 	/**
 	 * Opens or closes the claw
 	 * 
-	 * @param open if this command should set the claw to be open, else it will be closed
+	 * @param open
+	 *            if this command should set the claw to be open, else it will
+	 *            be closed
 	 */
 	public ClawSwitch(boolean open) {
 		super();

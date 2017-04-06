@@ -1,9 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
-import org.usfirst.frc.team4308.robot.Robot;
 import org.usfirst.frc.team4308.robot.RobotMap;
-import org.usfirst.frc.team4308.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team4308.robot.commands.TankDrive;
+import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
 import org.usfirst.frc.team4308.util.Powered;
@@ -12,7 +10,6 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,10 +17,19 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Controller for the drive train and its motors
+ * A controlling subsystem responsible for a 6 wheel drive train and its motors,
+ * as well as its pneumatic ball shifters. Encoders were to be available, but
+ * were never implemented. Currently only one encoder is written in, but two
+ * would be available on the robot.
+ *
+ * @author Michael Brown
  *
  */
-public class DriveTrain extends Subsystem implements Loggable, Powered {
+public class DriveTrain extends Subsystem implements Loggable, Powered, IAvailable {
+
+	private static final int CURRENT_LIMIT = 20; // Amps
+
+	private boolean isAvailable;
 
 	private Encoder encoder;
 
@@ -47,13 +53,27 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		CANTalon rightMiddle = new CANTalon(RobotMap.Drive.rightMiddle);
 		CANTalon rightBack = new CANTalon(RobotMap.Drive.rightBack);
 
+		leftFront.setCurrentLimit(CURRENT_LIMIT);
+		leftFront.EnableCurrentLimit(true);
+		leftMiddle.setCurrentLimit(CURRENT_LIMIT);
+		leftMiddle.EnableCurrentLimit(true);
+		leftBack.setCurrentLimit(CURRENT_LIMIT);
+		leftBack.EnableCurrentLimit(true);
+		rightFront.setCurrentLimit(CURRENT_LIMIT);
+		rightFront.EnableCurrentLimit(true);
+		rightMiddle.setCurrentLimit(CURRENT_LIMIT);
+		rightMiddle.EnableCurrentLimit(true);
+		rightBack.setCurrentLimit(CURRENT_LIMIT);
+		rightBack.EnableCurrentLimit(true);
+
 		left = new MultiSpeedController(leftFront, leftMiddle, leftBack);
 		right = new MultiSpeedController(rightFront, rightMiddle, rightBack);
 
 		driveHandler = new RobotDrive(left, right);
+		driveHandler.setSafetyEnabled(false);
 
-		leftShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
-		rightShifter = new DoubleSolenoid(RobotMap.PCM, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
+		leftShifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.Drive.leftShifterA, RobotMap.Drive.leftShifterB);
+		rightShifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.Drive.rightShifterA, RobotMap.Drive.rightShifterB);
 
 		gear = false;
 		slow = false;
@@ -69,76 +89,45 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		LiveWindow.addActuator("Drive Train", "rightMiddle", rightMiddle);
 		LiveWindow.addActuator("Drive Train", "rightBack", rightBack);
 		// LiveWindow.addSensor("Drive Train", "Encoder", encoder);
+
+		isAvailable = true;
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		if (Robot.io == null || Robot.io.getJoystickType() == null) {
-			DriverStation.reportWarning("Shit man, Robot.io is null", true);
-			DriverStation.reportWarning("Control system is not present!", true);
-		} else {
-			switch (Robot.io.getJoystickType()) {
-			case FLIGHT:
-				Robot.control = new ArcadeDrive(Robot.io.getLeftAxis(), Robot.io.getRightAxis());
-				break;
-			case STANDARD:
-				Robot.control = new TankDrive();
-				break;
-			default:
-				Robot.control = null;
-				DriverStation.reportError("Cannot assign control scheme to joystick!", false);
-				break;
-			}
-		}
-	}
 
-	public void arcadeDrive(double moveValue, double rotateValue) {
-		moveValue = limit(moveValue);
-		rotateValue = limit(rotateValue);
-
-		double leftMotorSpeed;
-		double rightMotorSpeed;
-		if (moveValue > 0.0D) {
-			if (rotateValue > 0.0D) {
-				leftMotorSpeed = moveValue - rotateValue;
-				rightMotorSpeed = Math.max(moveValue, rotateValue);
-			} else {
-				leftMotorSpeed = Math.max(moveValue, -rotateValue);
-				rightMotorSpeed = moveValue + rotateValue;
-			}
-		} else if (rotateValue > 0.0D) {
-			leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-			rightMotorSpeed = moveValue + rotateValue;
-		} else {
-			leftMotorSpeed = moveValue - rotateValue;
-			rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-		}
-
-		setLeftRightMotorOutputs(leftMotorSpeed, rightMotorSpeed);
-	}
-
-	public void tankDrive(double leftOutput, double rightOutput) {
-		leftOutput = limit(leftOutput);
-		rightOutput = limit(rightOutput);
-		setLeftRightMotorOutputs(leftOutput, rightOutput);
 	}
 
 	public void setLeftRightMotorOutputs(double leftOutput, double rightOutput) {
+		leftOutput = limit(leftOutput);
+		rightOutput = limit(rightOutput);
+		// DriverStation.reportWarning("Motor Output: " + leftOutput + ", " +
+		// rightOutput, false);
 		driveHandler.setLeftRightMotorOutputs(leftOutput, rightOutput);
+		leftMotorFeedback = leftOutput;
+		rightMotorFeedback = rightOutput;
 	}
+
+	private double leftMotorFeedback = 0.0;
+	private double rightMotorFeedback = 0.0;
 
 	@Override
 	public void log() {
 		// SmartDashboard.putNumber("Distance", encoder.getDistance());
 		// SmartDashboard.putNumber("Speed", encoder.getRate());
-		SmartDashboard.putBoolean("Gear", gear);
+		SmartDashboard.putString("Transmission", gear ? "High Gear" : "Low Gear");
 		SmartDashboard.putString("DB/String 1", gear ? "High Gear" : "Low Gear");
+		SmartDashboard.putNumber("Left Motor", leftMotorFeedback);
+		SmartDashboard.putNumber("Right Motor", rightMotorFeedback);
 	}
 
 	protected static double limit(double num) {
 		return num > 1.0D ? 1.0D : (num < -1.0D ? -1.0D : num);
 	}
-	
+
+	/**
+	 * Toggle between the motors running at near-half speed or full speed.
+	 */
 	public void slow() {
 		slow = !slow;
 		if (slow) {
@@ -148,24 +137,42 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 		}
 	}
 
+	/**
+	 * Resets the encoder attached to the drive train.
+	 */
 	public void resetEncoder() {
 		encoder.reset();
 	}
 
+	/**
+	 * @return How far have the encoders rotated thus far.
+	 */
 	public double getDistance() {
 		return encoder.getDistance();
 	}
 
+	/**
+	 * Returns the encoder that the drive train uses, allowing closer access and
+	 * configuration.
+	 * 
+	 * @return The encoder attached to this drive train.
+	 */
 	public final Encoder getEncoder() {
 		return encoder;
 	}
 
+	/**
+	 * Switches the robot's ball shifter into high speed mode.
+	 */
 	public void highGear() {
 		leftShifter.set(Value.kForward);
 		rightShifter.set(Value.kForward);
 		gear = true;
 	}
 
+	/**
+	 * Switches the robot's ball shifter into high torque mode.
+	 */
 	public void lowGear() {
 		leftShifter.set(Value.kReverse);
 		rightShifter.set(Value.kReverse);
@@ -174,5 +181,10 @@ public class DriveTrain extends Subsystem implements Loggable, Powered {
 
 	public void stopMotor() {
 		driveHandler.stopMotor();
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return isAvailable;
 	}
 }

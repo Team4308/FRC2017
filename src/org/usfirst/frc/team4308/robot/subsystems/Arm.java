@@ -6,9 +6,10 @@ import org.usfirst.frc.team4308.util.Powered;
 
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -16,26 +17,40 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * A subsystem used to control an arm that can pickup and dropoff gears.
+ * 
+ * @author Michael Brown
+ *
+ */
 public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, SpeedController {
 
-	private static final double MAX_OUTPUT = 0.65;
-	private static final double DROP_TIME = 1;
-	private static final double CLAW_TIME = 0.5;
+	// private static final double MAX_OUTPUT = 0.65;
+	// private static final double DROP_TIME = 1;
+	// private static final double CLAW_TIME = 0.5;
 
 	protected MotorSafetyHelper safetyHelper;
 
 	private DoubleSolenoid claw;
 	private CANTalon arm;
-	private AnalogInput ultrasonic;
+	private DigitalInput limitSwitchUp, limitSwitchDown;
+	// private AnalogInput ultrasonic;
 
 	private boolean grab;
 	private boolean down;
 
 	public Arm() {
 		super();
-		claw = new DoubleSolenoid(RobotMap.PCM, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
+		claw = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GearArm.solenoidA, RobotMap.GearArm.solenoidB);
 		arm = new CANTalon(RobotMap.GearArm.armChannel);
 		arm.setInverted(true);
+		try {
+			limitSwitchUp = new DigitalInput(1);
+			limitSwitchDown = new DigitalInput(0);
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plugg in the switcch you asshat", true);
+		}
+
 		// ultrasonic = new AnalogInput(RobotMap.GearArm.sensorChannel);
 		safetyHelper = new MotorSafetyHelper(this);
 		safetyHelper.setExpiration(0.5D);
@@ -51,6 +66,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 
 	@Override
 	protected void initDefaultCommand() {
+		closeClaw();
 	}
 
 	public void claw() {
@@ -58,12 +74,13 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 	}
 
 	public void claw(boolean state) {
-		if (!state) {
-			claw.set(Value.kReverse);
-		} else {
-			claw.set(Value.kForward);
-		}
 		grab = state;
+
+		if (state) {
+			claw.set(Value.kForward);
+		} else {
+			claw.set(Value.kReverse);
+		}
 	}
 
 	public void openClaw() {
@@ -74,8 +91,10 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		claw(false);
 	}
 
+	@Override
 	public void set(double output) {
-		arm.set(output);
+		if (!grab)
+			arm.set(output);
 	}
 
 	protected static double limit(double num) {
@@ -120,6 +139,7 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		return safetyHelper.isAlive();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void stopMotor() {
 		arm.stopMotor();
@@ -165,4 +185,21 @@ public class Arm extends Subsystem implements Loggable, Powered, MotorSafety, Sp
 		arm.disable();
 	}
 
+	public boolean isArmUp() {
+		try {
+			return !limitSwitchUp.get();
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plug in the switcch you asshat", false);
+		}
+		return false;
+	}
+
+	public boolean isArmDown() {
+		try {
+			return limitSwitchDown.get();
+		} catch (Exception e) {
+			DriverStation.reportWarning("Plug in the switcch you asshat", false);
+		}
+		return false;
+	}
 }

@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4308.auto;
 
 import org.usfirst.frc.team4308.robot.Robot;
-import org.usfirst.frc.team4308.robot.commands.WaitForPressure;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -9,14 +8,14 @@ import edu.wpi.first.wpilibj.hal.AllianceStationID;
 import edu.wpi.first.wpilibj.hal.HAL;
 
 public class BlindAuto extends CommandGroup {
-	
+
 	boolean center;
 
 	public BlindAuto() {
 		super();
 		requires(Robot.drive);
 	}
-	
+
 	@Override
 	protected void initialize() {
 		super.initialize();
@@ -27,13 +26,13 @@ public class BlindAuto extends CommandGroup {
 			center = false;
 		}
 	}
-	
+
 	@Override
 	protected void execute() {
 		super.execute();
 		if (center) {
 			addSequential(new CloseClaw());
-			addSequential(new WaitForPressure());
+			// TODO?addSequential(new WaitForPressure());
 			addSequential(new EasyAutonomous(2, 1, 1));
 			addSequential(new WaitCommand(0.3));
 			addSequential(new OpenClaw());
@@ -41,16 +40,17 @@ public class BlindAuto extends CommandGroup {
 			addSequential(new CloseClaw());
 		} else {
 			addSequential(new EasyAutonomous(4, 1, 1));
-			addParallel(new WaitForPressure());
+			// TODO? addParallel(new WaitForPressure());
 		}
 	}
-	
+
 	@Override
 	protected void end() {
 		super.end();
-		Robot.drive.stopMotor();
+		if (Robot.drive != null)
+			Robot.drive.stopMotor();
 	}
-	
+
 	@Override
 	protected void interrupted() {
 		super.interrupted();

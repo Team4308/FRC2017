@@ -2,8 +2,11 @@
 package org.usfirst.frc.team4308.robot;
 
 import org.usfirst.frc.team4308.auto.BlindAuto;
+import org.usfirst.frc.team4308.auto.CenterAuto;
 import org.usfirst.frc.team4308.auto.FlairAutonomous;
 import org.usfirst.frc.team4308.auto.HoldAuto;
+import org.usfirst.frc.team4308.auto.LeftAuto;
+import org.usfirst.frc.team4308.auto.RightAuto;
 import org.usfirst.frc.team4308.robot.commands.OperatorDrive;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
@@ -15,7 +18,6 @@ import org.usfirst.frc.team4308.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team4308.robot.subsystems.PowerMonitor;
 import org.usfirst.frc.team4308.robot.subsystems.USBVision;
 import org.usfirst.frc.team4308.util.Loggable;
-import org.usfirst.frc.team4308.util.Looper;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -32,7 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot implements Loggable, Looper {
+public class Robot extends IterativeRobot implements Loggable {
 
 	public static PowerMonitor powermonitor;
 	public static Pneumatics pneumatics;
@@ -43,7 +45,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public static IO io;
 	public static USBVision frontVision;
 	public static AxisVision climbVision;
-	
+
 	public static OperatorDrive control;
 
 	public static Command autonomousCommand;
@@ -51,7 +53,7 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void robotInit() {
-		// powermonitor = new PowerMonitor();
+		powermonitor = new PowerMonitor();
 		pneumatics = new Pneumatics();
 		drive = new DriveTrain();
 		climber = new Climber();
@@ -60,19 +62,26 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		io = new IO();
 		frontVision = new USBVision();
 		climbVision = new AxisVision();
-		
+
 		autoChooser = new SendableChooser<Command>();
 		autoChooser.addDefault("", new HoldAuto());
-		autoChooser.addObject("Flair Auto", new FlairAutonomous());
+		//TODO Test this shit
+		autoChooser.addObject("Test Auto", new FlairAutonomous());
+		autoChooser.addObject("Gear Auto", new CenterAuto());
 		autoChooser.addObject("Blind Auto", new BlindAuto());
+
+		// TODO test this shit as well
+		//autoChooser.addObject("Left Side Baseline", new LeftAuto());
+		//autoChooser.addObject("Right Side Baseline", new RightAuto());
+		//autoChooser.addObject("Move Forward", new ForwardAuto());
 
 		boolean bone = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false;
 		if (((((((((((!!!(!(bone != !!!!!!bone)))))))))))))
 			DriverStation.reportWarning("NOT ENOUGH BONE", true);
 		;
 
-		loops.add(gyro);
-		loops.add(pneumatics);
+		// loops.add(gyro);
+		// loops.add(pneumatics);
 
 		if (powermonitor != null)
 			SmartDashboard.putData(powermonitor);
@@ -86,11 +95,13 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			SmartDashboard.putData(gyro);
 		if (arm != null)
 			SmartDashboard.putData(arm);
+		if (autoChooser != null)
+			SmartDashboard.putData("Autonomous Selector", autoChooser);
 	}
 
 	@Override
 	public void disabledInit() {
-		stop();
+		// stop();
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
@@ -102,8 +113,9 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 
 	@Override
 	public void autonomousInit() {
-		start();
+		// start();
 		autonomousCommand = autoChooser.getSelected();
+
 		if (autonomousCommand != null)
 			autonomousCommand.start();
 	}
@@ -112,12 +124,15 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		loop();
 	}
 
 	@Override
 	public void teleopInit() {
-		start();
+		// If the IO failed to instanciate then retry at runtime
+		if (io != null && !io.isAvailable()) {
+			io = new IO();
+		}
+
 		if (control != null) {
 			control.start();
 		} else {
@@ -127,27 +142,30 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 			autonomousCommand.cancel();
 	}
 
+	public static void println(String text) {
+		DriverStation.reportWarning(text, false);
+	}
+
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		log();
-		loop();
 	}
 
 	@Override
 	public void testInit() {
-		start();
 	}
 
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 		log();
-		loop();
 	}
 
 	@Override
 	public void log() {
+		if (powermonitor != null)
+			powermonitor.log();
 		if (pneumatics != null)
 			pneumatics.log();
 		if (drive != null)
@@ -159,5 +177,4 @@ public class Robot extends IterativeRobot implements Loggable, Looper {
 		if (arm != null)
 			arm.log();
 	}
-
 }

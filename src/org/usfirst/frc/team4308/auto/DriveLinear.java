@@ -10,58 +10,63 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Autonomous command responsible for bi-directional linear movement of the robot, determined by either user-specified distances or by default values (specified in {@link IO}).
+ * Autonomous command responsible for bi-directional linear movement of the
+ * robot, determined by either user-specified distances or by default values
+ * (specified in {@link IO}).
  * 
  * @author Michael Brown
  *
  */
 public class DriveLinear extends Command {
-	
+
 	PIDController moveController;
-	PIDController turnController;
-	
+
 	PIDContainer moveInput;
 	PIDContainer moveOutput;
-	PIDContainer turnInput;
-	PIDContainer turnOutput;
-	
-	private final double angle;
 
-	public DriveLinear() {
-		this(RobotMap.Autonomous.defaultDistance);
-	}
+	// private final double angle;
 
-	public DriveLinear(double timeout) {
+	public DriveLinear(double timeout, double distance) {
 		super(timeout);
 		requires(Robot.drive);
-		
+		requires(Robot.gyro);
+
 		moveInput = new PIDContainer(PIDSourceType.kDisplacement);
 		moveOutput = new PIDContainer(PIDSourceType.kDisplacement);
-		turnInput = new PIDContainer(PIDSourceType.kDisplacement);
-		turnOutput = new PIDContainer(PIDSourceType.kDisplacement);
-		
-		moveController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, moveInput, moveOutput);
-		turnController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential, turnInput, turnOutput);
-		
-		angle = Robot.gyro.heading();
+
+		moveController = new PIDController(RobotMap.kProportional, RobotMap.kIntegral, RobotMap.kDifferential,
+				moveInput, moveOutput);
+		moveController.setAbsoluteTolerance(RobotMap.Autonomous.distancePercentTolerance);
+		moveController.setSetpoint(distance);
+	}
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+		Robot.gyro.reset();
+		moveController.enable();
 	}
 	
 	@Override
 	protected void execute() {
 		super.execute();
+		double displacement = Math.sqrt(Robot.gyro.xDistance()*Robot.gyro.xDistance()) + (Robot.gyro.yDistance()*Robot.gyro.yDistance());
+		moveInput.pidWrite(displacement);
+		Robot.drive.driveHandler.arcadeDrive(moveOutput.pidGet(), 0, false);
 	}
 
 	@Override
 	protected void end() {
-		Robot.drive.resetEncoder();
 		super.end();
+		Robot.drive.stopMotor();
+		moveController.disable();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return moveController.onTarget();
 	}
-	
+
 	@Override
 	protected void interrupted() {
 		super.interrupted();

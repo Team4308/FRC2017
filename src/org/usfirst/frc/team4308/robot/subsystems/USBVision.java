@@ -43,6 +43,12 @@ public class USBVision extends Vison {
 
 }
 
+/**
+ * Vision Thread for handling video input from a network-attached Axis Camera.
+ * 
+ * @author Michael Brown
+ *
+ */
 class AxisThread implements Runnable {
 
 	CvSource outputStream;
@@ -61,7 +67,8 @@ class AxisThread implements Runnable {
 		camera.setResolution(RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
 
 		cvsink = CameraServer.getInstance().getVideo();
-		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.axisName, RobotMap.Camera.videoWidth, RobotMap.Camera.videoHeight);
+		outputStream = CameraServer.getInstance().putVideo(RobotMap.Camera.axisName, RobotMap.Camera.videoWidth,
+				RobotMap.Camera.videoHeight);
 
 		Mat source = new Mat();
 		Mat output = new Mat();

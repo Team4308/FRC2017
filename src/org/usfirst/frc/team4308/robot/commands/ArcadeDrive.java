@@ -5,7 +5,8 @@ import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.DriveTrain;
 
 /**
- * Continuous command to send input from a joystick (specified in {@link IO}) to the motors of the {@link DriveTrain}, controlling its movement.
+ * Continuous command to send input from a joystick (specified in {@link IO}) to
+ * the motors of the {@link DriveTrain}, controlling its movement.
  * 
  * @author Michael Brown
  *
@@ -25,7 +26,10 @@ public class ArcadeDrive extends OperatorDrive {
 
 	@Override
 	protected void execute() {
-		Robot.drive.arcadeDrive(Robot.io.getJoystick().getRawAxis(xAxisID), Robot.io.getJoystick().getRawAxis(yAxisID));
+		if (Robot.drive != null && Robot.io != null && Robot.io.isAvailable()) {
+			Robot.drive.driveHandler.arcadeDrive(Robot.io.getJoystick().getRawAxis(xAxisID),
+					Robot.io.getJoystick().getRawAxis(yAxisID));
+		}
 	}
 
 }

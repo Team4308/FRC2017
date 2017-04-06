@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- * Abstract class allowing for multiple types of video sources and outputs used in vision processing and use
+ * Abstract class allowing for multiple types of video sources and outputs used
+ * in vision processing and use
  * 
  * @author Michael
  *
@@ -25,8 +26,19 @@ public abstract class Vison extends Subsystem {
 		super();
 	}
 
+	/**
+	 * Used for grabbing camera feed and throwing video processing into a
+	 * different thread.
+	 * 
+	 * @return
+	 */
 	public abstract boolean initialize();
 
+	/**
+	 * Unpauses or starts the thread responsible for vision.
+	 * 
+	 * @return Whether the thread starts properly.
+	 */
 	public synchronized boolean start() {
 		try {
 			if (visionThread.isAlive()) {
@@ -40,6 +52,11 @@ public abstract class Vison extends Subsystem {
 		return true;
 	}
 
+	/**
+	 * Pauses the thread responsible for vision, does not destroy thread.
+	 * 
+	 * @return Whether the thread stopped properly.
+	 */
 	public synchronized boolean stop() {
 		try {
 			visionThread.wait();

@@ -5,21 +5,26 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class OperatorDrive extends Command {
+public class ArmControlUp extends Command {
 
-	public OperatorDrive() {
-		super(RobotMap.kTeleoperatedTime);
-		requires(Robot.drive);
+	public ArmControlUp() {
+		super();
+		requires(Robot.arm);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Robot.arm.isArmUp();
+	}
+
+	@Override
+	protected void execute() {
+		super.execute();
+		Robot.arm.set(RobotMap.GearArm.speedUp);
 	}
 
 	@Override
 	protected void end() {
-		if (Robot.drive != null)
-			Robot.drive.stopMotor();
+		Robot.arm.stopMotor();
 	}
 }

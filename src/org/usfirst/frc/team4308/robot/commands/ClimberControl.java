@@ -6,18 +6,20 @@ import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Climber;
 
 /**
- * Continuous command that sends the state of a (specified in {@link IO}) button which controls the motors on the {@link Climber} subsystem.
+ * Continuous command that sends the state of a (specified in {@link IO}) button
+ * which controls the motors on the {@link Climber} subsystem.
  * 
- * @author Michael Brown
+ * @author Samson Close, Michael Brown
  *
  */
 public class ClimberControl extends ToggleCommand {
 
 	private boolean forwards;
-	
+
 	public ClimberControl(boolean forwards) {
 		super(false);
 		this.forwards = forwards;
+		requires(Robot.pneumatics);
 		requires(Robot.climber);
 		toggleOff();
 	}

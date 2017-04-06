@@ -1,7 +1,11 @@
 package org.usfirst.frc.team4308.robot;
 
 /**
- * A constants-style class that contains all the raw numbers responsible for adapting the rest of the code to hardware specifications, this class allows changes in hardware configuration to be smoothly implemented into code, as it centralizes all values that would not change between code revisions, but could between hardware revisions.
+ * A constants-style class that contains all the raw numbers responsible for
+ * adapting the rest of the code to hardware specifications, this class allows
+ * changes in hardware configuration to be smoothly implemented into code, as it
+ * centralizes all values that would not change between code revisions, but
+ * could between hardware revisions.
  */
 public class RobotMap {
 
@@ -12,32 +16,25 @@ public class RobotMap {
 
 	public static final double encoderPulseDistance = 0.042;
 
-	public static final int PCM = 9;
-	
+	public static final int PCM_ID = 9;
+	public static final int PDP_ID = 8;
+
 	public static final double kAutonomousTime = 15.0;
 	public static final double kTeleoperatedTime = 120.0;
+
+	// public static final int intakeChannel = 0;
 
 	public static class GearArm {
 		public static final int solenoidA = 0;
 		public static final int solenoidB = 1;
-		public static final int armChannel = 7;
+		public static final int armChannel = 4;
+		public static final double speedUp = -0.15;
+		public static final double speedDown = 0.75;
 	}
 
 	public static class Autonomous {
-		public static final double maxLinearSpeed = 0.5;
-		public static final double maxRotateSpeed = 1.0;
-		public static final double defaultDistance = 10.0;
-		public static final double defaultOrientation = 0.0;
 		public static final double distancePercentTolerance = 10.0;
-		public static final double maxTime = 14.0;
 		public static final double angularToleranceDegrees = 2.0;
-	}
-
-	public static class Constant {
-		public static final double proportional = 0.1;
-		public static final double integral = 0.001;
-		public static final double differential = 0.0;
-		public static final double feedForward = 0.0;
 	}
 
 	public static class Control {
@@ -51,7 +48,7 @@ public class RobotMap {
 			public static final int rightX = 4;
 			public static final int rightY = 5;
 
-			public static final int a = 1; // TODO test that these are right
+			public static final int a = 1;
 			public static final int b = 2;
 			public static final int x = 3;
 			public static final int y = 4;
@@ -84,21 +81,14 @@ public class RobotMap {
 	}
 
 	// TODO: encoder channel correction
-	// TODO: talonSRX device ID reassignment surgery
 	public static class Drive {
 		public static final int leftFront = 6;
-		public static final int leftMiddle = 4;
-		public static final int leftBack = 0;
+		public static final int leftMiddle = 1;
+		public static final int leftBack = 5;
 		public static final int rightFront = 3;
-		public static final int rightMiddle = 1;
-		public static final int rightBack = 2;
+		public static final int rightMiddle = 2;
+		public static final int rightBack = 7;
 
-		public static final int ChannelA = 0;
-		public static final int ChannelB = 0;
-
-		public static final double curveSensitivity = 0.5;
-		public static final double encoderPulseDistance = 0.042;
-		
 		public static final int leftShifterA = 2;
 		public static final int leftShifterB = 3;
 		public static final int rightShifterA = 4;
@@ -126,7 +116,7 @@ public class RobotMap {
 		public static final int climbB = 1;
 
 		public static final double maxForward = 0.65;
-		public static final double maxBackward = -0.65;
+		public static final double maxBackward = -0.4;
 		public static final double restingSpeed = 0.0;
 	}
 
@@ -148,13 +138,25 @@ public class RobotMap {
 			}
 
 			public static BatteryLevel level(double level) {
-				if (level > NOMINAL.center - NOMINAL.range) {
-					return BatteryLevel.NOMINAL;
-				} else if (level > LOW.center - LOW.range) {
-					return BatteryLevel.LOW;
-				} else {
-					return BatteryLevel.DISCHARGED;
+				for (int i = values().length - 1; i >= 0; i--) {
+					BatteryLevel l = values()[i];
+
+					// if the provided value is within the range of the level
+					// enum
+					if (level >= l.center - l.range) {
+						return l;
+					}
 				}
+
+				return BatteryLevel.DISCHARGED;
+
+				// if (level > NOMINAL.center - NOMINAL.range) {
+				// return BatteryLevel.NOMINAL;
+				// } else if (level > LOW.center - LOW.range) {
+				// return BatteryLevel.LOW;
+				// } else {
+				// return BatteryLevel.DISCHARGED;
+				// }
 			}
 		}
 

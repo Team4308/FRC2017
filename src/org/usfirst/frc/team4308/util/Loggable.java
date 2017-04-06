@@ -1,5 +1,11 @@
 package org.usfirst.frc.team4308.util;
 
+/**
+ * Allows a class to log data for drivers, operators, etc. to use.
+ * 
+ * @author Michael Brown
+ *
+ */
 public interface Loggable {
 
 	/**

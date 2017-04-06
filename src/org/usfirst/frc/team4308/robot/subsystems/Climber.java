@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.subsystems;
 
 import org.usfirst.frc.team4308.robot.RobotMap;
+import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 
 import edu.wpi.first.wpilibj.SpeedController;
@@ -9,12 +10,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Climber extends Subsystem implements SpeedController, Loggable { // Powered
+/**
+ * A subsystem responsible for controlling a ratcheted rope climbing system.
+ * 
+ * @author Michael Brown
+ *
+ */
+public class Climber extends Subsystem implements SpeedController, Loggable, IAvailable { // Powered
 
 	private final Talon master;
 	private final Talon slave;
-	private boolean isInverted = false;
-	private double speed;
+	private boolean isInverted;
+	private double speed = 0;
+	private boolean isAvailable;
 
 	public Climber() {
 		this(false);
@@ -24,6 +32,9 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 		super();
 		master = new Talon(RobotMap.Climb.climbB);
 		slave = new Talon(RobotMap.Climb.climbA);
+
+		isAvailable = !(master == null && slave == null);
+
 		this.set(RobotMap.Climb.restingSpeed);
 		this.isInverted = isInverted;
 
@@ -33,21 +44,27 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	@Override
 	protected void initDefaultCommand() {
-		
+
 	}
 
 	@Override
 	public void set(double speed) {
-		speed = Math.max(Math.min(speed, RobotMap.Climb.maxForward), RobotMap.Climb.maxBackward);
-		
-		if (isInverted) {
-			master.set(speed);
-		  slave.set(-speed);
-			this.speed = -speed;
-		} else {
-			master.set(-speed);
-			slave.set(speed);
-			this.speed = speed;
+		if (isAvailable) {
+			speed = Math.max(Math.min(speed, RobotMap.Climb.maxForward), RobotMap.Climb.maxBackward);
+
+			if (isInverted) {
+				if (master != null)
+					master.set(speed);
+				if (slave != null)
+					slave.set(-speed);
+				this.speed = -speed;
+			} else {
+				if (master != null)
+					master.set(-speed);
+				if (slave != null)
+					slave.set(speed);
+				this.speed = speed;
+			}
 		}
 	}
 
@@ -58,9 +75,13 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	@Override
 	public void stopMotor() {
-		this.master.stopMotor();
-		this.slave.stopMotor();
-		set(RobotMap.Climb.restingSpeed);
+		if (isAvailable) {
+			if (master != null)
+				this.master.stopMotor();
+			if (slave != null)
+				this.slave.stopMotor();
+			set(RobotMap.Climb.restingSpeed);
+		}
 	}
 
 	@Override
@@ -81,8 +102,10 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 
 	@Override
 	public void disable() {
-		master.disable();
-		slave.disable();
+		if (master != null)
+			master.disable();
+		if (slave != null)
+			slave.disable();
 	}
 
 	@Override
@@ -91,19 +114,9 @@ public class Climber extends Subsystem implements SpeedController, Loggable { //
 		SmartDashboard.putNumber("Climb Speed", speed);
 	}
 
-	// @Override
-	// public double voltage() {
-	// return (master.getOutputVoltage() + slave.getOutputVoltage()) / 2.0;
-	// }
-	//
-	// @Override
-	// public double current() {
-	// return (master.getOutputCurrent() / slave.getOutputCurrent()) / 2.0;
-	// }
-	//
-	// @Override
-	// public double temperature() {
-	// return (master.getTemperature() + slave.getTemperature()) / 2.0;
-	// }
+	@Override
+	public boolean isAvailable() {
+		return isAvailable;
+	}
 
 }

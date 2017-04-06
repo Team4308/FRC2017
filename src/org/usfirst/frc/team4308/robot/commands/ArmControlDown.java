@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4308.robot.commands;
 
 import org.usfirst.frc.team4308.robot.Robot;
+import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.robot.io.IO;
 import org.usfirst.frc.team4308.robot.subsystems.Arm;
 
@@ -13,26 +14,27 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Michael Brown
  *
  */
-public class ArmControl extends Command {
+public class ArmControlDown extends Command {
 
-	public ArmControl() {
+	public ArmControlDown() {
 		super();
 		requires(Robot.arm);
 	}
 
 	@Override
-	protected void execute() {
-		Robot.arm.set(1.0);
+	protected boolean isFinished() {
+		return Robot.arm.isArmDown();
 	}
 
 	@Override
-	protected boolean isFinished() {
-		return false;
+	protected void execute() {
+		super.execute();
+		Robot.println("Moving arm down");
+		Robot.arm.set(RobotMap.GearArm.speedDown);
 	}
 
 	@Override
 	protected void end() {
-		Robot.arm.set(0);
-	}
 
+	}
 }

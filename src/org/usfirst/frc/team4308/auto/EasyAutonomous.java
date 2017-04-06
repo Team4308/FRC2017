@@ -11,7 +11,8 @@ public class EasyAutonomous extends Command {
 
 	public EasyAutonomous(double timeout, double leftMotor, double rightMotor) {
 		super(timeout);
-		
+		requires(Robot.drive);
+
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 	}
@@ -33,5 +34,4 @@ public class EasyAutonomous extends Command {
 	protected boolean isFinished() {
 		return isTimedOut();
 	}
-
 }
