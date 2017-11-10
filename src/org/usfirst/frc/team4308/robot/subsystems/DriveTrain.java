@@ -6,7 +6,7 @@ import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.MultiSpeedController;
 import org.usfirst.frc.team4308.util.Powered;
 
-import com.ctre.CANTalon;
+import com.ctre.MotorControl.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;

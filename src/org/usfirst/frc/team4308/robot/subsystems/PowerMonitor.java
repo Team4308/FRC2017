@@ -6,7 +6,7 @@ import org.usfirst.frc.team4308.robot.RobotMap.Power;
 import org.usfirst.frc.team4308.util.IAvailable;
 import org.usfirst.frc.team4308.util.Loggable;
 
-import com.ctre.CANTalon;
+import com.ctre.MotorControl.CANTalon;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;

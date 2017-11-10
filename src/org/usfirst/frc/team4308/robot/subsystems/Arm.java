@@ -4,7 +4,7 @@ import org.usfirst.frc.team4308.robot.RobotMap;
 import org.usfirst.frc.team4308.util.Loggable;
 import org.usfirst.frc.team4308.util.Powered;
 
-import com.ctre.CANTalon;
+import com.ctre.MotorControl.CANTalon;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
